@@ -1,4 +1,6 @@
 using System.Reflection;
+using CleanArch.Application;
+using CleanArch.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +13,10 @@ Log.Logger = new LoggerConfiguration()
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 
-builder.Host.ConfigureServices((_, services) =>
+builder.Host.ConfigureServices((context, services) =>
 {
+    services.AddApplicationServices();
+    services.AddInfrastructureServices(context.Configuration);
     services.AddEndpointDefinitions(Assembly.GetExecutingAssembly());
 });
 
