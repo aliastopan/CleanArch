@@ -27,10 +27,10 @@ public class RegisterCommandHandler
             return await ValueTask.FromResult(result);
         }
 
-        var validation = await ValidateAvailabilityAsync(request.Username, request.Email);
-        if(!validation.IsSuccess)
+        var validateAvailability = await ValidateAvailabilityAsync(request.Username, request.Email);
+        if(!validateAvailability.IsSuccess)
         {
-            result = Result<RegisterCommandResponse>.Inherit(result: validation);
+            result = Result<RegisterCommandResponse>.Inherit(result: validateAvailability);
             return await ValueTask.FromResult(result);
         }
 
