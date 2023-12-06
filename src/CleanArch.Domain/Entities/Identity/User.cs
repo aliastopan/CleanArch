@@ -5,6 +5,18 @@ namespace CleanArch.Domain.Entities.Identity;
 
 public class User
 {
+    public User(string username, string email, string hashedPassword, string salt)
+    {
+        UserId = Guid.NewGuid();
+        Username = username;
+        Email = email;
+        Role = UserRole.Standard;
+        HashedPassword = hashedPassword;
+        Salt = salt;
+        CreationDate = DateTimeOffset.Now;
+        LastLoggedIn = DateTimeOffset.Now;
+    }
+
     public Guid UserId { get; set; }
     public string Username { get; set; }
     public string Email { get; set; }
