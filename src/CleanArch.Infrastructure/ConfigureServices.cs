@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using CleanArch.Infrastructure.Services;
 
 namespace CleanArch.Infrastructure;
 
@@ -9,6 +10,8 @@ public static class ConfigureServices
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddSingleton<IPasswordService, PasswordServiceProvider>();
+
         services.AddDbContext(configuration);
 
         return services;
