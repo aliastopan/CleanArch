@@ -13,6 +13,7 @@ public static class ConfigureServices
         services.Configure<UserSecrets>(configuration.GetSection(UserSecrets.SectionName));
 
         services.AddSingleton<IPasswordService, PasswordServiceProvider>();
+        services.AddScoped<ISecurityTokenService, SecurityTokenServiceProvider>();
 
         services.AddDbContext(configuration);
 

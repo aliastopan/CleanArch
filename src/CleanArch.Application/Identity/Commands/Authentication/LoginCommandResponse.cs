@@ -1,3 +1,3 @@
 namespace CleanArch.Application.Identity.Commands.Authentication;
 
-public record LoginCommandResponse(Guid UserId);
+public record LoginCommandResponse(Guid UserId, string AccessToken);

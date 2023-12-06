@@ -16,7 +16,16 @@ public class AuthenticationEndpoint : IEndpointDefinition
         var result = await sender.Send(new LoginCommand(request.Username, request.Password));
 
         return result.Match(
-            value => Results.Ok(value),
+            value =>
+            {
+                var cookieOption = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Expires = DateTime.Now.AddMonths(1)
+                };
+                httpContext.Response.Cookies.Append("access-token", value.AccessToken, cookieOption);
+                return Results.Ok(value);
+            },
             fault => fault.AsProblem(new ProblemDetails
             {
                 Title = "Authentication Failed"

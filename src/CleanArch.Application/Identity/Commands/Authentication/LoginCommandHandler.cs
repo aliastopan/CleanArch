@@ -6,12 +6,15 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCom
 {
     private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
     private readonly IPasswordService _passwordService;
+    private readonly ISecurityTokenService _securityTokenService;
 
     public LoginCommandHandler(IAppDbContextFactory<IAppDbContext> dbContextFactory,
-        IPasswordService passwordService)
+        IPasswordService passwordService,
+        ISecurityTokenService securityTokenService)
     {
         _dbContextFactory = dbContextFactory;
         _passwordService = passwordService;
+        _securityTokenService = securityTokenService;
     }
 
     public async ValueTask<Result<LoginCommandResponse>> Handle(LoginCommand request,
@@ -41,7 +44,9 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCom
             return await ValueTask.FromResult(result);
         }
 
-        var response = new LoginCommandResponse(user.UserId);
+        var accessToken = _securityTokenService.GenerateAccessToken(user);
+
+        var response = new LoginCommandResponse(user.UserId, accessToken);
         result = Result<LoginCommandResponse>.Ok(response);
         return await ValueTask.FromResult(result);
     }
