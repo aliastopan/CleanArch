@@ -5,6 +5,7 @@
     <AssemblyName>CleanArch.Api</AssemblyName>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>fdebdfe8-9f9c-4226-8cab-94bfa4e6366d</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CleanArch.Contracts\CleanArch.Contracts.csproj" />
@@ -13,6 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AnnotatedResult.AspNetCore" Version="1.0.0-preview.7" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
   </ItemGroup>
 </Project>
