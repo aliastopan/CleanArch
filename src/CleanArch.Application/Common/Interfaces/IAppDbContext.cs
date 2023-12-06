@@ -8,4 +8,5 @@ public interface IAppDbContext : IDisposable
     DbSet<User> Users { get; }
 
     int SaveChanges();
+    Task<int> SaveChangesAsync();
 }

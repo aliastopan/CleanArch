@@ -17,6 +17,11 @@ internal sealed class AppDbContext : DbContext, IAppDbContext
         return base.SaveChanges();
     }
 
+    public async Task<int> SaveChangesAsync()
+    {
+        return await base.SaveChangesAsync();
+    }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
