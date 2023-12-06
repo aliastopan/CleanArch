@@ -24,7 +24,7 @@ public static class ConfigureServices
         {
             services.AddDbContext<IAppDbContext, AppDbContext>(options =>
             {
-                options.UseInMemoryDatabase($"Database-{Guid.NewGuid()}");
+                options.UseInMemoryDatabase($"Database-CleanArch");
                 options.UseLazyLoadingProxies();
             });
             services.AddScoped<IAppDbContextFactory<IAppDbContext>, AppDbContextFactory>();
