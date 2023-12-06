@@ -10,6 +10,7 @@
     <ProjectReference Include="..\CleanArch.Domain\CleanArch.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AnnotatedResult" Version="1.0.0-preview.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageReference Include="Serilog" Version="3.1.1" />
