@@ -13,6 +13,7 @@ public static class ConfigureServices
         services.Configure<UserSecrets>(configuration.GetSection(UserSecrets.SectionName));
         services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
 
+        services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorServiceProvider>();
         services.AddSingleton<IPasswordService, PasswordServiceProvider>();
         services.AddScoped<ISecurityTokenService, SecurityTokenServiceProvider>();
 
