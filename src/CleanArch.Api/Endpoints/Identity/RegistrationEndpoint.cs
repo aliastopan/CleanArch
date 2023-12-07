@@ -7,7 +7,7 @@ public class RegistrationEndpoint : IEndpointDefinition
 {
     public void DefineEndpoints(WebApplication app)
     {
-        app.MapPost("/api/register", Register);
+        app.MapPost("/api/register", Register).AllowAnonymous();
     }
 
     internal async Task<IResult> Register([FromServices] ISender sender,
