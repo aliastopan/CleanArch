@@ -11,6 +11,7 @@ public static class ConfigureServices
         IConfiguration configuration)
     {
         services.Configure<UserSecrets>(configuration.GetSection(UserSecrets.SectionName));
+        services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
 
         services.AddSingleton<IPasswordService, PasswordServiceProvider>();
         services.AddScoped<ISecurityTokenService, SecurityTokenServiceProvider>();
