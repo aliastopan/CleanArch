@@ -13,10 +13,10 @@ public static class ConfigureServices
         services.Configure<UserSecrets>(configuration.GetSection(UserSecrets.SectionName));
         services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
 
-        services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorServiceProvider>();
+        services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorService>();
         services.AddSingleton<IPasswordService, PasswordService>();
         // services.AddSingleton<IPasswordService, BcryptPasswordService>();
-        services.AddScoped<ISecurityTokenService, SecurityTokenServiceProvider>();
+        services.AddScoped<ISecurityTokenService, SecurityTokenService>();
 
 
         services.AddDbContext(configuration);

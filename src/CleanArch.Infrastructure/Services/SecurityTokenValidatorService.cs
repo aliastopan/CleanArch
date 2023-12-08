@@ -4,11 +4,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace CleanArch.Infrastructure.Services;
 
-internal sealed class SecurityTokenValidatorServiceProvider : ISecurityTokenValidatorService
+internal sealed class SecurityTokenValidatorService : ISecurityTokenValidatorService
 {
     private readonly IConfiguration _configuration;
 
-    public SecurityTokenValidatorServiceProvider(IConfiguration configuration)
+    public SecurityTokenValidatorService(IConfiguration configuration)
     {
         _configuration = configuration;
     }

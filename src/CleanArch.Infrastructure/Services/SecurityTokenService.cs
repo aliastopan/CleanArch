@@ -7,12 +7,12 @@ using CleanArch.Domain.Entities.Identity;
 
 namespace CleanArch.Infrastructure.Services;
 
-internal sealed class SecurityTokenServiceProvider : ISecurityTokenService
+internal sealed class SecurityTokenService : ISecurityTokenService
 {
     private readonly UserSecrets _userSecrets;
     private readonly SecurityTokenSettings _securityTokenSettings;
 
-    public SecurityTokenServiceProvider(IOptions<UserSecrets> userSecrets,
+    public SecurityTokenService(IOptions<UserSecrets> userSecrets,
         IOptions<SecurityTokenSettings> securityTokenSettings)
     {
         _userSecrets = userSecrets.Value;
