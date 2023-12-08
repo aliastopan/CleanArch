@@ -26,4 +26,6 @@ public class User
     public string PasswordSalt { get; set; }
     public DateTimeOffset CreationDate { get; set; }
     public DateTimeOffset LastLoggedIn { get; set; }
+
+    public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
 }
