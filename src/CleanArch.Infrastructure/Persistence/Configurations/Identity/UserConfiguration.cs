@@ -34,13 +34,13 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnName("is_verified")
             .IsRequired();
 
-        builder.Property(u => u.HashedPassword)
-            .HasColumnName("password")
+        builder.Property(u => u.PasswordHash)
+            .HasColumnName("password_hash")
             .HasMaxLength(96) // SHA384 (48-byte)
             .IsRequired();
 
-        builder.Property(u => u.Salt)
-            .HasColumnName("salt")
+        builder.Property(u => u.PasswordSalt)
+            .HasColumnName("password_salt")
             .HasMaxLength(8)
             .IsRequired();
 

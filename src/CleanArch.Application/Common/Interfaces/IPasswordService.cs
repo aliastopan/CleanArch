@@ -2,6 +2,6 @@ namespace CleanArch.Application.Common.Interfaces;
 
 public interface IPasswordService
 {
-    string HashPassword(string rawPassword, out string salt);
-    bool VerifyPassword(string rawPassword, string salt, string hashedPassword);
+    string HashPassword(string password, out string passwordSalt);
+    bool VerifyPassword(string password, string passwordSalt, string passwordHash);
 }

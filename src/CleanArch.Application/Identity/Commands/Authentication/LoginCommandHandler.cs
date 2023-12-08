@@ -37,7 +37,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCom
             return await ValueTask.FromResult(result);
         }
 
-        var validatePassword = ValidatePassword(request.Password, user.Salt, user.HashedPassword);
+        var validatePassword = ValidatePassword(request.Password, user.PasswordSalt, user.PasswordHash);
         if(!validatePassword.IsSuccess)
         {
             result = Result<LoginCommandResponse>.Inherit(result: validatePassword);
@@ -51,9 +51,9 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCom
         return await ValueTask.FromResult(result);
     }
 
-    private Result ValidatePassword(string password, string salt, string hashedPassword)
+    private Result ValidatePassword(string password, string passwordSalt, string passwordHash)
     {
-        var isValid = _passwordService.VerifyPassword(password, salt, hashedPassword);
+        var isValid = _passwordService.VerifyPassword(password, passwordSalt, passwordHash);
         if(!isValid)
         {
             var error = new Error("Incorrect password.", ErrorSeverity.Warning);
