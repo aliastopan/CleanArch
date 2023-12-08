@@ -14,6 +14,7 @@ public static class ConfigureServices
         services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
 
         services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorService>();
+        services.AddSingleton<IDateTimeService, DateTimeService>();
         services.AddSingleton<IPasswordService, PasswordService>();
         // services.AddSingleton<IPasswordService, BcryptPasswordService>();
         services.AddScoped<ISecurityTokenService, SecurityTokenService>();

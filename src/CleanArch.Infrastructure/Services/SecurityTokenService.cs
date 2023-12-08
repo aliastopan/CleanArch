@@ -9,12 +9,15 @@ namespace CleanArch.Infrastructure.Services;
 
 internal sealed class SecurityTokenService : ISecurityTokenService
 {
+    private readonly IDateTimeService _dateTimeService;
     private readonly UserSecrets _userSecrets;
     private readonly SecurityTokenSettings _securityTokenSettings;
 
-    public SecurityTokenService(IOptions<UserSecrets> userSecrets,
+    public SecurityTokenService(IDateTimeService dateTimeService,
+        IOptions<UserSecrets> userSecrets,
         IOptions<SecurityTokenSettings> securityTokenSettings)
     {
+        _dateTimeService = dateTimeService;
         _userSecrets = userSecrets.Value;
         _securityTokenSettings = securityTokenSettings.Value;
     }
@@ -36,7 +39,7 @@ internal sealed class SecurityTokenService : ISecurityTokenService
         var jwt = new JwtSecurityToken(
             issuer: _securityTokenSettings.Issuer,
             audience: _securityTokenSettings.Audience,
-            expires: DateTime.UtcNow.Add(_securityTokenSettings.AccessTokenLifeTime),
+            expires: _dateTimeService.UtcNow.Add(_securityTokenSettings.AccessTokenLifeTime),
             claims: claims,
             signingCredentials: signingCredentials);
 
