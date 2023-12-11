@@ -45,8 +45,16 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCom
         }
 
         var accessToken = _securityTokenService.GenerateAccessToken(user);
+        var refreshToken = _securityTokenService.GenerateRefreshToken(accessToken, user).Value;
 
-        var response = new LoginCommandResponse(user.UserId, accessToken);
+        using var dbContext = _dbContextFactory.CreateDbContext();
+
+        user.LastLoggedIn = DateTimeOffset.Now;
+        dbContext.Users.Update(user);
+        dbContext.RefreshTokens.Add(refreshToken);
+        await dbContext.SaveChangesAsync();
+
+        var response = new LoginCommandResponse(user.UserId, accessToken, refreshToken.Token);
         result = Result<LoginCommandResponse>.Ok(response);
         return await ValueTask.FromResult(result);
     }
