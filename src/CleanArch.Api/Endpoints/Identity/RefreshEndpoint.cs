@@ -36,7 +36,7 @@ public class RefreshEndpoint : IEndpointDefinition
                 httpContext.Response.Cookies.Append("access-token", value.AccessToken, cookieOption);
                 httpContext.Response.Cookies.Append("refresh-token", value.RefreshToken, cookieOption);
 
-                return Results.Ok();
+                return Results.Ok(value);
             },
             error => error.AsProblem(new ProblemDetails
             {

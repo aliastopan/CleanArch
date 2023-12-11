@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using CleanArch.Domain.Entities.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace CleanArch.Infrastructure.Services;
 
@@ -87,7 +88,10 @@ internal sealed class SecurityTokenService : ISecurityTokenService
 
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        var currentRefreshToken = dbContext.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
+        var currentRefreshToken = dbContext.RefreshTokens
+            .Include(x => x.User)
+            .SingleOrDefault(x => x.Token == refreshToken);
+
         if(currentRefreshToken is null)
         {
             var error = new Error("Refresh token not found.", ErrorSeverity.Warning);
