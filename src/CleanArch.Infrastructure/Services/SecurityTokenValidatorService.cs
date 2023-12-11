@@ -29,4 +29,18 @@ internal sealed class SecurityTokenValidatorService : ISecurityTokenValidatorSer
             ClockSkew = TimeSpan.Zero
         };
     }
+
+    public TokenValidationParameters GetRefreshTokenValidationParameters()
+    {
+        var apiKey = _configuration[UserSecrets.Element.ApiKey];
+        return new TokenValidationParameters
+        {
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(apiKey!)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            RequireSignedTokens = true,
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = false,
+        };
+    }
 }
