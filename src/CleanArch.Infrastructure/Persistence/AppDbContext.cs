@@ -11,6 +11,7 @@ internal sealed class AppDbContext : DbContext, IAppDbContext
     { }
 
     public DbSet<User> Users => Set<User>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     public override int SaveChanges()
     {
