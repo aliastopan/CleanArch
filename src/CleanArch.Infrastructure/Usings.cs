@@ -3,4 +3,5 @@ global using CleanArch.Infrastructure.Extensions;
 global using CleanArch.Infrastructure.Persistence;
 global using CleanArch.Infrastructure.Security;
 
+global using AnnotatedResult;
 global using Serilog;

@@ -9,15 +9,21 @@ namespace CleanArch.Infrastructure.Services;
 
 internal sealed class SecurityTokenService : ISecurityTokenService
 {
+    private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
     private readonly IDateTimeService _dateTimeService;
+    private readonly ISecurityTokenValidatorService _securityTokenValidatorService;
     private readonly UserSecrets _userSecrets;
     private readonly SecurityTokenSettings _securityTokenSettings;
 
-    public SecurityTokenService(IDateTimeService dateTimeService,
+    public SecurityTokenService(IAppDbContextFactory<IAppDbContext> dbContextFactory,
+        IDateTimeService dateTimeService,
+        ISecurityTokenValidatorService securityTokenValidatorService,
         IOptions<UserSecrets> userSecrets,
         IOptions<SecurityTokenSettings> securityTokenSettings)
     {
+        _dbContextFactory = dbContextFactory;
         _dateTimeService = dateTimeService;
+        _securityTokenValidatorService = securityTokenValidatorService;
         _userSecrets = userSecrets.Value;
         _securityTokenSettings = securityTokenSettings.Value;
     }
@@ -44,5 +50,97 @@ internal sealed class SecurityTokenService : ISecurityTokenService
             signingCredentials: signingCredentials);
 
         return jwtHandler.WriteToken(jwt);
+    }
+
+    public Result<RefreshToken> GenerateRefreshToken(string accessToken, User user)
+    {
+        var principal = GetPrincipalFromToken(accessToken);
+        if(principal is null)
+        {
+            var error = new Error("Refresh token has invalid null principal.", ErrorSeverity.Warning);
+            return Result<RefreshToken>.Unauthorized(error);
+        }
+
+        var jti = principal.Claims.Single(x => x.Type == JwtClaimTypes.Jti).Value;
+        var refreshToken = new RefreshToken
+        {
+            RefreshTokenId = Guid.NewGuid(),
+            Token = Guid.NewGuid().ToString(),
+            Jti = jti,
+            CreationDate = _dateTimeService.UtcNow,
+            ExpiryDate = _dateTimeService.UtcNow.Add(_securityTokenSettings.RefreshTokenLifeTime),
+            UserId = user.UserId,
+            User = user,
+        };
+
+        return Result<RefreshToken>.Ok(refreshToken);
+    }
+
+    public Result<RefreshToken> ValidateRefreshToken(string accessToken, string refreshToken)
+    {
+        var principal = GetPrincipalFromToken(accessToken);
+        if(principal is null)
+        {
+            var error = new Error("Refresh token has invalid null principal.", ErrorSeverity.Warning);
+            return Result<RefreshToken>.Unauthorized(error);
+        }
+
+        using var dbContext = _dbContextFactory.CreateDbContext();
+
+        var currentRefreshToken = dbContext.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
+        if(currentRefreshToken is null)
+        {
+            var error = new Error("Refresh token not found.", ErrorSeverity.Warning);
+            return Result<RefreshToken>.NotFound(error);
+        }
+
+        if(currentRefreshToken.ExpiryDate < _dateTimeService.UtcNow)
+        {
+            var error = new Error("Refresh token was expired.", ErrorSeverity.Warning);
+            return Result<RefreshToken>.Unauthorized(error);
+        }
+
+        if(currentRefreshToken.IsInvalidated)
+        {
+            var error = new Error("Refresh token was invalidated.", ErrorSeverity.Warning);
+            return Result<RefreshToken>.Invalid(error);
+        }
+
+        if(currentRefreshToken.IsUsed)
+        {
+            var error = new Error("Refresh token was used.", ErrorSeverity.Warning);
+            return Result<RefreshToken>.Error(error);
+        }
+
+        currentRefreshToken.IsUsed = true;
+        return Result<RefreshToken>.Ok(currentRefreshToken);
+    }
+
+    private ClaimsPrincipal GetPrincipalFromToken(string accessToken)
+    {
+        try
+        {
+            var validationParameters = _securityTokenValidatorService.GetRefreshTokenValidationParameters();
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var principal = tokenHandler.ValidateToken(accessToken, validationParameters, out var securityToken);
+            if(!HasValidSecurityAlgorithm(securityToken))
+            {
+                return null!;
+            }
+
+            return principal;
+        }
+        catch
+        {
+            return null!;
+        }
+    }
+
+    private static bool HasValidSecurityAlgorithm(SecurityToken securityToken)
+    {
+        var securityAlgorithm = SecurityAlgorithms.HmacSha256;
+        var jwtSecurityToken = securityToken as JwtSecurityToken;
+        return jwtSecurityToken is not null && jwtSecurityToken!.Header.Alg
+            .Equals(securityAlgorithm, StringComparison.InvariantCulture);
     }
 }
