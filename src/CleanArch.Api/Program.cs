@@ -18,6 +18,7 @@ builder.Host.ConfigureServices((context, services) =>
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseEndpointDefinitions();
 
