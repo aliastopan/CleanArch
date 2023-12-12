@@ -10,7 +10,7 @@ builder.ConfigureLogging();
 builder.Host.ConfigureServices((context, services) =>
 {
     services.AddApplicationServices();
-    services.AddInfrastructureServices(context.Configuration);
+    services.AddInfrastructureServices(context.Configuration, context.HostingEnvironment);
     services.AddEndpointDefinitions(Assembly.GetExecutingAssembly());
     services.AddJwtAuthentication();
     services.AddJwtAuthorization();

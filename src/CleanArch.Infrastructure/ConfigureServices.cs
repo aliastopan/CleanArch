@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using CleanArch.Infrastructure.Services;
@@ -8,7 +9,7 @@ namespace CleanArch.Infrastructure;
 public static class ConfigureServices
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration, IHostEnvironment environment)
     {
         services.Configure<UserSecrets>(configuration.GetSection(UserSecrets.SectionName));
         services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
@@ -19,16 +20,15 @@ public static class ConfigureServices
         // services.AddSingleton<IPasswordService, BcryptPasswordService>();
         services.AddScoped<ISecurityTokenService, SecurityTokenService>();
 
-
-        services.AddDbContext(configuration);
+        services.AddDbContext(configuration, environment);
 
         return services;
     }
 
     internal static IServiceCollection AddDbContext(this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration, IHostEnvironment environment)
     {
-        if(configuration.UseInMemoryDatabase())
+        if(environment.IsDevelopment() && configuration.UseInMemoryDatabase())
         {
             services.AddDbContext<IAppDbContext, AppDbContext>(options =>
             {
