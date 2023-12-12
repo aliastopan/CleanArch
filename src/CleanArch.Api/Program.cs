@@ -5,14 +5,7 @@ using CleanArch.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .CreateLogger();
-
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog();
+builder.ConfigureLogging();
 
 builder.Host.ConfigureServices((context, services) =>
 {

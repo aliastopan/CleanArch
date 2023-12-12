@@ -34,6 +34,7 @@ public static class ConfigureServices
             {
                 options.UseInMemoryDatabase($"Database-CleanArch");
                 options.UseLazyLoadingProxies();
+                options.EnableSensitiveDataLogging();
             });
             services.AddScoped<IAppDbContextFactory<IAppDbContext>, AppDbContextFactory>();
         }

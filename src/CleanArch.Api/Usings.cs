@@ -1,5 +1,6 @@
 global using CleanArch.Api.Extensions;
 global using CleanArch.Api.Interfaces;
+global using CleanArch.Api.Logging;
 
 global using Microsoft.AspNetCore.Mvc;
 
