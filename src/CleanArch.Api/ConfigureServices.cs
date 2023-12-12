@@ -6,7 +6,7 @@ namespace CleanArch.Api;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
+    public static IServiceCollection AddSecurityTokenAuthentication(this IServiceCollection services)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {
@@ -25,7 +25,7 @@ public static class ConfigureServices
         return services;
     }
 
-    public static IServiceCollection AddJwtAuthorization(this IServiceCollection services)
+    public static IServiceCollection AddSecurityTokenAuthorization(this IServiceCollection services)
     {
         services.AddAuthorization(options =>
         {

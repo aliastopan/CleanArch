@@ -12,8 +12,8 @@ builder.Host.ConfigureServices((context, services) =>
     services.AddApplicationServices();
     services.AddInfrastructureServices(context.Configuration, context.HostingEnvironment);
     services.AddEndpointDefinitions(Assembly.GetExecutingAssembly());
-    services.AddJwtAuthentication();
-    services.AddJwtAuthorization();
+    services.AddSecurityTokenAuthentication();
+    services.AddSecurityTokenAuthorization();
 });
 
 var app = builder.Build();
