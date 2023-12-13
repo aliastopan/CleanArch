@@ -37,6 +37,7 @@ public static class ConfigureServices
                 options.EnableSensitiveDataLogging();
             });
             services.AddScoped<IAppDbContextFactory<IAppDbContext>, AppDbContextFactory>();
+            services.AddScoped<IAppDbContextSeeder, AppDbContextSeeder>();
         }
         else
         {
