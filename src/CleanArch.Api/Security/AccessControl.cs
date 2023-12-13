@@ -36,6 +36,11 @@ public static class AccessControl
                 .Build();
 
             options.AddPolicy(Policies.AllowAnonymous, policy => policy.RequireAssertion(_ => true));
+            options.AddPolicy(Policies.DeveloperPolicy, policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireClaim("role", "Developer");
+            });
         });
 
         return services;
