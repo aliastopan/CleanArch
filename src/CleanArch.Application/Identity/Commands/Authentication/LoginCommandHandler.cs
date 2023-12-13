@@ -32,7 +32,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCom
         var user = await SearchUserAsync(request.Username);
         if(user is null)
         {
-            var error = new Error("User is not registered", ErrorSeverity.Warning);
+            var error = new Error("User does not exist.", ErrorSeverity.Warning);
             result = Result<LoginCommandResponse>.NotFound(error);
             return await ValueTask.FromResult(result);
         }
