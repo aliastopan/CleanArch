@@ -16,4 +16,5 @@ public static class JwtClaimTypes
     public const string Nonce = "nonce";
     public const string UniqueName = "unique_name";
     public const string Role = "role";
+    public const string IsVerified = "is_verified";
 }

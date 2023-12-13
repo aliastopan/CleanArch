@@ -1,3 +1,4 @@
+using CleanArch.Api.Security.Requirements;
 using CleanArch.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -41,7 +42,14 @@ public static class AccessControl
                 policy.RequireAuthenticatedUser();
                 policy.RequireClaim("role", "Developer");
             });
+            options.AddPolicy(Policies.VerifiedUserPolicy, policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.Requirements.Add(new VerifiedUserRequirement());
+            });
         });
+
+        services.AddScoped<IAuthorizationHandler, VerifiedUserRequirementHandler>();
 
         return services;
     }

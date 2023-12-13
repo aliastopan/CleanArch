@@ -38,7 +38,8 @@ internal sealed class SecurityTokenService : ISecurityTokenService
             new Claim(JwtClaimTypes.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtClaimTypes.Sub, user.UserId.ToString()),
             new Claim(JwtClaimTypes.UniqueName, user.Username),
-            new Claim(JwtClaimTypes.Role, user.Role.ToString())
+            new Claim(JwtClaimTypes.Role, user.Role.ToString()),
+            new Claim(JwtClaimTypes.IsVerified, user.IsVerified ? "true" : "false")
         };
 
         JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
