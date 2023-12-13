@@ -21,7 +21,7 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
         {
             UserId = Guid.Parse("9dd0aa01-3a6e-4159-8c7b-8ee4caa1d4ea"),
             Username = "aliastopan",
-            Email = "aliastopan@proton.me",
+            Email = "alias.topan@proton.me",
             PasswordHash = _passwordService.HashPassword("LongPassword012", out var salt),
             PasswordSalt = salt,
             IsVerified = true,
