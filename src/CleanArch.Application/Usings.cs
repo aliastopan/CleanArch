@@ -1,6 +1,5 @@
 global using CleanArch.Application.Common.Interfaces;
-
-global using Microsoft.EntityFrameworkCore;
+global using CleanArch.Application.Common.Extensions.Repository;
 
 global using AnnotatedResult;
 global using Mediator;

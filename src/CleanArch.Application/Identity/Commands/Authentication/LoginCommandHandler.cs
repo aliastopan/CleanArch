@@ -75,7 +75,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCom
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Username == username);
-        return user;
+        var user = await dbContext.GetUserByUsernameAsync(username);
+        return user!;
     }
 }

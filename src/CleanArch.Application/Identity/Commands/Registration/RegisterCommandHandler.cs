@@ -48,14 +48,14 @@ public class RegisterCommandHandler
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Username == username);
+        var user = await dbContext.GetUserByUsernameAsync(username);
         if(user is not null)
         {
             var error = new Error("Username is already taken.", ErrorSeverity.Warning);
             return Result.Conflict(error);
         }
 
-        user = await dbContext.Users.FirstOrDefaultAsync(x => x.Email == email);
+        user = await dbContext.GetUserByEmailAsync(email);
         if(user is not null)
         {
             var error = new Error("Email is already in use.", ErrorSeverity.Warning);
