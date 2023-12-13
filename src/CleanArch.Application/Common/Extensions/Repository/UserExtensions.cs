@@ -5,6 +5,11 @@ namespace CleanArch.Application.Common.Extensions.Repository;
 
 public static class UserExtensions
 {
+    public static async Task<User?> GetUserByIdAsync(this IAppDbContext context, Guid UserId)
+    {
+        return await context.Users.FindAsync(UserId);
+    }
+
     public static async Task<User?> GetUserByUsernameAsync(this IAppDbContext context, string username)
     {
         return await context.Users.FirstOrDefaultAsync(x => x.Username == username);

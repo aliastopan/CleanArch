@@ -1,0 +1,29 @@
+using System.ComponentModel.DataAnnotations;
+using CleanArch.Application.Common.Validations;
+
+namespace CleanArch.Application.Identity.Commands.ResetPassword;
+
+public record ResetPasswordCommand : IRequest<Result>
+{
+    public ResetPasswordCommand(Guid userId, string oldPassword, string newPassword, string confirmPassword)
+    {
+        UserId = userId;
+        OldPassword = oldPassword;
+        NewPassword = newPassword;
+        ConfirmPassword = confirmPassword;
+    }
+
+    [Required]
+    public Guid UserId { get; init; }
+
+    [Required]
+    public string OldPassword { get; init; }
+
+    [Required]
+    [RegularExpression(RegexPattern.StrongPassword)]
+    public string NewPassword { get; init; }
+
+    [Required]
+    [Compare(nameof(NewPassword), ErrorMessage = "Confirm password does not match.")]
+    public string ConfirmPassword { get; init; }
+}
