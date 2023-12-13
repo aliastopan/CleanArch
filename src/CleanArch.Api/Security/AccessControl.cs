@@ -2,9 +2,9 @@ using CleanArch.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
-namespace CleanArch.Api;
+namespace CleanArch.Api.Security;
 
-public static class ConfigureServices
+public static class AccessControl
 {
     public static IServiceCollection AddSecurityTokenAuthentication(this IServiceCollection services)
     {
@@ -33,6 +33,8 @@ public static class ConfigureServices
                 .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                 .RequireAuthenticatedUser()
                 .Build();
+
+            options.AddPolicy(Policies.AllowAnonymous, policy => policy.RequireAssertion(_ => true));
         });
 
         return services;
