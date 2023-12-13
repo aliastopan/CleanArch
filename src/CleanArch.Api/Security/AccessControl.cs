@@ -12,6 +12,7 @@ public static class AccessControl
         {
             var securityTokenValidator = services.BuildServiceProvider().GetRequiredService<ISecurityTokenValidatorService>();
             options.TokenValidationParameters = securityTokenValidator.GetAccessTokenValidationParameters();
+            options.MapInboundClaims = false;
             options.Events = new JwtBearerEvents
             {
                 OnMessageReceived = context =>
