@@ -14,4 +14,9 @@ public static class UserExtensions
     {
         return await context.Users.FirstOrDefaultAsync(x => x.Email == email);
     }
+
+    public static async Task<List<User>> GetUsersAsync(this IAppDbContext context)
+    {
+        return await context.Users.ToListAsync();
+    }
 }
