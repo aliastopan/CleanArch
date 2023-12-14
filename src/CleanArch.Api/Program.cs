@@ -1,5 +1,4 @@
 using System.Reflection;
-using CleanArch.Api;
 using CleanArch.Application;
 using CleanArch.Infrastructure;
 
