@@ -44,15 +44,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCom
             return await ValueTask.FromResult(result);
         }
 
-        var accessToken = _securityTokenService.GenerateAccessToken(user);
-        var refreshToken = _securityTokenService.GenerateRefreshToken(accessToken, user).Value;
-
-        using var dbContext = _dbContextFactory.CreateDbContext();
-
-        user.LastLoggedIn = DateTimeOffset.Now;
-        dbContext.Users.Update(user);
-        dbContext.RefreshTokens.Add(refreshToken);
-        await dbContext.SaveChangesAsync();
+        var (accessToken, refreshToken) = await SignUserAsync(user);
 
         var response = new LoginCommandResponse(user.UserId, accessToken, refreshToken.Token);
         result = Result<LoginCommandResponse>.Ok(response);
@@ -77,5 +69,20 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCom
 
         var user = await dbContext.GetUserByUsernameAsync(username);
         return user!;
+    }
+
+    private async Task<(string accessToken, RefreshToken refreshToken)> SignUserAsync(User user)
+    {
+        var accessToken = _securityTokenService.GenerateAccessToken(user);
+        var refreshToken = _securityTokenService.GenerateRefreshToken(accessToken, user).Value;
+
+        using var dbContext = _dbContextFactory.CreateDbContext();
+
+        user.LastLoggedIn = DateTimeOffset.Now;
+        dbContext.Users.Update(user);
+        dbContext.RefreshTokens.Add(refreshToken);
+        await dbContext.SaveChangesAsync();
+
+        return (accessToken, refreshToken);
     }
 }
