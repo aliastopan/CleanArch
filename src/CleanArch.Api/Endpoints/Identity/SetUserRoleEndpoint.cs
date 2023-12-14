@@ -7,7 +7,9 @@ public class SetUserRoleEndpoint : IEndpointDefinition
 {
     public void DefineEndpoints(WebApplication app)
     {
-        app.MapPost("/api/auth/set-role", SetUserRole);
+        app.MapPost("/api/auth/set-role", SetUserRole)
+            .RequireAuthorization(Policies.VerifiedUserPolicy)
+            .RequireAuthorization(Policies.DeveloperPolicy);
     }
 
     internal async Task<IResult> SetUserRole([FromServices] ISender sender,
