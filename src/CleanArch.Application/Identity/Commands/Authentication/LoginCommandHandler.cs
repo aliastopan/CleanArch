@@ -53,8 +53,8 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCom
 
     private Result ValidatePassword(string password, string passwordSalt, string passwordHash)
     {
-        var isValid = _passwordService.VerifyPassword(password, passwordSalt, passwordHash);
-        if(!isValid)
+        var isVerified = _passwordService.VerifyPassword(password, passwordSalt, passwordHash);
+        if(!isVerified)
         {
             var error = new Error("Incorrect password.", ErrorSeverity.Warning);
             return Result.Unauthorized(error);

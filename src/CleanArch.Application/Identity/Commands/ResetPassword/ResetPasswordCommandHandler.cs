@@ -54,8 +54,8 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
 
     private Result ValidatePassword(string newPassword, string oldPassword, string passwordSalt, string passwordHash)
     {
-        var isValid = _passwordService.VerifyPassword(oldPassword, passwordSalt, passwordHash);
-        if(!isValid)
+        var isVerified = _passwordService.VerifyPassword(oldPassword, passwordSalt, passwordHash);
+        if(!isVerified)
         {
             var error = new Error("Incorrect password.", ErrorSeverity.Warning);
             return Result.Unauthorized(error);
