@@ -50,5 +50,10 @@ internal sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refre
               .WithMany(u => u.RefreshTokens)
               .HasForeignKey(rt => rt.UserId)
               .OnDelete(DeleteBehavior.Cascade);
+
+       builder.HasOne(rt => rt.UserAccount)
+              .WithMany(u => u.RefreshTokens)
+              .HasForeignKey(rt => rt.UserAccountId)
+              .OnDelete(DeleteBehavior.Cascade);
     }
 }
