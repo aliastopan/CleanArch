@@ -1,6 +1,6 @@
 #nullable disable
 
-namespace CleanArch.Domain.Entities.Identity;
+namespace CleanArch.Domain.Aggregates.Identity;
 
 public class RefreshToken
 {

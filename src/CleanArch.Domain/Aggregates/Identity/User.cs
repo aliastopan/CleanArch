@@ -1,7 +1,6 @@
 #nullable disable
-using CleanArch.Domain.Enums;
 
-namespace CleanArch.Domain.Entities.Identity;
+namespace CleanArch.Domain.Aggregates.Identity;
 
 public class User
 {

@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using CleanArch.Domain.Entities.Identity;
-
+using CleanArch.Domain.Aggregates.Identity;
 
 namespace CleanArch.Infrastructure.Persistence.Configurations.Identity;
 

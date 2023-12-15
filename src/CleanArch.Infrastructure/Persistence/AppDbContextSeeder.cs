@@ -1,5 +1,4 @@
-using CleanArch.Domain.Aggregates;
-using CleanArch.Domain.Entities.Identity;
+using CleanArch.Domain.Aggregates.Identity;
 using CleanArch.Domain.Enums;
 
 namespace CleanArch.Infrastructure.Persistence;

@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using CleanArch.Domain.Aggregates;
-using CleanArch.Domain.Entities.Identity;
+using CleanArch.Domain.Aggregates.Identity;
 
 namespace CleanArch.Application.Common.Interfaces.Persistence;
 

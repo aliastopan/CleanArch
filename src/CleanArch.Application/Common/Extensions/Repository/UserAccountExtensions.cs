@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using CleanArch.Domain.Aggregates;
+using CleanArch.Domain.Aggregates.Identity;
 
 namespace CleanArch.Application.Common.Extensions.Repository;
 

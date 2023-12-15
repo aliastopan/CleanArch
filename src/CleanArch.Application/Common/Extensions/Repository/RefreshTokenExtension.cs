@@ -1,4 +1,4 @@
-using CleanArch.Domain.Entities.Identity;
+using CleanArch.Domain.Aggregates.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArch.Application.Common.Extensions.Repository;

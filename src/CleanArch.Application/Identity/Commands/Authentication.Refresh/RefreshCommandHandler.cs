@@ -1,4 +1,4 @@
-using CleanArch.Domain.Entities.Identity;
+using CleanArch.Domain.Aggregates.Identity;
 
 namespace CleanArch.Application.Identity.Commands.Authentication.Refresh;
 

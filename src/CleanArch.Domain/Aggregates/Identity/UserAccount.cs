@@ -1,8 +1,6 @@
 #nullable disable
-using CleanArch.Domain.Entities.Identity;
-using CleanArch.Domain.Enums;
 
-namespace CleanArch.Domain.Aggregates;
+namespace CleanArch.Domain.Aggregates.Identity;
 
 public class UserAccount : IAggregateRoot
 {

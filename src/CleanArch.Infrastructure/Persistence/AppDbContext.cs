@@ -1,7 +1,6 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using CleanArch.Domain.Entities.Identity;
-using CleanArch.Domain.Aggregates;
+using CleanArch.Domain.Aggregates.Identity;
 
 namespace CleanArch.Infrastructure.Persistence;
 

@@ -1,4 +1,4 @@
-using CleanArch.Domain.Aggregates;
+using CleanArch.Domain.Aggregates.Identity;
 using CleanArch.Domain.Enums;
 
 namespace CleanArch.Application.Identity.Commands.SetUserRole;
