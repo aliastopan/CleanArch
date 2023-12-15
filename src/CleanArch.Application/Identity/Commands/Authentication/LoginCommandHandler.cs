@@ -1,3 +1,4 @@
+using CleanArch.Domain.Aggregates;
 using CleanArch.Domain.Entities.Identity;
 
 namespace CleanArch.Application.Identity.Commands.Authentication;
@@ -29,24 +30,24 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCom
             return await ValueTask.FromResult(result);
         }
 
-        var user = await SearchUserAsync(request.Username);
-        if(user is null)
+        var userAccount = await SearchUserAccountAsync(request.Username);
+        if(userAccount is null)
         {
             var error = new Error("User does not exist.", ErrorSeverity.Warning);
             result = Result<LoginCommandResponse>.NotFound(error);
             return await ValueTask.FromResult(result);
         }
 
-        var validatePassword = ValidatePassword(request.Password, user.PasswordSalt, user.PasswordHash);
+        var validatePassword = ValidatePassword(request.Password, userAccount.PasswordSalt, userAccount.PasswordHash);
         if(!validatePassword.IsSuccess)
         {
             result = Result<LoginCommandResponse>.Inherit(result: validatePassword);
             return await ValueTask.FromResult(result);
         }
 
-        var (accessToken, refreshToken) = await SignUserAsync(user);
+        var (accessToken, refreshToken) = await SignUserAsync(userAccount);
 
-        var response = new LoginCommandResponse(user.UserId, accessToken, refreshToken.Token);
+        var response = new LoginCommandResponse(userAccount.UserAccountId, accessToken, refreshToken.Token);
         result = Result<LoginCommandResponse>.Ok(response);
         return await ValueTask.FromResult(result);
     }
@@ -63,23 +64,23 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCom
         return Result.Ok();
     }
 
-    private async Task<User?> SearchUserAsync(string username)
+    private async Task<UserAccount?> SearchUserAccountAsync(string username)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        var user = await dbContext.GetUserByUsernameAsync(username);
+        var user = await dbContext.GetUserAccountByUsernameAsync(username);
         return user!;
     }
 
-    private async Task<(string accessToken, RefreshToken refreshToken)> SignUserAsync(User user)
+    private async Task<(string accessToken, RefreshToken refreshToken)> SignUserAsync(UserAccount userAccount)
     {
-        var accessToken = _securityTokenService.GenerateAccessToken(user);
-        var refreshToken = _securityTokenService.GenerateRefreshToken(accessToken, user).Value;
+        var accessToken = _securityTokenService.GenerateAccessToken(userAccount);
+        var refreshToken = _securityTokenService.GenerateRefreshToken(accessToken, userAccount).Value;
 
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        user.LastLoggedIn = DateTimeOffset.Now;
-        dbContext.Users.Update(user);
+        userAccount.LastLoggedIn = DateTimeOffset.Now;
+        dbContext.UserAccounts.Update(userAccount);
         dbContext.RefreshTokens.Add(refreshToken);
         await dbContext.SaveChangesAsync();
 

@@ -11,6 +11,9 @@ internal sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refre
     {
        builder.ToTable("dbo.refresh_token");
 
+        // primary key
+        builder.HasKey(rt => rt.RefreshTokenId);
+
        // configure properties
        builder.Property(rt => rt.RefreshTokenId)
               .HasColumnName("refresh_token_id")
@@ -41,16 +44,11 @@ internal sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refre
               .HasColumnName("is_invalidated")
               .IsRequired();
 
-       builder.Property(rt => rt.UserId)
-              .HasColumnName("user_id")
+       builder.Property(rt => rt.UserAccountId)
+              .HasColumnName("user_account_id")
               .IsRequired();
 
        // configure relationships
-       builder.HasOne(rt => rt.User)
-              .WithMany(u => u.RefreshTokens)
-              .HasForeignKey(rt => rt.UserId)
-              .OnDelete(DeleteBehavior.Cascade);
-
        builder.HasOne(rt => rt.UserAccount)
               .WithMany(u => u.RefreshTokens)
               .HasForeignKey(rt => rt.UserAccountId)

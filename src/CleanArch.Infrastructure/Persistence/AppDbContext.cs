@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using CleanArch.Domain.Entities.Identity;
+using CleanArch.Domain.Aggregates;
 
 namespace CleanArch.Infrastructure.Persistence;
 
@@ -10,8 +11,12 @@ internal sealed class AppDbContext : DbContext, IAppDbContext
         : base(options)
     { }
 
-    public DbSet<User> Users => Set<User>();
+    // aggregates
+    public DbSet<UserAccount> UserAccounts => Set<UserAccount>();
+
+    // entities
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
 
     public override int SaveChanges()
     {

@@ -6,6 +6,32 @@ namespace CleanArch.Domain.Aggregates;
 
 public class UserAccount : IAggregateRoot
 {
+    public UserAccount()
+    {
+
+    }
+
+    public UserAccount(string username,
+        string email,
+        string passwordHash,
+        string passwordSalt,
+        DateTimeOffset creationDate)
+    {
+        User = new User
+        {
+            UserId = Guid.NewGuid(),
+            Username = username,
+            Email = email
+        };
+
+        UserAccountId = Guid.NewGuid();
+        UserRole = UserRole.Standard;
+        PasswordHash = passwordHash;
+        PasswordSalt = passwordSalt;
+        CreationDate = creationDate;
+        LastLoggedIn = creationDate;
+    }
+
     public Guid UserAccountId { get; init; }
     public UserRole UserRole { get; set; }
     public bool IsVerified { get; set; }

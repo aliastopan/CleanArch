@@ -1,4 +1,4 @@
-using CleanArch.Application.Identity.Queries.GetUsers;
+using CleanArch.Application.Identity.Queries.GetUserAccounts;
 
 namespace CleanArch.Api.Endpoints.Identity;
 
@@ -12,7 +12,7 @@ public class GetUsersEndpoint : IEndpointDefinition
     internal async Task<IResult> GetUsers([FromServices] ISender sender,
         HttpContext httpContext)
     {
-        var request = new GetUsersQuery();
+        var request = new GetUserAccountsQuery();
         var result = await sender.Send(request);
 
         return result.Match(

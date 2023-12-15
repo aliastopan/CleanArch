@@ -1,4 +1,4 @@
-using CleanArch.Domain.Entities.Identity;
+using CleanArch.Domain.Aggregates;
 using CleanArch.Domain.Enums;
 
 namespace CleanArch.Application.Identity.Commands.SetUserRole;
@@ -31,39 +31,39 @@ public class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand, Res
 
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        var grantor = await dbContext.GetUserByIdAsync(request.GrantorId);
-        var grantee = await dbContext.GetUserByIdAsync(request.GranteeId);
+        var grantorAccount = await dbContext.GetUserAccountByIdAsync(request.GrantorId);
+        var granteeAccount = await dbContext.GetUserAccountByIdAsync(request.GranteeId);
 
-        if(grantor is null || grantee is null)
+        if(grantorAccount is null || granteeAccount is null)
         {
             var error = new Error("User does not exist.", ErrorSeverity.Warning);
             result = Result.NotFound(error);
             return await ValueTask.FromResult(result);
         }
 
-        var validatePermission = ValidatePermission(grantor!, request.PermissionPassword);
+        var validatePermission = ValidatePermission(grantorAccount!, request.PermissionPassword);
         if(!validatePermission.IsSuccess)
         {
             result = Result.Inherit(result: validatePermission);
             return await ValueTask.FromResult(result);
         }
 
-        await SetUserRoleAsync(grantee, (UserRole)request.Role);
+        await SetUserRoleAsync(granteeAccount, (UserRole)request.Role);
 
         result = Result.Ok();
         return await ValueTask.FromResult(result);
     }
 
-    private Result ValidatePermission(User user, string password)
+    private Result ValidatePermission(UserAccount userAccount, string password)
     {
-        var isVerified = _passwordService.VerifyPassword(password, user.PasswordSalt, user.PasswordHash);
+        var isVerified = _passwordService.VerifyPassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
         if(!isVerified)
         {
             var error = new Error("Incorrect password.", ErrorSeverity.Warning);
             return Result.Unauthorized(error);
         }
 
-        var hasPermission = user.Role == UserRole.Developer;
+        var hasPermission = userAccount.UserRole == UserRole.Developer;
         if(!hasPermission)
         {
             var error = new Error("You don't have permission.", ErrorSeverity.Warning);
@@ -73,12 +73,12 @@ public class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand, Res
         return Result.Ok();
     }
 
-    private async Task SetUserRoleAsync(User user, UserRole role)
+    private async Task SetUserRoleAsync(UserAccount userAccount, UserRole userRole)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        user.Role = role;
-        dbContext.Users.Update(user);
+        userAccount.UserRole = userRole;
+        dbContext.UserAccounts.Update(userAccount);
         await dbContext.SaveChangesAsync();
     }
 }

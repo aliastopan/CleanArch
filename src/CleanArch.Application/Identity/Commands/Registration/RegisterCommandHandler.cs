@@ -1,4 +1,4 @@
-using CleanArch.Domain.Entities.Identity;
+using CleanArch.Domain.Aggregates;
 
 namespace CleanArch.Application.Identity.Commands.Registration;
 
@@ -7,12 +7,15 @@ public class RegisterCommandHandler
 {
     private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
     private readonly IPasswordService _passwordService;
+    private readonly IDateTimeService _dateTimeService;
 
     public RegisterCommandHandler(IAppDbContextFactory<IAppDbContext> dbContextFactory,
-        IPasswordService passwordService)
+        IPasswordService passwordService,
+        IDateTimeService dateTimeService)
     {
         _dbContextFactory = dbContextFactory;
         _passwordService = passwordService;
+        _dateTimeService = dateTimeService;
     }
 
     public async ValueTask<Result<RegisterCommandResponse>> Handle(RegisterCommand request,
@@ -34,11 +37,11 @@ public class RegisterCommandHandler
             return await ValueTask.FromResult(result);
         }
 
-        var user = await CreateUserAsync(request.Username, request.Email, request.Password);
-        var response = new RegisterCommandResponse(user.UserId,
-            user.Username,
-            user.Email,
-            user.Role.ToString());
+        var userAccount = await CreateUserAccountAsync(request.Username, request.Email, request.Password);
+        var response = new RegisterCommandResponse(userAccount.UserAccountId,
+            userAccount.User.Username,
+            userAccount.User.Email,
+            userAccount.UserRole.ToString());
 
         result = Result<RegisterCommandResponse>.Ok(response);
         return await ValueTask.FromResult(result);
@@ -48,15 +51,15 @@ public class RegisterCommandHandler
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        var user = await dbContext.GetUserByUsernameAsync(username);
-        if(user is not null)
+        var userAccount = await dbContext.GetUserAccountByUsernameAsync(username);
+        if(userAccount is not null)
         {
             var error = new Error("Username is already taken.", ErrorSeverity.Warning);
             return Result.Conflict(error);
         }
 
-        user = await dbContext.GetUserByEmailAsync(email);
-        if(user is not null)
+        userAccount = await dbContext.GetUserAccountByEmailAsync(email);
+        if(userAccount is not null)
         {
             var error = new Error("Email is already in use.", ErrorSeverity.Warning);
             return Result.Conflict(error);
@@ -65,15 +68,16 @@ public class RegisterCommandHandler
         return Result.Ok();
     }
 
-    private async Task<User> CreateUserAsync(string username, string email, string password)
+    private async Task<UserAccount> CreateUserAccountAsync(string username, string email, string password)
     {
         var hash = _passwordService.HashPassword(password, out string salt);
-        var user = new User(username, email, hash, salt);
+        var userAccount = new UserAccount(username, email, hash, salt, _dateTimeService.DateTimeOffsetNow);
 
         using var dbContext = _dbContextFactory.CreateDbContext();
-        dbContext.Users.Add(user);
+
+        dbContext.UserAccounts.Add(userAccount);
         await dbContext.SaveChangesAsync();
 
-        return user;
+        return userAccount;
     }
 }

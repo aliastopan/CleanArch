@@ -10,6 +10,9 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable("dbo.user");
 
+        // primary key
+        builder.HasKey(u => u.UserId);
+
         // configure properties
         builder.Property(u => u.UserId)
             .HasColumnName("user_id")
@@ -25,37 +28,5 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnName("email")
             .HasMaxLength(64)
             .IsRequired();
-
-        builder.Property(u => u.Role)
-            .HasColumnName("role")
-            .IsRequired();
-
-        builder.Property(u => u.IsVerified)
-            .HasColumnName("is_verified")
-            .IsRequired();
-
-        builder.Property(u => u.PasswordHash)
-            .HasColumnName("password_hash")
-            .HasMaxLength(96) // SHA384 (48-byte)
-            .IsRequired();
-
-        builder.Property(u => u.PasswordSalt)
-            .HasColumnName("password_salt")
-            .HasMaxLength(8)
-            .IsRequired();
-
-        builder.Property(u => u.CreationDate)
-            .HasColumnName("creation_date")
-            .IsRequired();
-
-        builder.Property(u => u.LastLoggedIn)
-            .HasColumnType("last_logged_in")
-            .IsRequired();
-
-        // configure relationships
-        builder.HasMany(u => u.RefreshTokens)
-            .WithOne(rt => rt.User)
-            .HasForeignKey(rt => rt.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

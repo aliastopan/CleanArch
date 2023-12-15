@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using CleanArch.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
+using CleanArch.Domain.Aggregates;
 
 namespace CleanArch.Infrastructure.Services;
 
@@ -29,17 +30,17 @@ internal sealed class SecurityTokenService : ISecurityTokenService
         _securityTokenSettings = securityTokenSettings.Value;
     }
 
-    public string GenerateAccessToken(User user)
+    public string GenerateAccessToken(UserAccount userAccount)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_userSecrets.ApiKey));
         var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var claims = new[]
         {
             new Claim(JwtClaimTypes.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtClaimTypes.Sub, user.UserId.ToString()),
-            new Claim(JwtClaimTypes.UniqueName, user.Username),
-            new Claim(JwtClaimTypes.Role, user.Role.ToString()),
-            new Claim(JwtClaimTypes.IsVerified, user.IsVerified ? "true" : "false")
+            new Claim(JwtClaimTypes.Sub, userAccount.UserAccountId.ToString()),
+            new Claim(JwtClaimTypes.UniqueName, userAccount.User.Username),
+            new Claim(JwtClaimTypes.Role, userAccount.UserRole.ToString()),
+            new Claim(JwtClaimTypes.IsVerified, userAccount.IsVerified ? "true" : "false")
         };
 
         JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
@@ -54,7 +55,7 @@ internal sealed class SecurityTokenService : ISecurityTokenService
         return jwtHandler.WriteToken(jwt);
     }
 
-    public Result<RefreshToken> GenerateRefreshToken(string accessToken, User user)
+    public Result<RefreshToken> GenerateRefreshToken(string accessToken, UserAccount userAccount)
     {
         var principal = GetPrincipalFromToken(accessToken);
         if(principal is null)
@@ -71,8 +72,8 @@ internal sealed class SecurityTokenService : ISecurityTokenService
             Jti = jti,
             CreationDate = _dateTimeService.UtcNow,
             ExpiryDate = _dateTimeService.UtcNow.Add(_securityTokenSettings.RefreshTokenLifeTime),
-            UserId = user.UserId,
-            User = user,
+            UserAccountId = userAccount.UserAccountId,
+            UserAccount = userAccount,
         };
 
         return Result<RefreshToken>.Ok(refreshToken);
@@ -90,7 +91,7 @@ internal sealed class SecurityTokenService : ISecurityTokenService
         using var dbContext = _dbContextFactory.CreateDbContext();
 
         var currentRefreshToken = dbContext.RefreshTokens
-            .Include(x => x.User)
+            .Include(x => x.UserAccount)
             .SingleOrDefault(x => x.Token == refreshToken);
 
         if(currentRefreshToken is null)

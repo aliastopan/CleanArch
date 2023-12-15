@@ -5,8 +5,8 @@ namespace CleanArch.Application.Common.Extensions.Repository;
 
 public static class RefreshTokenExtensions
 {
-    public static async Task<List<RefreshToken>> GetRefreshTokensByUserIdAsync(this IAppDbContext context, Guid userId)
+    public static async Task<List<RefreshToken>> GetRefreshTokensByUserIdAsync(this IAppDbContext context, Guid userAccountId)
     {
-        return await context.RefreshTokens.Where(x => x.UserId == userId).ToListAsync();
+        return await context.RefreshTokens.Where(x => x.UserAccountId == userAccountId).ToListAsync();
     }
 }

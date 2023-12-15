@@ -1,4 +1,4 @@
-using CleanArch.Domain.Entities.Identity;
+using CleanArch.Domain.Aggregates;
 
 namespace CleanArch.Application.Identity.Commands.ResetPassword;
 
@@ -27,8 +27,8 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
 
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        var user = await dbContext.GetUserByIdAsync(request.UserId);
-        if(user is null)
+        var userAccount = await dbContext.GetUserAccountByIdAsync(request.UserId);
+        if(userAccount is null)
         {
             var error = new Error("User does not exist.", ErrorSeverity.Warning);
             result = Result.NotFound(errors);
@@ -37,16 +37,16 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
 
         var validatePassword = ValidatePassword(request.NewPassword,
             request.OldPassword,
-            user.PasswordSalt,
-            user.PasswordHash);
+            userAccount.PasswordSalt,
+            userAccount.PasswordHash);
         if(!validatePassword.IsSuccess)
         {
             result = Result.Inherit(result: validatePassword);
             return await ValueTask.FromResult(result);
         }
 
-        await ResetPassword(user, request.NewPassword);
-        await InvalidateRefreshToken(user);
+        await ResetPassword(userAccount, request.NewPassword);
+        await InvalidateRefreshToken(userAccount);
 
         result = Result.Ok();
         return await ValueTask.FromResult(result);
@@ -71,22 +71,22 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
         return Result.Ok();
     }
 
-    private async Task ResetPassword(User user, string newPassword)
+    private async Task ResetPassword(UserAccount userAccount, string newPassword)
     {
-        user.PasswordHash = _passwordService.HashPassword(newPassword, out var salt);
-        user.PasswordSalt = salt;
+        userAccount.PasswordHash = _passwordService.HashPassword(newPassword, out var salt);
+        userAccount.PasswordSalt = salt;
 
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        dbContext.Users.Update(user);
+        dbContext.UserAccounts.Update(userAccount);
         await dbContext.SaveChangesAsync();
     }
 
-    private async Task InvalidateRefreshToken(User user)
+    private async Task InvalidateRefreshToken(UserAccount userAccount)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        var refreshTokens = await dbContext.GetRefreshTokensByUserIdAsync(user.UserId);
+        var refreshTokens = await dbContext.GetRefreshTokensByUserIdAsync(userAccount.UserAccountId);
         refreshTokens.ForEach(x => x.IsInvalidated = true);
         dbContext.RefreshTokens.UpdateRange(refreshTokens);
         await dbContext.SaveChangesAsync();

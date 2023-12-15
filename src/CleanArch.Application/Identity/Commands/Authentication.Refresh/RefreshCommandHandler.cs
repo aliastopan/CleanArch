@@ -26,9 +26,9 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, Result<Refr
             return await ValueTask.FromResult(result);
         }
 
-        var user = validateRefreshToken.Value.User;
-        var accessToken = _securityTokenService.GenerateAccessToken(user);
-        var refreshToken = _securityTokenService.GenerateRefreshToken(accessToken, user);
+        var userAccount = validateRefreshToken.Value.UserAccount;
+        var accessToken = _securityTokenService.GenerateAccessToken(userAccount);
+        var refreshToken = _securityTokenService.GenerateRefreshToken(accessToken, userAccount);
 
         using var dbContext = _dbContextFactory.CreateDbContext();
         RefreshToken previousRefreshToken = validateRefreshToken.Value;
