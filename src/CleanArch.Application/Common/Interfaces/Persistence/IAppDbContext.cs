@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using CleanArch.Domain.Aggregates;
 using CleanArch.Domain.Entities.Identity;
 
-namespace CleanArch.Application.Common.Interfaces;
+namespace CleanArch.Application.Common.Interfaces.Persistence;
 
 public interface IAppDbContext : IDisposable
 {

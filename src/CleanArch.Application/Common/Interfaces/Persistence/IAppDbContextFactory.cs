@@ -1,4 +1,4 @@
-namespace CleanArch.Application.Common.Interfaces;
+namespace CleanArch.Application.Common.Interfaces.Persistence;
 
 public interface IAppDbContextFactory<out T> where T : IAppDbContext
 {

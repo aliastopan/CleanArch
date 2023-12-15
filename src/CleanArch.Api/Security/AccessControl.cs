@@ -1,5 +1,5 @@
 using CleanArch.Api.Security.Requirements;
-using CleanArch.Application.Common.Interfaces;
+using CleanArch.Application.Common.Interfaces.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 

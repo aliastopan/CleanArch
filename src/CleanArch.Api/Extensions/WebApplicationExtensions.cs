@@ -1,5 +1,4 @@
-
-using CleanArch.Application.Common.Interfaces;
+using CleanArch.Application.Common.Interfaces.Persistence;
 
 namespace CleanArch.Api.Extensions;
 
