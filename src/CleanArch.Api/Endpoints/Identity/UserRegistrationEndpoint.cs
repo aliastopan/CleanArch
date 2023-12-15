@@ -3,17 +3,17 @@ using CleanArch.Contracts.Identity;
 
 namespace CleanArch.Api.Endpoints.Identity;
 
-public class RegistrationEndpoint : IEndpointDefinition
+public class UserRegistrationEndpoint : IEndpointDefinition
 {
     public void DefineEndpoints(WebApplication app)
     {
-        app.MapPost("/api/register", Register).AllowAnonymous();
+        app.MapPost("/api/register", RegisterUser).AllowAnonymous();
     }
 
-    internal async Task<IResult> Register([FromServices] ISender sender,
+    internal async Task<IResult> RegisterUser([FromServices] ISender sender,
         RegisterRequest request, HttpContext httpContext)
     {
-        var result = await sender.Send(new RegisterCommand(request.Username,
+        var result = await sender.Send(new RegisterUserCommand(request.Username,
             request.Email,
             request.Password)
         );

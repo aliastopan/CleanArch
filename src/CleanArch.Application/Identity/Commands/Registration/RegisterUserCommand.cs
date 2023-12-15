@@ -3,9 +3,9 @@ using CleanArch.Application.Common.Validations;
 
 namespace CleanArch.Application.Identity.Commands.Registration;
 
-public record RegisterCommand : IRequest<Result<RegisterCommandResponse>>
+public record RegisterUserCommand : IRequest<Result<RegisterUserCommandResponse>>
 {
-    public RegisterCommand(string username, string email, string password)
+    public RegisterUserCommand(string username, string email, string password)
     {
         Username = username;
         Email = email;

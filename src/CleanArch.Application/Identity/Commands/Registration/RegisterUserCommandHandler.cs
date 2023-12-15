@@ -1,24 +1,24 @@
 namespace CleanArch.Application.Identity.Commands.Registration;
 
-public class RegisterCommandHandler
-    : IRequestHandler<RegisterCommand, Result<RegisterCommandResponse>>
+public class RegisterUserCommandHandler
+    : IRequestHandler<RegisterUserCommand, Result<RegisterUserCommandResponse>>
 {
     private readonly IUserRegistrationService _userRegistrationService;
 
-    public RegisterCommandHandler(IUserRegistrationService userRegistrationService)
+    public RegisterUserCommandHandler(IUserRegistrationService userRegistrationService)
     {
         _userRegistrationService = userRegistrationService;
     }
 
-    public async ValueTask<Result<RegisterCommandResponse>> Handle(RegisterCommand request,
+    public async ValueTask<Result<RegisterUserCommandResponse>> Handle(RegisterUserCommand request,
         CancellationToken cancellationToken)
     {
-        Result<RegisterCommandResponse> result;
+        Result<RegisterUserCommandResponse> result;
 
         var isValid = request.TryValidate(out var errors);
         if(!isValid)
         {
-            result = Result<RegisterCommandResponse>.Invalid(errors);
+            result = Result<RegisterUserCommandResponse>.Invalid(errors);
             return await ValueTask.FromResult(result);
         }
 
@@ -28,17 +28,17 @@ public class RegisterCommandHandler
 
         if(!registerUserResult.IsSuccess)
         {
-            result = Result<RegisterCommandResponse>.Inherit(result: registerUserResult);
+            result = Result<RegisterUserCommandResponse>.Inherit(result: registerUserResult);
             return await ValueTask.FromResult(result);
         }
 
         var userAccount = registerUserResult.Value;
-        var response = new RegisterCommandResponse(userAccount.UserAccountId,
+        var response = new RegisterUserCommandResponse(userAccount.UserAccountId,
             userAccount.User.Username,
             userAccount.User.Email,
             userAccount.UserRole.ToString());
 
-        result = Result<RegisterCommandResponse>.Ok(response);
+        result = Result<RegisterUserCommandResponse>.Ok(response);
         return await ValueTask.FromResult(result);
     }
 }
