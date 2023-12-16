@@ -19,16 +19,16 @@ public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCo
             return await ValueTask.FromResult(invalid);
         }
 
-        var authentication = await _userAuthenticationService.AuthenticateUserAsync(request.Username,
+        var tryAuthenticateUser = await _userAuthenticationService.TryAuthenticateUserAsync(request.Username,
             request.Password);
 
-        if(!authentication.IsSuccess)
+        if(!tryAuthenticateUser.IsSuccess)
         {
-            var failure = Result<AuthenticateUserCommandResponse>.Inherit(result: authentication);
+            var failure = Result<AuthenticateUserCommandResponse>.Inherit(result: tryAuthenticateUser);
             return await ValueTask.FromResult(failure);
         }
 
-        var (accessToken, refreshToken) = authentication.Value;
+        var (accessToken, refreshToken) = tryAuthenticateUser.Value;
         var response = new AuthenticateUserCommandResponse(accessToken, refreshToken.Token);
 
         var ok = Result<AuthenticateUserCommandResponse>.Ok(response);

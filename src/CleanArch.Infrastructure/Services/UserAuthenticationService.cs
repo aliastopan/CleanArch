@@ -17,7 +17,7 @@ internal sealed class UserAuthenticationService : IUserAuthenticationService
         _securityTokenService = securityTokenService;
     }
 
-    public async Task<Result<(string accessToken, RefreshToken refreshToken)>> AuthenticateUserAsync(string username, string password)
+    public async Task<Result<(string accessToken, RefreshToken refreshToken)>> TryAuthenticateUserAsync(string username, string password)
     {
         var userAccount = await SearchUserAccountAsync(username);
         if(userAccount is null)
@@ -26,7 +26,7 @@ internal sealed class UserAuthenticationService : IUserAuthenticationService
             return Result<(string, RefreshToken)>.NotFound(error);
         }
 
-        var validatePassword = ValidatePassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
+        var validatePassword = TryValidatePassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
         if(!validatePassword.IsSuccess)
         {
             return Result<(string, RefreshToken)>.Inherit(result: validatePassword);
@@ -59,7 +59,7 @@ internal sealed class UserAuthenticationService : IUserAuthenticationService
         return user!;
     }
 
-    private Result ValidatePassword(string password, string passwordSalt, string passwordHash)
+    private Result TryValidatePassword(string password, string passwordSalt, string passwordHash)
     {
         var isVerified = _passwordService.VerifyPassword(password, passwordSalt, passwordHash);
         if(!isVerified)
