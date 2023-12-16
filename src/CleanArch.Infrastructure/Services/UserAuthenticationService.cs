@@ -42,6 +42,34 @@ internal sealed class UserAuthenticationService : IUserAuthenticationService
         return Result<(string, RefreshToken)>.Ok(access);
     }
 
+    public async Task<Result<(string accessToken, RefreshToken refreshToken)>> TryRefreshAccessAsync(string accessToken, string refreshToken)
+    {
+        var tryValidateSecurityToken = _securityTokenService.TryValidateSecurityToken(accessToken, refreshToken);
+        if(!tryValidateSecurityToken.IsSuccess)
+        {
+            return Result<(string, RefreshToken)>.Inherit(result: tryValidateSecurityToken);
+        }
+
+        var userAccount = tryValidateSecurityToken.Value.UserAccount;
+        accessToken = _securityTokenService.GenerateAccessToken(userAccount);
+        var tryGetRefreshToken = _securityTokenService.TryGenerateRefreshToken(accessToken, userAccount);
+        if(!tryGetRefreshToken.IsSuccess)
+        {
+            return Result<(string, RefreshToken)>.Inherit(result: tryGetRefreshToken);
+        }
+
+        RefreshToken previous = tryValidateSecurityToken.Value;
+        RefreshToken current = tryGetRefreshToken.Value;
+
+        using var dbContext = _dbContextFactory.CreateDbContext();
+
+        dbContext.RefreshTokens.Update(previous);
+        dbContext.RefreshTokens.Add(current);
+        await dbContext.SaveChangesAsync();
+
+        return Result<(string, RefreshToken)>.Ok((accessToken, current));
+    }
+
     private async Task<Result<(string accessToken, RefreshToken refreshToken)>> TrySignInAsync(UserAccount userAccount)
     {
         var accessToken = _securityTokenService.GenerateAccessToken(userAccount);

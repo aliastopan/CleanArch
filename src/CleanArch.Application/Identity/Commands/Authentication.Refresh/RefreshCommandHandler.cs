@@ -1,45 +1,28 @@
-using CleanArch.Domain.Aggregates.Identity;
-
 namespace CleanArch.Application.Identity.Commands.Authentication.Refresh;
 
 public class RefreshCommandHandler : IRequestHandler<RefreshCommand, Result<RefreshCommandResponse>>
 {
-    private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
-    private readonly ISecurityTokenService _securityTokenService;
+    private readonly IUserAuthenticationService _userAuthenticationService;
 
-    public RefreshCommandHandler(IAppDbContextFactory<IAppDbContext> dbContextFactory,
-        ISecurityTokenService securityTokenService)
+    public RefreshCommandHandler(IUserAuthenticationService userAuthenticationService)
     {
-        _dbContextFactory = dbContextFactory;
-        _securityTokenService = securityTokenService;
+        _userAuthenticationService = userAuthenticationService;
     }
 
     public async ValueTask<Result<RefreshCommandResponse>> Handle(RefreshCommand request,
         CancellationToken cancellationToken)
     {
-        Result<RefreshCommandResponse> result;
-
-        var validateSecurityToken = _securityTokenService.TryValidateSecurityToken(request.AccessToken, request.RefreshToken);
-        if(!validateSecurityToken.IsSuccess)
+        var tryRefreshAccess = await _userAuthenticationService.TryRefreshAccessAsync(request.AccessToken, request.RefreshToken);
+        if(!tryRefreshAccess.IsSuccess)
         {
-            result = Result<RefreshCommandResponse>.Inherit(result: validateSecurityToken);
-            return await ValueTask.FromResult(result);
+            var failure = Result<RefreshCommandResponse>.Inherit(result: tryRefreshAccess);
+            return await ValueTask.FromResult(failure);
         }
 
-        var userAccount = validateSecurityToken.Value.UserAccount;
-        var accessToken = _securityTokenService.GenerateAccessToken(userAccount);
-        var refreshToken = _securityTokenService.TryGenerateRefreshToken(accessToken, userAccount);
+        var (accessToken, refreshToken) = tryRefreshAccess.Value;
+        var response = new RefreshCommandResponse(accessToken, refreshToken.Token);
 
-        using var dbContext = _dbContextFactory.CreateDbContext();
-        RefreshToken previousRefreshToken = validateSecurityToken.Value;
-        RefreshToken currentRefreshToken = refreshToken.Value;
-
-        dbContext.RefreshTokens.Update(previousRefreshToken);
-        dbContext.RefreshTokens.Add(currentRefreshToken);
-        await dbContext.SaveChangesAsync();
-
-        var response = new RefreshCommandResponse(accessToken, currentRefreshToken.Token);
-        result = Result<RefreshCommandResponse>.Ok(response);
-        return await ValueTask.FromResult(result);
+        var ok = Result<RefreshCommandResponse>.Ok(response);
+        return await ValueTask.FromResult(ok);
     }
 }
