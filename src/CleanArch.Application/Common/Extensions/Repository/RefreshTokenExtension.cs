@@ -9,4 +9,12 @@ public static class RefreshTokenExtensions
     {
         return await context.RefreshTokens.Where(x => x.UserAccountId == userAccountId).ToListAsync();
     }
+
+    public static RefreshToken? GetRefreshToken(this IAppDbContext context, string token)
+    {
+        return context.RefreshTokens
+            .Include(x => x.UserAccount)
+                .ThenInclude(x => x.User)
+            .SingleOrDefault(x => x.Token == token);
+    }
 }

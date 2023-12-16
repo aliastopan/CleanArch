@@ -87,12 +87,11 @@ internal sealed class SecurityTokenService : ISecurityTokenService
             return Result<RefreshToken>.Unauthorized(error);
         }
 
-        using var dbContext = _dbContextFactory.CreateDbContext();
-
-        var currentRefreshToken = dbContext.RefreshTokens
-            .Include(x => x.UserAccount)
-                .ThenInclude(x => x.User)
-            .SingleOrDefault(x => x.Token == refreshToken);
+        RefreshToken? currentRefreshToken;
+        using(var dbContext = _dbContextFactory.CreateDbContext())
+        {
+            currentRefreshToken = dbContext.GetRefreshToken(refreshToken);
+        }
 
         if(currentRefreshToken is null)
         {
