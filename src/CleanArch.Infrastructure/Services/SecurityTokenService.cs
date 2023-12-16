@@ -91,6 +91,7 @@ internal sealed class SecurityTokenService : ISecurityTokenService
 
         var currentRefreshToken = dbContext.RefreshTokens
             .Include(x => x.UserAccount)
+                .ThenInclude(x => x.User)
             .SingleOrDefault(x => x.Token == refreshToken);
 
         if(currentRefreshToken is null)
