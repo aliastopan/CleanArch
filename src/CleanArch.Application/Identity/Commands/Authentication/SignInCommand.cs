@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CleanArch.Application.Identity.Commands.Authentication;
 
-public record AuthenticateUserCommand : IRequest<Result<AuthenticateUserCommandResponse>>
+public record SignInCommand : IRequest<Result<SignInCommandResponse>>
 {
-    public AuthenticateUserCommand(string username, string password)
+    public SignInCommand(string username, string password)
     {
         Username = username;
         Password = password;

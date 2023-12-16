@@ -2,22 +2,25 @@ using CleanArch.Domain.Aggregates.Identity;
 
 namespace CleanArch.Infrastructure.Services;
 
-internal sealed class UserAuthenticationService : IUserAuthenticationService
+internal sealed class AuthenticationService : IAuthenticationService
 {
     private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
     private readonly IPasswordService _passwordService;
     private readonly ISecurityTokenService _securityTokenService;
+    private readonly IDateTimeService _dateTimeService;
 
-    public UserAuthenticationService(IAppDbContextFactory<IAppDbContext> dbContextFactory,
+    public AuthenticationService(IAppDbContextFactory<IAppDbContext> dbContextFactory,
         IPasswordService passwordService,
-        ISecurityTokenService securityTokenService)
+        ISecurityTokenService securityTokenService,
+        IDateTimeService dateTimeService)
     {
         _dbContextFactory = dbContextFactory;
         _passwordService = passwordService;
         _securityTokenService = securityTokenService;
+        _dateTimeService = dateTimeService;
     }
 
-    public async Task<Result<(string accessToken, RefreshToken refreshToken)>> TryAuthenticateUserAsync(string username, string password)
+    public async Task<Result<(string accessToken, RefreshToken refreshToken)>> TrySignInAsync(string username, string password)
     {
         var userAccount = await SearchUserAccountAsync(username);
         if(userAccount is null)
@@ -32,14 +35,24 @@ internal sealed class UserAuthenticationService : IUserAuthenticationService
             return Result<(string, RefreshToken)>.Inherit(result: validatePassword);
         }
 
-        var trySignIn = await TrySignInAsync(userAccount);
-        if(!trySignIn.IsSuccess)
+        // sign-in protocol
+        var accessToken = _securityTokenService.GenerateAccessToken(userAccount);
+        var tryGetRefreshToken = _securityTokenService.TryGenerateRefreshToken(accessToken, userAccount);
+        if(!tryGetRefreshToken.IsSuccess)
         {
-            return Result<(string, RefreshToken)>.Inherit(result: trySignIn);
+            return Result<(string, RefreshToken)>.Inherit(result: tryGetRefreshToken);
         }
 
-        var access = trySignIn.Value;
-        return Result<(string, RefreshToken)>.Ok(access);
+        var refreshToken = tryGetRefreshToken.Value;
+
+        using var dbContext = _dbContextFactory.CreateDbContext();
+
+        userAccount.LastLoggedIn = _dateTimeService.UtcNow;
+        dbContext.UserAccounts.Update(userAccount);
+        dbContext.RefreshTokens.Add(refreshToken);
+        await dbContext.SaveChangesAsync();
+
+        return Result<(string, RefreshToken)>.Ok((accessToken, refreshToken));
     }
 
     public async Task<Result<(string accessToken, RefreshToken refreshToken)>> TryRefreshAccessAsync(string accessToken, string refreshToken)
@@ -68,27 +81,6 @@ internal sealed class UserAuthenticationService : IUserAuthenticationService
         await dbContext.SaveChangesAsync();
 
         return Result<(string, RefreshToken)>.Ok((accessToken, current));
-    }
-
-    private async Task<Result<(string accessToken, RefreshToken refreshToken)>> TrySignInAsync(UserAccount userAccount)
-    {
-        var accessToken = _securityTokenService.GenerateAccessToken(userAccount);
-        var tryGetRefreshToken = _securityTokenService.TryGenerateRefreshToken(accessToken, userAccount);
-        if(!tryGetRefreshToken.IsSuccess)
-        {
-            return Result<(string, RefreshToken)>.Inherit(result: tryGetRefreshToken);
-        }
-
-        var refreshToken = tryGetRefreshToken.Value;
-
-        using var dbContext = _dbContextFactory.CreateDbContext();
-
-        userAccount.LastLoggedIn = DateTimeOffset.Now;
-        dbContext.UserAccounts.Update(userAccount);
-        dbContext.RefreshTokens.Add(refreshToken);
-        await dbContext.SaveChangesAsync();
-
-        return Result<(string, RefreshToken)>.Ok((accessToken, refreshToken));
     }
 
     private async Task<UserAccount?> SearchUserAccountAsync(string username)

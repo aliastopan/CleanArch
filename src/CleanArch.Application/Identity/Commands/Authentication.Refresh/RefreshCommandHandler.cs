@@ -2,9 +2,9 @@ namespace CleanArch.Application.Identity.Commands.Authentication.Refresh;
 
 public class RefreshCommandHandler : IRequestHandler<RefreshCommand, Result<RefreshCommandResponse>>
 {
-    private readonly IUserAuthenticationService _userAuthenticationService;
+    private readonly IAuthenticationService _userAuthenticationService;
 
-    public RefreshCommandHandler(IUserAuthenticationService userAuthenticationService)
+    public RefreshCommandHandler(IAuthenticationService userAuthenticationService)
     {
         _userAuthenticationService = userAuthenticationService;
     }

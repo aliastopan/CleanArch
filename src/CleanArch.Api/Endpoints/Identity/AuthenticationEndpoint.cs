@@ -13,7 +13,7 @@ public class AuthenticationEndpoint : IEndpointDefinition
     internal async Task<IResult> Login([FromServices] ISender sender,
         LoginRequest request, HttpContext httpContext)
     {
-        var result = await sender.Send(new AuthenticateUserCommand(request.Username, request.Password));
+        var result = await sender.Send(new SignInCommand(request.Username, request.Password));
 
         return result.Match(
             value =>
