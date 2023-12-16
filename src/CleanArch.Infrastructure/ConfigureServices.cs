@@ -21,6 +21,7 @@ public static class ConfigureServices
         services.AddScoped<ISecurityTokenService, SecurityTokenService>();
 
         services.AddScoped<IUserRegistrationService, UserRegistrationService>();
+        services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 
         services.AddDbContext(configuration, environment);
 
