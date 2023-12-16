@@ -13,13 +13,11 @@ public class RegisterUserCommandHandler
     public async ValueTask<Result<RegisterUserCommandResponse>> Handle(RegisterUserCommand request,
         CancellationToken cancellationToken)
     {
-        Result<RegisterUserCommandResponse> result;
-
         var isValid = request.TryValidate(out var errors);
         if(!isValid)
         {
-            result = Result<RegisterUserCommandResponse>.Invalid(errors);
-            return await ValueTask.FromResult(result);
+            var invalid = Result<RegisterUserCommandResponse>.Invalid(errors);
+            return await ValueTask.FromResult(invalid);
         }
 
         var registerUserResult = await _userRegistrationService.RegisterUserAsync(request.Username,
@@ -28,8 +26,8 @@ public class RegisterUserCommandHandler
 
         if(!registerUserResult.IsSuccess)
         {
-            result = Result<RegisterUserCommandResponse>.Inherit(result: registerUserResult);
-            return await ValueTask.FromResult(result);
+            var failure = Result<RegisterUserCommandResponse>.Inherit(result: registerUserResult);
+            return await ValueTask.FromResult(failure);
         }
 
         var userAccount = registerUserResult.Value;
@@ -38,7 +36,7 @@ public class RegisterUserCommandHandler
             userAccount.User.Email,
             userAccount.UserRole.ToString());
 
-        result = Result<RegisterUserCommandResponse>.Ok(response);
-        return await ValueTask.FromResult(result);
+        var ok = Result<RegisterUserCommandResponse>.Ok(response);
+        return await ValueTask.FromResult(ok);
     }
 }

@@ -12,13 +12,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCom
     public async ValueTask<Result<LoginCommandResponse>> Handle(LoginCommand request,
         CancellationToken cancellationToken)
     {
-        Result<LoginCommandResponse> result;
-
         var isValid = request.TryValidate(out var errors);
         if(!isValid)
         {
-            result = Result<LoginCommandResponse>.Invalid(errors);
-            return await ValueTask.FromResult(result);
+            var invalid = Result<LoginCommandResponse>.Invalid(errors);
+            return await ValueTask.FromResult(invalid);
         }
 
         var signInResult = await _userAuthenticationService.AuthenticateUserAsync(request.Username,
@@ -26,14 +24,14 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCom
 
         if(!signInResult.IsSuccess)
         {
-            result = Result<LoginCommandResponse>.Inherit(result: signInResult);
-            return await ValueTask.FromResult(result);
+            var failure = Result<LoginCommandResponse>.Inherit(result: signInResult);
+            return await ValueTask.FromResult(failure);
         }
 
         var (accessToken, refreshToken) = signInResult.Value;
         var response = new LoginCommandResponse(accessToken, refreshToken.Token);
 
-        result = Result<LoginCommandResponse>.Ok(response);
-        return await ValueTask.FromResult(result);
+        var ok = Result<LoginCommandResponse>.Ok(response);
+        return await ValueTask.FromResult(ok);
     }
 }
