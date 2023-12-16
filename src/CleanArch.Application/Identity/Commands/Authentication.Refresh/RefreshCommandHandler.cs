@@ -19,7 +19,7 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, Result<Refr
     {
         Result<RefreshCommandResponse> result;
 
-        var validateRefreshToken = _securityTokenService.ValidateRefreshToken(request.AccessToken, request.RefreshToken);
+        var validateRefreshToken = _securityTokenService.TryValidateRefreshToken(request.AccessToken, request.RefreshToken);
         if(!validateRefreshToken.IsSuccess)
         {
             result = Result<RefreshCommandResponse>.Inherit(result: validateRefreshToken);
@@ -28,7 +28,7 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, Result<Refr
 
         var userAccount = validateRefreshToken.Value.UserAccount;
         var accessToken = _securityTokenService.GenerateAccessToken(userAccount);
-        var refreshToken = _securityTokenService.GenerateRefreshToken(accessToken, userAccount);
+        var refreshToken = _securityTokenService.TryGenerateRefreshToken(accessToken, userAccount);
 
         using var dbContext = _dbContextFactory.CreateDbContext();
         RefreshToken previousRefreshToken = validateRefreshToken.Value;

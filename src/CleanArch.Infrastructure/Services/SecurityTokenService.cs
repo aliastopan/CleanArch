@@ -54,7 +54,7 @@ internal sealed class SecurityTokenService : ISecurityTokenService
         return jwtHandler.WriteToken(jwt);
     }
 
-    public Result<RefreshToken> GenerateRefreshToken(string accessToken, UserAccount userAccount)
+    public Result<RefreshToken> TryGenerateRefreshToken(string accessToken, UserAccount userAccount)
     {
         var principal = GetPrincipalFromToken(accessToken);
         if(principal is null)
@@ -78,7 +78,7 @@ internal sealed class SecurityTokenService : ISecurityTokenService
         return Result<RefreshToken>.Ok(refreshToken);
     }
 
-    public Result<RefreshToken> ValidateRefreshToken(string accessToken, string refreshToken)
+    public Result<RefreshToken> TryValidateRefreshToken(string accessToken, string refreshToken)
     {
         var principal = GetPrincipalFromToken(accessToken);
         if(principal is null)

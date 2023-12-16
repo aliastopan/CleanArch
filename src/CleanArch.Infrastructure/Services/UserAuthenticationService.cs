@@ -32,14 +32,26 @@ internal sealed class UserAuthenticationService : IUserAuthenticationService
             return Result<(string, RefreshToken)>.Inherit(result: validatePassword);
         }
 
-        var access = await SignInAsync(userAccount);
+        var trySignIn = await TrySignInAsync(userAccount);
+        if(!trySignIn.IsSuccess)
+        {
+            return Result<(string, RefreshToken)>.Inherit(result: trySignIn);
+        }
+
+        var access = trySignIn.Value;
         return Result<(string, RefreshToken)>.Ok(access);
     }
 
-    private async Task<(string accessToken, RefreshToken refreshToken)> SignInAsync(UserAccount userAccount)
+    private async Task<Result<(string accessToken, RefreshToken refreshToken)>> TrySignInAsync(UserAccount userAccount)
     {
         var accessToken = _securityTokenService.GenerateAccessToken(userAccount);
-        var refreshToken = _securityTokenService.GenerateRefreshToken(accessToken, userAccount).Value;
+        var tryGetRefreshToken = _securityTokenService.TryGenerateRefreshToken(accessToken, userAccount);
+        if(!tryGetRefreshToken.IsSuccess)
+        {
+            return Result<(string, RefreshToken)>.Inherit(result: tryGetRefreshToken);
+        }
+
+        var refreshToken = tryGetRefreshToken.Value;
 
         using var dbContext = _dbContextFactory.CreateDbContext();
 
@@ -48,7 +60,7 @@ internal sealed class UserAuthenticationService : IUserAuthenticationService
         dbContext.RefreshTokens.Add(refreshToken);
         await dbContext.SaveChangesAsync();
 
-        return(accessToken, refreshToken);
+        return Result<(string, RefreshToken)>.Ok((accessToken, refreshToken));
     }
 
     private async Task<UserAccount?> SearchUserAccountAsync(string username)
