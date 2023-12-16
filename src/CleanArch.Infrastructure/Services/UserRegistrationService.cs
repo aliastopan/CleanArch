@@ -17,9 +17,9 @@ internal sealed class UserRegistrationService : IUserRegistrationService
         _dateTimeService = dateTimeService;
     }
 
-    public async Task<Result<UserAccount>> RegisterUserAsync(string username, string email, string password)
+    public async Task<Result<UserAccount>> TryRegisterUserAsync(string username, string email, string password)
     {
-        var validateAvailability = await ValidateAvailabilityAsync(username, email);
+        var validateAvailability = await TryValidateAvailabilityAsync(username, email);
         if(!validateAvailability.IsSuccess)
         {
             return Result<UserAccount>.Inherit(result: validateAvailability);
@@ -42,7 +42,7 @@ internal sealed class UserRegistrationService : IUserRegistrationService
         return userAccount;
     }
 
-    private async Task<Result> ValidateAvailabilityAsync(string username, string email)
+    private async Task<Result> TryValidateAvailabilityAsync(string username, string email)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 

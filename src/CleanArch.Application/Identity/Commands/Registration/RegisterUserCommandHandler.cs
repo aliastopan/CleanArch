@@ -20,17 +20,17 @@ public class RegisterUserCommandHandler
             return await ValueTask.FromResult(invalid);
         }
 
-        var registerUserResult = await _userRegistrationService.RegisterUserAsync(request.Username,
+        var tryRegisterUser = await _userRegistrationService.TryRegisterUserAsync(request.Username,
             request.Email,
             request.Password);
 
-        if(!registerUserResult.IsSuccess)
+        if(!tryRegisterUser.IsSuccess)
         {
-            var failure = Result<RegisterUserCommandResponse>.Inherit(result: registerUserResult);
+            var failure = Result<RegisterUserCommandResponse>.Inherit(result: tryRegisterUser);
             return await ValueTask.FromResult(failure);
         }
 
-        var userAccount = registerUserResult.Value;
+        var userAccount = tryRegisterUser.Value;
         var response = new RegisterUserCommandResponse(userAccount.UserAccountId,
             userAccount.User.Username,
             userAccount.User.Email,

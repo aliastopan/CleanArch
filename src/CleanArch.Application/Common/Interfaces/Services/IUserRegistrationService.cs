@@ -4,5 +4,5 @@ namespace CleanArch.Application.Common.Interfaces.Services;
 
 public interface IUserRegistrationService
 {
-    Task<Result<UserAccount>> RegisterUserAsync(string username, string email, string password);
+    Task<Result<UserAccount>> TryRegisterUserAsync(string username, string email, string password);
 }
