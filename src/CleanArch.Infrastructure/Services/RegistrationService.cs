@@ -2,13 +2,13 @@ using CleanArch.Domain.Aggregates.Identity;
 
 namespace CleanArch.Infrastructure.Services;
 
-internal sealed class UserRegistrationService : IUserRegistrationService
+internal sealed class RegistrationService : IRegistrationService
 {
     private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
     private readonly IPasswordService _passwordService;
     private readonly IDateTimeService _dateTimeService;
 
-    public UserRegistrationService(IAppDbContextFactory<IAppDbContext> dbContextFactory,
+    public RegistrationService(IAppDbContextFactory<IAppDbContext> dbContextFactory,
         IPasswordService passwordService,
         IDateTimeService dateTimeService)
     {
@@ -17,12 +17,12 @@ internal sealed class UserRegistrationService : IUserRegistrationService
         _dateTimeService = dateTimeService;
     }
 
-    public async Task<Result<UserAccount>> TryRegisterUserAsync(string username, string email, string password)
+    public async Task<Result<UserAccount>> TrySignUpAsync(string username, string email, string password)
     {
-        var validateAvailability = await TryValidateAvailabilityAsync(username, email);
-        if(!validateAvailability.IsSuccess)
+        var TryValidateAvailability = await TryValidateAvailabilityAsync(username, email);
+        if(!TryValidateAvailability.IsSuccess)
         {
-            return Result<UserAccount>.Inherit(result: validateAvailability);
+            return Result<UserAccount>.Inherit(result: TryValidateAvailability);
         }
 
         var userAccount = await CreateUserAccountAsync(username, email, password);

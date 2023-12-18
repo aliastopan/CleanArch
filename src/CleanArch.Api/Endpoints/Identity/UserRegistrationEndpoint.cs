@@ -13,7 +13,7 @@ public class UserRegistrationEndpoint : IEndpointDefinition
     internal async Task<IResult> RegisterUser([FromServices] ISender sender,
         RegisterRequest request, HttpContext httpContext)
     {
-        var result = await sender.Send(new RegisterUserCommand(request.Username,
+        var result = await sender.Send(new SignUpCommand(request.Username,
             request.Email,
             request.Password)
         );

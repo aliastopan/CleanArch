@@ -20,7 +20,7 @@ public static class ConfigureServices
         // services.AddSingleton<IPasswordService, BcryptPasswordService>();
         services.AddScoped<ISecurityTokenService, SecurityTokenService>();
 
-        services.AddScoped<IUserRegistrationService, UserRegistrationService>();
+        services.AddScoped<IRegistrationService, RegistrationService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
 
         services.AddDbContext(configuration, environment);
