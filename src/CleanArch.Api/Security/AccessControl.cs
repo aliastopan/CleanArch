@@ -37,10 +37,10 @@ public static class AccessControl
                 .Build();
 
             options.AddPolicy(Policies.AllowAnonymous, policy => policy.RequireAssertion(_ => true));
-            options.AddPolicy(Policies.DeveloperPolicy, policy =>
+            options.AddPolicy(Policies.AdministratorPrivilege, policy =>
             {
                 policy.RequireAuthenticatedUser();
-                policy.RequireClaim("role", "Developer");
+                policy.RequireClaim("roles", "Administrator");
             });
             options.AddPolicy(Policies.VerifiedUserPolicy, policy =>
             {

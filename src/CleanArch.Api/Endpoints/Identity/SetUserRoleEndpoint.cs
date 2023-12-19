@@ -9,7 +9,7 @@ public class SetUserRoleEndpoint : IEndpointDefinition
     {
         app.MapPost("/api/auth/set-role", SetUserRole)
             .RequireAuthorization(Policies.VerifiedUserPolicy)
-            .RequireAuthorization(Policies.DeveloperPolicy);
+            .RequireAuthorization(Policies.AdministratorPrivilege);
     }
 
     internal async Task<IResult> SetUserRole([FromServices] ISender sender,
