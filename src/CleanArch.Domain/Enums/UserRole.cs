@@ -3,7 +3,9 @@ namespace CleanArch.Domain.Enums;
 [Flags]
 public enum UserRole
 {
-    Viewer = 0,
-    Manager = 1,
+    None = 0,
+    Viewer = 1,
+    Editor = 2,
+    Manager = 4,
     Administrator = 64,
 }
