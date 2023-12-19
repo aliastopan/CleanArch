@@ -31,7 +31,7 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             PasswordHash = _passwordService.HashPassword("LongPassword012", out var salt),
             PasswordSalt = salt,
             IsVerified = true,
-            UserRole = UserRole.Developer,
+            UserRole = UserRole.Administrator,
             CreationDate = _dateTimeService.DateTimeOffsetNow,
             LastLoggedIn = _dateTimeService.DateTimeOffsetNow
         };
@@ -47,7 +47,7 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             PasswordHash = _passwordService.HashPassword("LongPassword012", out salt),
             PasswordSalt = salt,
             IsVerified = true,
-            UserRole = UserRole.Standard,
+            UserRole = UserRole.Viewer,
             CreationDate = _dateTimeService.DateTimeOffsetNow,
             LastLoggedIn = _dateTimeService.DateTimeOffsetNow
         };
@@ -63,7 +63,7 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             PasswordHash = _passwordService.HashPassword("LongPassword012", out salt),
             PasswordSalt = salt,
             IsVerified = true,
-            UserRole = UserRole.Standard,
+            UserRole = UserRole.Viewer,
             CreationDate = _dateTimeService.DateTimeOffsetNow,
             LastLoggedIn = _dateTimeService.DateTimeOffsetNow
         };

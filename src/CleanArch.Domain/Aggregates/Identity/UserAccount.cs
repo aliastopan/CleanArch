@@ -23,7 +23,7 @@ public class UserAccount : IAggregateRoot
         };
 
         UserAccountId = Guid.NewGuid();
-        UserRole = UserRole.Standard;
+        UserRole = UserRole.Viewer;
         PasswordHash = passwordHash;
         PasswordSalt = passwordSalt;
         CreationDate = creationDate;
