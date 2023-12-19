@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using CleanArch.Domain.Aggregates.Identity;
+using CleanArch.Domain.Enums;
 
 namespace CleanArch.Infrastructure.Persistence.Configurations.Identity;
 
@@ -19,8 +20,13 @@ internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAc
             .HasMaxLength(36)
             .IsRequired();
 
-        builder.Property(u => u.UserRole)
-            .HasColumnName("role")
+        builder.Property(u => u.UserRoles)
+            .HasColumnName("user_roles")
+            .HasConversion(
+                x => string.Join(',', x.Select(role => role.ToString())),
+                x => x.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                      .Select(roleString => Enum.Parse<UserRole>(roleString))
+                      .ToList())
             .IsRequired();
 
         builder.Property(u => u.IsVerified)

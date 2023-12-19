@@ -33,23 +33,17 @@ internal sealed class SecurityTokenService : ISecurityTokenService
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_userSecrets.ApiKey));
         var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var claims = new[]
-        {
-            new Claim(JwtClaimTypes.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtClaimTypes.Sub, userAccount.UserAccountId.ToString()),
-            new Claim(JwtClaimTypes.UniqueName, userAccount.User.Username),
-            new Claim(JwtClaimTypes.Role, userAccount.UserRole.ToString()),
-            new Claim(JwtClaimTypes.IsVerified, userAccount.IsVerified ? "true" : "false")
-        };
 
         JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
         var jwtHandler = new JwtSecurityTokenHandler();
-        var jwt = new JwtSecurityToken(
+        var jwt = new JwtSecurityToken
+        (
             issuer: _securityTokenSettings.Issuer,
             audience: _securityTokenSettings.Audience,
             expires: _dateTimeService.UtcNow.Add(_securityTokenSettings.AccessTokenLifeTime),
-            claims: claims,
-            signingCredentials: signingCredentials);
+            claims: CreateClaims(userAccount),
+            signingCredentials: signingCredentials
+        );
 
         return jwtHandler.WriteToken(jwt);
     }
@@ -147,5 +141,23 @@ internal sealed class SecurityTokenService : ISecurityTokenService
         var jwtSecurityToken = securityToken as JwtSecurityToken;
         return jwtSecurityToken is not null && jwtSecurityToken!.Header.Alg
             .Equals(securityAlgorithm, StringComparison.InvariantCulture);
+    }
+
+    private static List<Claim> CreateClaims(UserAccount userAccount)
+    {
+        var claims = new List<Claim>
+        {
+            new Claim(JwtClaimTypes.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtClaimTypes.Sub, userAccount.UserAccountId.ToString()),
+            new Claim(JwtClaimTypes.UniqueName, userAccount.User.Username),
+            new Claim(JwtClaimTypes.IsVerified, userAccount.IsVerified ? "true" : "false")
+        };
+
+        foreach (var role in userAccount.UserRoles)
+        {
+            claims.Add(new Claim(JwtClaimTypes.Roles, role.ToString()));
+        }
+
+        return claims;
     }
 }

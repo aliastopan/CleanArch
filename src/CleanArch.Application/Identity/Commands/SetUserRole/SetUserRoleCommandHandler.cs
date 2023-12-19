@@ -18,40 +18,8 @@ public class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand, Res
     public async ValueTask<Result> Handle(SetUserRoleCommand request,
         CancellationToken cancellationToken)
     {
-        Result result;
-
-        var isRoleDefined = Enum.IsDefined(typeof(UserRole), request.Role);
-        if(!isRoleDefined)
-        {
-            var error = new Error("Invalid role request.", ErrorSeverity.Warning);
-            result = Result.Invalid(error);
-            return await ValueTask.FromResult(result);
-        }
-
-
-        using var dbContext = _dbContextFactory.CreateDbContext();
-
-        var grantorAccount = await dbContext.GetUserAccountByIdAsync(request.GrantorId);
-        var granteeAccount = await dbContext.GetUserAccountByIdAsync(request.GranteeId);
-
-        if(grantorAccount is null || granteeAccount is null)
-        {
-            var error = new Error("User does not exist.", ErrorSeverity.Warning);
-            result = Result.NotFound(error);
-            return await ValueTask.FromResult(result);
-        }
-
-        var validatePermission = ValidatePermission(grantorAccount!, request.PermissionPassword);
-        if(!validatePermission.IsSuccess)
-        {
-            result = Result.Inherit(result: validatePermission);
-            return await ValueTask.FromResult(result);
-        }
-
-        await SetUserRoleAsync(granteeAccount, (UserRole)request.Role);
-
-        result = Result.Ok();
-        return await ValueTask.FromResult(result);
+        await Task.CompletedTask;
+        throw new NotImplementedException();
     }
 
     private Result ValidatePermission(UserAccount userAccount, string password)
@@ -63,7 +31,10 @@ public class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand, Res
             return Result.Unauthorized(error);
         }
 
-        var hasPermission = userAccount.UserRole == UserRole.Developer;
+        var hasPermission = userAccount.UserRoles.Any(role =>
+        {
+            return (role & UserRole.Administrator) == UserRole.Administrator;
+        });
         if(!hasPermission)
         {
             var error = new Error("You don't have permission.", ErrorSeverity.Warning);
@@ -73,11 +44,11 @@ public class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand, Res
         return Result.Ok();
     }
 
-    private async Task SetUserRoleAsync(UserAccount userAccount, UserRole userRole)
+    private async Task SetUserRoleAsync(UserAccount userAccount, List<UserRole> userRoles)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        userAccount.UserRole = userRole;
+        userAccount.UserRoles = userRoles;
         dbContext.UserAccounts.Update(userAccount);
         await dbContext.SaveChangesAsync();
     }

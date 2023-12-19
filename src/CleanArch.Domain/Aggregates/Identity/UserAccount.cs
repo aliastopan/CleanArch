@@ -23,7 +23,10 @@ public class UserAccount : IAggregateRoot
         };
 
         UserAccountId = Guid.NewGuid();
-        UserRole = UserRole.Viewer;
+        UserRoles = new List<UserRole>()
+        {
+            UserRole.Viewer
+        };
         PasswordHash = passwordHash;
         PasswordSalt = passwordSalt;
         CreationDate = creationDate;
@@ -31,7 +34,7 @@ public class UserAccount : IAggregateRoot
     }
 
     public Guid UserAccountId { get; init; }
-    public UserRole UserRole { get; set; }
+    public ICollection<UserRole> UserRoles { get; set; }
     public bool IsVerified { get; set; }
     public string PasswordHash { get; set; }
     public string PasswordSalt { get; set; }

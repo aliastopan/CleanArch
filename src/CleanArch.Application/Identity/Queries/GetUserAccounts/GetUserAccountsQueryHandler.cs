@@ -27,7 +27,7 @@ public class GetUserAccountsQueryHandler : IRequestHandler<GetUserAccountsQuery,
         foreach(var userAccount in userAccounts)
         {
             var userAccountDto = new UserAccountDto(userAccount.UserAccountId,
-                userAccount.UserRole.ToString(),
+                userAccount.UserRoles.Select(role => role.ToString()).ToList(),
                 userAccount.LastLoggedIn.DateTime.ToLocalTime());
 
             userAccountDtos.Add(userAccountDto);

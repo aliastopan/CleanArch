@@ -34,7 +34,7 @@ public class SignUpCommandHandler
         var response = new SignUpCommandResponse(userAccount.UserAccountId,
             userAccount.User.Username,
             userAccount.User.Email,
-            userAccount.UserRole.ToString());
+            userAccount.UserRoles.Select(role => role.ToString()).ToList());
 
         var ok = Result<SignUpCommandResponse>.Ok(response);
         return await ValueTask.FromResult(ok);
