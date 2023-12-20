@@ -7,7 +7,7 @@ public class RefreshEndpoint : IEndpointDefinition
 {
     public void DefineEndpoints(WebApplication app)
     {
-        app.MapPost("/api/auth/refresh", Refresh).AllowAnonymous();
+        app.MapPost(ApiEndpoint.Identity.Refresh, Refresh).AllowAnonymous();
     }
 
     internal async Task<IResult> Refresh([FromServices] ISender sender,

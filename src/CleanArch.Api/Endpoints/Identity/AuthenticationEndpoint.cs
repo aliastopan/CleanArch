@@ -7,8 +7,8 @@ public class AuthenticationEndpoint : IEndpointDefinition
 {
     public void DefineEndpoints(WebApplication app)
     {
-        app.MapPost("/api/sign-in", SignIn).AllowAnonymous();
-        app.MapPost("/api/sign-out", SignOut).AllowAnonymous();
+        app.MapPost(ApiEndpoint.Identity.SignIn, SignIn).AllowAnonymous();
+        app.MapPost(ApiEndpoint.Identity.SignOut, SignOut).AllowAnonymous();
     }
 
     internal async Task<IResult> SignIn([FromServices] ISender sender,

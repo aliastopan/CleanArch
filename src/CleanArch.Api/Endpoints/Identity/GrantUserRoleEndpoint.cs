@@ -7,7 +7,7 @@ public class GrantUserRoleEndpoint : IEndpointDefinition
 {
     public void DefineEndpoints(WebApplication app)
     {
-        app.MapPost("/api/identity/grant-role", GrantUserRole)
+        app.MapPost(ApiEndpoint.Identity.GrantRole, GrantUserRole)
             .RequireAuthorization(Policies.AdministratorPrivilege);
     }
 
