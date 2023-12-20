@@ -34,6 +34,7 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             UserRoles = new List<UserRole>()
             {
                 UserRole.Viewer,
+                UserRole.Editor,
                 UserRole.Manager,
                 UserRole.Administrator
             },
