@@ -7,10 +7,10 @@ public class AuthenticationEndpoint : IEndpointDefinition
 {
     public void DefineEndpoints(WebApplication app)
     {
-        app.MapPost("/api/login", Login).AllowAnonymous();
+        app.MapPost("/api/login", SignIn).AllowAnonymous();
     }
 
-    internal async Task<IResult> Login([FromServices] ISender sender,
+    internal async Task<IResult> SignIn([FromServices] ISender sender,
         LoginRequest request, HttpContext httpContext)
     {
         var result = await sender.Send(new SignInCommand(request.Username, request.Password));
