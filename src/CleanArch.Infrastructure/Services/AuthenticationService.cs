@@ -103,11 +103,11 @@ internal sealed class AuthenticationService : IAuthenticationService
         return Result.Ok();
     }
 
-    private async Task<Result<UserAccount>> TryGetUserAccountAsync(Guid userAccountId)
+    private async Task<Result<UserAccount>> TryGetUserAccountAsync(Func<IAppDbContext, Task<UserAccount?>> getUserAccount)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        var userAccount = await dbContext.GetUserAccountByIdAsync(userAccountId);
+        var userAccount = await getUserAccount(dbContext);
         if(userAccount is null)
         {
             var error = new Error("User does not exist.", ErrorSeverity.Warning);
@@ -117,18 +117,14 @@ internal sealed class AuthenticationService : IAuthenticationService
         return Result<UserAccount>.Ok(userAccount);
     }
 
+    private async Task<Result<UserAccount>> TryGetUserAccountAsync(Guid userAccountId)
+    {
+        return await TryGetUserAccountAsync(db => db.GetUserAccountByIdAsync(userAccountId));
+    }
+
     private async Task<Result<UserAccount>> TryGetUserAccountAsync(string username)
     {
-        using var dbContext = _dbContextFactory.CreateDbContext();
-
-        var userAccount = await dbContext.GetUserAccountByUsernameAsync(username);
-        if(userAccount is null)
-        {
-            var error = new Error("User does not exist.", ErrorSeverity.Warning);
-            return Result<UserAccount>.NotFound(error);
-        }
-
-        return Result<UserAccount>.Ok(userAccount);
+        return await TryGetUserAccountAsync(db => db.GetUserAccountByUsernameAsync(username));
     }
 
     private Result TryValidatePassword(string password, string passwordSalt, string passwordHash)
