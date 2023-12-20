@@ -22,12 +22,13 @@ internal sealed class AuthenticationService : IAuthenticationService
 
     public async Task<Result<(string accessToken, RefreshToken refreshToken)>> TrySignInAsync(string username, string password)
     {
-        var userAccount = await SearchUserAccountAsync(username);
-        if(userAccount is null)
+        var tryGetUserAccount = await TryGetUserAccountAsync(username);
+        if(!tryGetUserAccount.IsSuccess)
         {
-            var error = new Error("User does not exist.", ErrorSeverity.Warning);
-            return Result<(string, RefreshToken)>.NotFound(error);
+            return Result<(string, RefreshToken)>.Inherit(result: tryGetUserAccount);
         }
+
+        var userAccount = tryGetUserAccount.Value;
 
         var validatePassword = TryValidatePassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
         if(!validatePassword.IsSuccess)
@@ -83,12 +84,18 @@ internal sealed class AuthenticationService : IAuthenticationService
         return Result<(string, RefreshToken)>.Ok((accessToken, current));
     }
 
-    private async Task<UserAccount?> SearchUserAccountAsync(string username)
+    private async Task<Result<UserAccount>> TryGetUserAccountAsync(string username)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        var user = await dbContext.GetUserAccountByUsernameAsync(username);
-        return user!;
+        var userAccount = await dbContext.GetUserAccountByUsernameAsync(username);
+        if(userAccount is null)
+        {
+            var error = new Error("User does not exist.", ErrorSeverity.Warning);
+            return Result<UserAccount>.NotFound(error);
+        }
+
+        return Result<UserAccount>.Ok(userAccount);
     }
 
     private Result TryValidatePassword(string password, string passwordSalt, string passwordHash)
