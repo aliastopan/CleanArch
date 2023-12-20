@@ -8,6 +8,7 @@ public class AuthenticationEndpoint : IEndpointDefinition
     public void DefineEndpoints(WebApplication app)
     {
         app.MapPost("/api/sign-in", SignIn).AllowAnonymous();
+        app.MapPost("/api/sign-out", SignOut).AllowAnonymous();
     }
 
     internal async Task<IResult> SignIn([FromServices] ISender sender,
@@ -32,5 +33,13 @@ public class AuthenticationEndpoint : IEndpointDefinition
                 Title = "Authentication Failed"
             },
             context: httpContext));
+    }
+
+    internal IResult SignOut(HttpContext httpContext)
+    {
+        httpContext.Response.Cookies.Delete("access-token");
+        httpContext.Response.Cookies.Delete("refresh-token");
+
+        return Results.Ok();
     }
 }
