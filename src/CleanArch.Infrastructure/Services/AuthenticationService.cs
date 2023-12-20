@@ -84,6 +84,39 @@ internal sealed class AuthenticationService : IAuthenticationService
         return Result<(string, RefreshToken)>.Ok((accessToken, current));
     }
 
+    public async Task<Result> TryAccessPromptAsync(Guid userAccountId, string password)
+    {
+        var tryGetUserAccount = await TryGetUserAccountAsync(userAccountId);
+        if(!tryGetUserAccount.IsSuccess)
+        {
+            return Result.Inherit(result: tryGetUserAccount);
+        }
+
+        var userAccount = tryGetUserAccount.Value;
+
+        var validatePassword = TryValidatePassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
+        if(!validatePassword.IsSuccess)
+        {
+            return Result.Inherit(result: validatePassword);
+        }
+
+        return Result.Ok();
+    }
+
+    private async Task<Result<UserAccount>> TryGetUserAccountAsync(Guid userAccountId)
+    {
+        using var dbContext = _dbContextFactory.CreateDbContext();
+
+        var userAccount = await dbContext.GetUserAccountByIdAsync(userAccountId);
+        if(userAccount is null)
+        {
+            var error = new Error("User does not exist.", ErrorSeverity.Warning);
+            return Result<UserAccount>.NotFound(error);
+        }
+
+        return Result<UserAccount>.Ok(userAccount);
+    }
+
     private async Task<Result<UserAccount>> TryGetUserAccountAsync(string username)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();

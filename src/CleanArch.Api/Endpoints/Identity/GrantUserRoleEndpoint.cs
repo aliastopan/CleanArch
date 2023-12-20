@@ -14,7 +14,9 @@ public class GrantUserRoleEndpoint : IEndpointDefinition
     internal async Task<IResult> GrantUserRole([FromServices] ISender sender,
         GrantUserRoleRequest request, HttpContext httpContext)
     {
-        var result = await sender.Send(new GrantUserRoleCommand(request.UserAccountId,
+        var result = await sender.Send(new GrantUserRoleCommand(request.SenderAccountId,
+            request.AccessPassword,
+            request.RecipientAccountId,
             request.Role));
 
         return result.Match(() => Results.Ok(),

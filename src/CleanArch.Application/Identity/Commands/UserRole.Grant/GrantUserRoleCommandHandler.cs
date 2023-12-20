@@ -2,10 +2,13 @@ namespace CleanArch.Application.Identity.Commands.UserRole.Grant;
 
 public class GrantUserRoleCommandHandler : IRequestHandler<GrantUserRoleCommand, Result>
 {
+    private readonly IAuthenticationService _authenticationService;
     private readonly IIdentityService _identityService;
 
-    public GrantUserRoleCommandHandler(IIdentityService identityService)
+    public GrantUserRoleCommandHandler(IAuthenticationService authenticationService,
+        IIdentityService identityService)
     {
+        _authenticationService = authenticationService;
         _identityService = identityService;
     }
 
@@ -20,8 +23,17 @@ public class GrantUserRoleCommandHandler : IRequestHandler<GrantUserRoleCommand,
             return await ValueTask.FromResult(invalid);
         }
 
+        var tryAccessPrompt = await _authenticationService
+            .TryAccessPromptAsync(request.SenderAccountId, request.AccessPassword);
+
+        if(!tryAccessPrompt.IsSuccess)
+        {
+            var denied = Result.Inherit(result: tryAccessPrompt);
+            return await ValueTask.FromResult(denied);
+        }
+
         // grant user role
-        var tryGrantRole = await _identityService.TryGrantRoleAsync(request.UserAccountId, request.Role);
+        var tryGrantRole = await _identityService.TryGrantRoleAsync(request.RecipientAccountId, request.Role);
         if(!tryGrantRole.IsSuccess)
         {
             var failure = Result.Inherit(result: tryGrantRole);
