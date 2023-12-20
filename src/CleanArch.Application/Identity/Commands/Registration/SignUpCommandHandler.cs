@@ -13,6 +13,7 @@ public class SignUpCommandHandler
     public async ValueTask<Result<SignUpCommandResponse>> Handle(SignUpCommand request,
         CancellationToken cancellationToken)
     {
+        // data annotation validations
         var isValid = request.TryValidate(out var errors);
         if(!isValid)
         {
@@ -20,6 +21,7 @@ public class SignUpCommandHandler
             return await ValueTask.FromResult(invalid);
         }
 
+        // registration
         var trySignUp = await _registrationService.TrySignUpAsync(request.Username,
             request.Email,
             request.Password);

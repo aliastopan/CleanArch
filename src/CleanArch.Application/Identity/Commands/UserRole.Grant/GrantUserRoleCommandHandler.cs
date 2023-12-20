@@ -12,6 +12,7 @@ public class GrantUserRoleCommandHandler : IRequestHandler<GrantUserRoleCommand,
     public async ValueTask<Result> Handle(GrantUserRoleCommand request,
         CancellationToken cancellationToken)
     {
+        // data annotation validations
         var isValid = request.TryValidate(out var errors);
         if(!isValid)
         {
@@ -19,6 +20,7 @@ public class GrantUserRoleCommandHandler : IRequestHandler<GrantUserRoleCommand,
             return await ValueTask.FromResult(invalid);
         }
 
+        // grant user role
         var tryGrantRole = await _identityService.TryGrantRoleAsync(request.UserAccountId, request.Role);
         if(!tryGrantRole.IsSuccess)
         {
