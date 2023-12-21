@@ -33,7 +33,7 @@ public class GrantUserRoleCommandHandler : IRequestHandler<GrantUserRoleCommand,
         }
 
         // grant user role
-        var tryGrantRole = await _identityService.TryGrantRoleAsync(request.RecipientAccountId, request.Role);
+        var tryGrantRole = await _identityService.TryGrantRoleAsync(request.SubjectAccountId, request.Role);
         if(!tryGrantRole.IsSuccess)
         {
             var failure = Result.Inherit(result: tryGrantRole);

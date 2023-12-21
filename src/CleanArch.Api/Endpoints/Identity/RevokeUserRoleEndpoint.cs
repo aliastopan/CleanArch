@@ -16,7 +16,7 @@ public class RevokeUserRoleEndpoint : IEndpointDefinition
     {
         var result = await sender.Send(new RevokeUserRoleCommand(request.SenderAccountId,
             request.AccessPassword,
-            request.RecipientAccountId,
+            request.SubjectAccountId,
             request.Role));
 
         return result.Match(() => Results.Ok(),

@@ -33,7 +33,7 @@ public class RevokeUserRoleCommandHandler : IRequestHandler<RevokeUserRoleComman
         }
 
         // revoke user role
-        var tryRevokeRole = await _identityService.TryRevokeRoleAsync(request.RecipientAccountId, request.Role);
+        var tryRevokeRole = await _identityService.TryRevokeRoleAsync(request.SubjectAccountId, request.Role);
         if(!tryRevokeRole.IsSuccess)
         {
             var failure = Result.Inherit(result: tryRevokeRole);

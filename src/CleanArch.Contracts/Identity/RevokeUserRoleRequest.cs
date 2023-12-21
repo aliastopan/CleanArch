@@ -2,5 +2,5 @@ namespace CleanArch.Contracts.Identity;
 
 public record RevokeUserRoleRequest(Guid SenderAccountId,
     string AccessPassword,
-    Guid RecipientAccountId,
+    Guid SubjectAccountId,
     string Role);

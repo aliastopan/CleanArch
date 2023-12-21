@@ -5,16 +5,16 @@ namespace CleanArch.Application.Identity.Commands.UserRole.Grant;
 
 public record GrantUserRoleCommand : IRequest<Result>
 {
-    public GrantUserRoleCommand(Guid senderAccountId, string accessPassword, Guid recipientAccountId, string role)
+    public GrantUserRoleCommand(Guid senderAccountId, string accessPassword, Guid subjectAccountId, string role)
     {
         SenderAccountId = senderAccountId;
-        RecipientAccountId = recipientAccountId;
+        SubjectAccountId = subjectAccountId;
         AccessPassword = accessPassword;
         Role = role;
     }
 
     [Required] public Guid SenderAccountId { get; init; }
-    [Required] public Guid RecipientAccountId { get; init; }
+    [Required] public Guid SubjectAccountId { get; init; }
     [Required] public string AccessPassword { get; init; }
 
     [Required]
