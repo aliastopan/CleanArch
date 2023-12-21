@@ -2,11 +2,11 @@ namespace CleanArch.Application.Identity.Commands.Registration;
 
 public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUpCommandResponse>>
 {
-    private readonly IRegistrationService _registrationService;
+    private readonly IIdentityService _identityService;
 
-    public SignUpCommandHandler(IRegistrationService registrationService)
+    public SignUpCommandHandler(IIdentityService identityService)
     {
-        _registrationService = registrationService;
+        _identityService = identityService;
     }
 
     public async ValueTask<Result<SignUpCommandResponse>> Handle(SignUpCommand request,
@@ -21,7 +21,7 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUp
         }
 
         // registration
-        var trySignUp = await _registrationService.TrySignUpAsync(request.Username, request.Email, request.Password);
+        var trySignUp = await _identityService.TrySignUpAsync(request.Username, request.Email, request.Password);
         if(!trySignUp.IsSuccess)
         {
             var failure = Result<SignUpCommandResponse>.Inherit(result: trySignUp);
