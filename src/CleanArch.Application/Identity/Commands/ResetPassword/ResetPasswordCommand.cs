@@ -7,14 +7,14 @@ public record ResetPasswordCommand : IRequest<Result>
 {
     public ResetPasswordCommand(Guid userId, string oldPassword, string newPassword, string confirmPassword)
     {
-        UserId = userId;
+        UserAccountId = userId;
         OldPassword = oldPassword;
         NewPassword = newPassword;
         ConfirmPassword = confirmPassword;
     }
 
     [Required]
-    public Guid UserId { get; init; }
+    public Guid UserAccountId { get; init; }
 
     [Required]
     public string OldPassword { get; init; }

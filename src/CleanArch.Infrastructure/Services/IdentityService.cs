@@ -81,6 +81,27 @@ internal sealed class IdentityService : IIdentityService
         return Result.Ok();
     }
 
+    public async Task<Result> TryResetPasswordAsync(Guid userAccountId, string oldPassword, string newPassword)
+    {
+        var tryGetUserAccount = await TryGetUserAccountAsync(userAccountId);
+        if(!tryGetUserAccount.IsSuccess)
+        {
+            return Result.Inherit(result: tryGetUserAccount);
+        }
+
+        var userAccount = tryGetUserAccount.Value;
+        var tryValidatePasswords = TryValidatePasswords(newPassword, oldPassword, userAccount.PasswordSalt, userAccount.PasswordHash);
+        if(!tryValidatePasswords.IsSuccess)
+        {
+            return Result.Inherit(result: tryValidatePasswords);
+        }
+
+        await UpdatePassword(userAccount, newPassword);
+        await InvalidateRefreshToken(userAccount);
+
+        return Result.Ok();
+    }
+
     private async Task<UserAccount> CreateUserAccountAsync(string username, string email, string password)
     {
         var hash = _passwordService.HashPassword(password, out string salt);
@@ -93,6 +114,36 @@ internal sealed class IdentityService : IIdentityService
         await dbContext.SaveChangesAsync();
 
         return userAccount;
+    }
+
+    private async Task UpdatePassword(UserAccount userAccount, string newPassword)
+    {
+        userAccount.PasswordHash = _passwordService.HashPassword(newPassword, out var salt);
+        userAccount.PasswordSalt = salt;
+
+        using var dbContext = _dbContextFactory.CreateDbContext();
+
+        dbContext.UserAccounts.Update(userAccount);
+        await dbContext.SaveChangesAsync();
+    }
+
+    private Result TryValidatePasswords(string newPassword, string oldPassword, string passwordSalt, string passwordHash)
+    {
+        var isVerified = _passwordService.VerifyPassword(oldPassword, passwordSalt, passwordHash);
+        if(!isVerified)
+        {
+            var error = new Error("Incorrect password.", ErrorSeverity.Warning);
+            return Result.Unauthorized(error);
+        }
+
+        var isNew = !_passwordService.VerifyPassword(newPassword, passwordSalt, passwordHash);
+        if(!isNew)
+        {
+            var error = new Error("New password cannot be the same as the old password.", ErrorSeverity.Warning);
+            return Result.Invalid(error);
+        }
+
+        return Result.Ok();
     }
 
     private async Task<Result<UserAccount>> TryGetUserAccountAsync(Guid userAccountId)
@@ -128,5 +179,16 @@ internal sealed class IdentityService : IIdentityService
         }
 
         return Result.Ok();
+    }
+
+    private async Task InvalidateRefreshToken(UserAccount userAccount)
+    {
+        using var dbContext = _dbContextFactory.CreateDbContext();
+
+        var refreshTokens = await dbContext.GetRefreshTokensByUserIdAsync(userAccount.UserAccountId);
+        refreshTokens.ForEach(x => x.IsInvalidated = true);
+        dbContext.RefreshTokens.UpdateRange(refreshTokens);
+
+        await dbContext.SaveChangesAsync();
     }
 }

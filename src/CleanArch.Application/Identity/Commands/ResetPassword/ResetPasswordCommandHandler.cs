@@ -4,91 +4,33 @@ namespace CleanArch.Application.Identity.Commands.ResetPassword;
 
 public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, Result>
 {
-    private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
-    private readonly IPasswordService _passwordService;
+    private readonly IIdentityService _identityService;
 
-    public ResetPasswordCommandHandler(IAppDbContextFactory<IAppDbContext> dbContextFactory,
-        IPasswordService passwordService)
+    public ResetPasswordCommandHandler(IIdentityService identityService)
     {
-        _dbContextFactory = dbContextFactory;
-        _passwordService = passwordService;
+        _identityService = identityService;
     }
 
     public async ValueTask<Result> Handle(ResetPasswordCommand request,
         CancellationToken cancellationToken)
     {
-        Result result;
+        // data annotation validations
         var isValid = request.TryValidate(out var errors);
         if(!isValid)
         {
-            result = Result.Invalid(errors);
-            return await ValueTask.FromResult(result);
+            var invalid = Result.Invalid(errors);
+            return await ValueTask.FromResult(invalid);
         }
 
-        using var dbContext = _dbContextFactory.CreateDbContext();
-
-        var userAccount = await dbContext.GetUserAccountByIdAsync(request.UserId);
-        if(userAccount is null)
+        // reset password
+        var tryResetPassword = await _identityService.TryResetPasswordAsync(request.UserAccountId, request.OldPassword, request.NewPassword);
+        if(!tryResetPassword.IsSuccess)
         {
-            var error = new Error("User does not exist.", ErrorSeverity.Warning);
-            result = Result.NotFound(errors);
-            return await ValueTask.FromResult(result);
+            var failure = Result.Inherit(result: tryResetPassword);
+            return await ValueTask.FromResult(failure);
         }
 
-        var validatePassword = ValidatePassword(request.NewPassword,
-            request.OldPassword,
-            userAccount.PasswordSalt,
-            userAccount.PasswordHash);
-        if(!validatePassword.IsSuccess)
-        {
-            result = Result.Inherit(result: validatePassword);
-            return await ValueTask.FromResult(result);
-        }
-
-        await ResetPassword(userAccount, request.NewPassword);
-        await InvalidateRefreshToken(userAccount);
-
-        result = Result.Ok();
-        return await ValueTask.FromResult(result);
-    }
-
-    private Result ValidatePassword(string newPassword, string oldPassword, string passwordSalt, string passwordHash)
-    {
-        var isVerified = _passwordService.VerifyPassword(oldPassword, passwordSalt, passwordHash);
-        if(!isVerified)
-        {
-            var error = new Error("Incorrect password.", ErrorSeverity.Warning);
-            return Result.Unauthorized(error);
-        }
-
-        var isNew = !_passwordService.VerifyPassword(newPassword, passwordSalt, passwordHash);
-        if(!isNew)
-        {
-            var error = new Error("New password cannot be the same as the old password.", ErrorSeverity.Warning);
-            return Result.Invalid(error);
-        }
-
-        return Result.Ok();
-    }
-
-    private async Task ResetPassword(UserAccount userAccount, string newPassword)
-    {
-        userAccount.PasswordHash = _passwordService.HashPassword(newPassword, out var salt);
-        userAccount.PasswordSalt = salt;
-
-        using var dbContext = _dbContextFactory.CreateDbContext();
-
-        dbContext.UserAccounts.Update(userAccount);
-        await dbContext.SaveChangesAsync();
-    }
-
-    private async Task InvalidateRefreshToken(UserAccount userAccount)
-    {
-        using var dbContext = _dbContextFactory.CreateDbContext();
-
-        var refreshTokens = await dbContext.GetRefreshTokensByUserIdAsync(userAccount.UserAccountId);
-        refreshTokens.ForEach(x => x.IsInvalidated = true);
-        dbContext.RefreshTokens.UpdateRange(refreshTokens);
-        await dbContext.SaveChangesAsync();
+        var ok = Result.Ok();
+        return await ValueTask.FromResult(ok);
     }
 }
