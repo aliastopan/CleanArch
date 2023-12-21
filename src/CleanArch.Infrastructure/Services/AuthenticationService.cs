@@ -48,7 +48,7 @@ internal sealed class AuthenticationService : IAuthenticationService
 
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        userAccount.LastLoggedIn = _dateTimeService.UtcNow;
+        userAccount.LastSignedIn = _dateTimeService.UtcNow;
         dbContext.UserAccounts.Update(userAccount);
         dbContext.RefreshTokens.Add(refreshToken);
         await dbContext.SaveChangesAsync();

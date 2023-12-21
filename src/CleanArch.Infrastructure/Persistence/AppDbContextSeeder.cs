@@ -39,7 +39,7 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
                 UserRole.Administrator
             },
             CreationDate = _dateTimeService.DateTimeOffsetNow,
-            LastLoggedIn = _dateTimeService.DateTimeOffsetNow
+            LastSignedIn = _dateTimeService.DateTimeOffsetNow
         };
 
         var userAccount02 = new UserAccount
@@ -58,7 +58,7 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
                 UserRole.Viewer
             },
             CreationDate = _dateTimeService.DateTimeOffsetNow,
-            LastLoggedIn = _dateTimeService.DateTimeOffsetNow
+            LastSignedIn = _dateTimeService.DateTimeOffsetNow
         };
 
         var userAccount03 = new UserAccount
@@ -77,7 +77,7 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
                 UserRole.Viewer
             },
             CreationDate = _dateTimeService.DateTimeOffsetNow,
-            LastLoggedIn = _dateTimeService.DateTimeOffsetNow
+            LastSignedIn = _dateTimeService.DateTimeOffsetNow
         };
 
         using var dbContext = _dbContextFactory.CreateDbContext();

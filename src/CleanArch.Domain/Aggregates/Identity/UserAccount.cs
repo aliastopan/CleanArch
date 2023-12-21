@@ -30,7 +30,7 @@ public class UserAccount : IAggregateRoot
         PasswordHash = passwordHash;
         PasswordSalt = passwordSalt;
         CreationDate = creationDate;
-        LastLoggedIn = creationDate;
+        LastSignedIn = creationDate;
     }
 
     public Guid UserAccountId { get; init; }
@@ -39,7 +39,7 @@ public class UserAccount : IAggregateRoot
     public string PasswordHash { get; set; }
     public string PasswordSalt { get; set; }
     public DateTimeOffset CreationDate { get; init; }
-    public DateTimeOffset LastLoggedIn { get; set; }
+    public DateTimeOffset LastSignedIn { get; set; }
 
     public virtual User User { get; init; }
     public virtual ICollection<RefreshToken> RefreshTokens { get; set; }

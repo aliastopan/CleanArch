@@ -47,8 +47,8 @@ internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAc
             .HasColumnName("creation_date")
             .IsRequired();
 
-        builder.Property(u => u.LastLoggedIn)
-            .HasColumnType("last_logged_in")
+        builder.Property(u => u.LastSignedIn)
+            .HasColumnType("last_signed_in")
             .IsRequired();
 
         // configure relationships
