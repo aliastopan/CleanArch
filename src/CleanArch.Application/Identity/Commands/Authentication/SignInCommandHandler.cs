@@ -21,9 +21,7 @@ public class SignInCommandHandler : IRequestHandler<SignInCommand, Result<SignIn
         }
 
         // authentication
-        var trySignIn = await _authenticationService.TrySignInAsync(request.Username,
-            request.Password);
-
+        var trySignIn = await _authenticationService.TrySignInAsync(request.Username, request.Password);
         if(!trySignIn.IsSuccess)
         {
             var failure = Result<SignInCommandResponse>.Inherit(result: trySignIn);

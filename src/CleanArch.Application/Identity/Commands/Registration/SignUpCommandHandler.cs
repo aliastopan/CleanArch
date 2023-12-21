@@ -1,7 +1,6 @@
 namespace CleanArch.Application.Identity.Commands.Registration;
 
-public class SignUpCommandHandler
-    : IRequestHandler<SignUpCommand, Result<SignUpCommandResponse>>
+public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUpCommandResponse>>
 {
     private readonly IRegistrationService _registrationService;
 
@@ -22,10 +21,7 @@ public class SignUpCommandHandler
         }
 
         // registration
-        var trySignUp = await _registrationService.TrySignUpAsync(request.Username,
-            request.Email,
-            request.Password);
-
+        var trySignUp = await _registrationService.TrySignUpAsync(request.Username, request.Email, request.Password);
         if(!trySignUp.IsSuccess)
         {
             var failure = Result<SignUpCommandResponse>.Inherit(result: trySignUp);
