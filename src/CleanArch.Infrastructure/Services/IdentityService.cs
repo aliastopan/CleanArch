@@ -38,6 +38,31 @@ internal sealed class IdentityService : IIdentityService
         return Result.Ok();
     }
 
+    public async Task<Result> TryRevokeRoleAsync(Guid userAccountId, string role)
+    {
+        var tryGetUserAccount = await TryGetUserAccountAsync(userAccountId);
+        if(!tryGetUserAccount.IsSuccess)
+        {
+            return Result.Inherit(result: tryGetUserAccount);
+        }
+
+        var userAccount = tryGetUserAccount.Value;
+        var userRole = (UserRole)Enum.Parse(typeof(UserRole), role);
+        if(!userAccount.UserRoles.Contains(userRole))
+        {
+            var error = new Error("Role does not exist.", ErrorSeverity.Warning);
+            return Result.Conflict(error);
+        }
+
+        using var dbContext = _dbContextFactory.CreateDbContext();
+
+        userAccount.UserRoles.Remove(userRole);
+        dbContext.UserAccounts.Update(userAccount);
+        await dbContext.SaveChangesAsync();
+
+        return Result.Ok();
+    }
+
     private async Task<Result<UserAccount>> TryGetUserAccountAsync(Guid userAccountId)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
