@@ -72,16 +72,11 @@ internal sealed class AuthenticationService : IAuthenticationService
             return Result<(string, RefreshToken)>.Inherit(result: tryGetRefreshToken);
         }
 
-        RefreshToken previous = tryValidateSecurityToken.Value;
-        RefreshToken current = tryGetRefreshToken.Value;
+        var previousRefreshToken = tryValidateSecurityToken.Value;
+        var currentRefreshToken = tryGetRefreshToken.Value;
+        await RotateRefreshTokenAsync(previousRefreshToken, currentRefreshToken);
 
-        using var dbContext = _dbContextFactory.CreateDbContext();
-
-        dbContext.RefreshTokens.Update(previous);
-        dbContext.RefreshTokens.Add(current);
-        await dbContext.SaveChangesAsync();
-
-        return Result<(string, RefreshToken)>.Ok((accessToken, current));
+        return Result<(string, RefreshToken)>.Ok((accessToken, currentRefreshToken));
     }
 
     public async Task<Result> TryAccessPromptAsync(Guid userAccountId, string password)
@@ -137,5 +132,15 @@ internal sealed class AuthenticationService : IAuthenticationService
         }
 
         return Result.Ok();
+    }
+
+    private async Task RotateRefreshTokenAsync(RefreshToken previous, RefreshToken current)
+    {
+        using var dbContext = _dbContextFactory.CreateDbContext();
+
+        dbContext.RefreshTokens.Update(previous);
+        dbContext.RefreshTokens.Add(current);
+
+        await dbContext.SaveChangesAsync();
     }
 }
