@@ -185,7 +185,7 @@ internal sealed class IdentityService : IIdentityService
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        var refreshTokens = await dbContext.GetRefreshTokensByUserIdAsync(userAccount.UserAccountId);
+        var refreshTokens = await dbContext.GetRefreshTokensByUserAccountIdAsync(userAccount.UserAccountId);
         refreshTokens.ForEach(x => x.IsInvalidated = true);
         dbContext.RefreshTokens.UpdateRange(refreshTokens);
 

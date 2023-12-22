@@ -5,9 +5,9 @@ namespace CleanArch.Application.Identity.Commands.ResetPassword;
 
 public record ResetPasswordCommand : IRequest<Result>
 {
-    public ResetPasswordCommand(Guid userId, string oldPassword, string newPassword, string confirmPassword)
+    public ResetPasswordCommand(Guid userAccountId, string oldPassword, string newPassword, string confirmPassword)
     {
-        UserAccountId = userId;
+        UserAccountId = userAccountId;
         OldPassword = oldPassword;
         NewPassword = newPassword;
         ConfirmPassword = confirmPassword;
