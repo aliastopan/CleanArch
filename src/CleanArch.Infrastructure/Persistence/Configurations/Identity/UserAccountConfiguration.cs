@@ -54,7 +54,7 @@ internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAc
         // configure relationships
         builder.HasOne(u => u.User)
             .WithOne()
-            .HasForeignKey<UserAccount>(u => u.UserAccountId)
+            .HasForeignKey<User>(u => u.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(u => u.RefreshTokens)
