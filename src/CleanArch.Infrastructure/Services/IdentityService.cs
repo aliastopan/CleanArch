@@ -90,10 +90,10 @@ internal sealed class IdentityService : IIdentityService
         }
 
         var userAccount = tryGetUserAccount.Value;
-        var tryValidatePasswords = TryValidatePasswords(newPassword, oldPassword, userAccount.PasswordSalt, userAccount.PasswordHash);
-        if(!tryValidatePasswords.IsSuccess)
+        var tryValidatePassword = TryValidatePassword(newPassword, oldPassword, userAccount.PasswordSalt, userAccount.PasswordHash);
+        if(!tryValidatePassword.IsSuccess)
         {
-            return Result.Inherit(result: tryValidatePasswords);
+            return Result.Inherit(result: tryValidatePassword);
         }
 
         await UpdatePassword(userAccount, newPassword);
@@ -127,7 +127,7 @@ internal sealed class IdentityService : IIdentityService
         await dbContext.SaveChangesAsync();
     }
 
-    private Result TryValidatePasswords(string newPassword, string oldPassword, string passwordSalt, string passwordHash)
+    private Result TryValidatePassword(string newPassword, string oldPassword, string passwordSalt, string passwordHash)
     {
         var isVerified = _passwordService.VerifyPassword(oldPassword, passwordSalt, passwordHash);
         if(!isVerified)
