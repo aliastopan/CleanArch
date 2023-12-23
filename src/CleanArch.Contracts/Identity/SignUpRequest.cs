@@ -1,10 +1,8 @@
-using CleanArch.Shared.Models.Identity;
+namespace CleanArch.Contracts.Identity;
 
-namespace CleanArch.Application.Identity.Commands.Registration;
-
-public class SignUpCommand : UserRegistrationModel, IRequest<Result<SignUpCommandResponse>>
+public class SignUpRequest : UserRegistrationModel
 {
-    public SignUpCommand(string username, string firstName, string lastName,
+    public SignUpRequest(string username, string firstName, string lastName,
         DateOnly dateOfBirth, string emailAddress, string password)
     {
         base.Username = username;

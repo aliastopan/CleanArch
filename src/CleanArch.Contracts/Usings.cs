@@ -1,0 +1,1 @@
+global using CleanArch.Shared.Models.Identity;

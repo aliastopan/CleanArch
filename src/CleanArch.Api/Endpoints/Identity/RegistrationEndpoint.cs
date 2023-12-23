@@ -11,7 +11,7 @@ public class RegistrationEndpoint : IEndpointDefinition
     }
 
     internal async Task<IResult> SignUp([FromServices] ISender sender,
-        RegisterRequest request, HttpContext httpContext)
+        SignUpRequest request, HttpContext httpContext)
     {
         var result = await sender.Send(new SignUpCommand(request.Username,
             request.FirstName,
