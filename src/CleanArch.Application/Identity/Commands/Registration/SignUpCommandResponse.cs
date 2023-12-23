@@ -4,5 +4,5 @@ public record SignUpCommandResponse(Guid UserAccountId,
     string Username,
     string FullName,
     DateOnly DateOfBirth,
-    string Email,
+    string EmailAddress,
     List<string> UserRoles);

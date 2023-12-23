@@ -13,7 +13,7 @@ public class UserAccount : IAggregateRoot
         string firstName,
         string lastName,
         DateOnly dateOfBirth,
-        string email,
+        string emailAddress,
         string passwordHash,
         string passwordSalt,
         DateTimeOffset creationDate)
@@ -22,7 +22,7 @@ public class UserAccount : IAggregateRoot
         {
             UserId = Guid.NewGuid(),
             Username = username,
-            Email = email
+            EmailAddress = emailAddress
         };
 
         UserProfile = new UserProfile

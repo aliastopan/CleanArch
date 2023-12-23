@@ -19,15 +19,15 @@ internal sealed class IdentityService : IIdentityService
     }
 
     public async Task<Result<UserAccount>> TrySignUpAsync(string username, string firstName, string lastName,
-        DateOnly dateOfBirth, string email, string password)
+        DateOnly dateOfBirth, string emailAddress, string password)
     {
-        var TryValidateAvailability = await TryValidateAvailabilityAsync(username, email);
+        var TryValidateAvailability = await TryValidateAvailabilityAsync(username, emailAddress);
         if(!TryValidateAvailability.IsSuccess)
         {
             return Result<UserAccount>.Inherit(result: TryValidateAvailability);
         }
 
-        var userAccount = await CreateUserAccountAsync(username, firstName, lastName, dateOfBirth, email, password);
+        var userAccount = await CreateUserAccountAsync(username, firstName, lastName, dateOfBirth, emailAddress, password);
         return Result<UserAccount>.Ok(userAccount);
     }
 
@@ -104,12 +104,12 @@ internal sealed class IdentityService : IIdentityService
     }
 
     private async Task<UserAccount> CreateUserAccountAsync(string username, string firstName, string lastName,
-        DateOnly dateOfBirth, string email, string password)
+        DateOnly dateOfBirth, string emailAddress, string password)
     {
         var hash = _passwordService.HashPassword(password, out string salt);
         var creationDate = _dateTimeService.DateTimeOffsetNow;
         var userAccount = new UserAccount(username, firstName, lastName,
-            dateOfBirth, email, hash, salt, creationDate);
+            dateOfBirth, emailAddress, hash, salt, creationDate);
 
         using var dbContext = _dbContextFactory.CreateDbContext();
 
@@ -163,7 +163,7 @@ internal sealed class IdentityService : IIdentityService
         return Result<UserAccount>.Ok(userAccount);
     }
 
-    private async Task<Result> TryValidateAvailabilityAsync(string username, string email)
+    private async Task<Result> TryValidateAvailabilityAsync(string username, string emailAddress)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
@@ -174,10 +174,10 @@ internal sealed class IdentityService : IIdentityService
             return Result.Conflict(error);
         }
 
-        userAccount = await dbContext.GetUserAccountByEmailAsync(email);
+        userAccount = await dbContext.GetUserAccountByEmailAddressAsync(emailAddress);
         if(userAccount is not null)
         {
-            var error = new Error("Email is already in use.", ErrorSeverity.Warning);
+            var error = new Error("Email address is already in use.", ErrorSeverity.Warning);
             return Result.Conflict(error);
         }
 

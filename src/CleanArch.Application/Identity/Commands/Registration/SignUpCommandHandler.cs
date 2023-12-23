@@ -25,7 +25,7 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUp
             request.FirstName,
             request.LastName,
             request.DateOfBirth,
-            request.Email,
+            request.EmailAddress,
             request.Password);
 
         if(!trySignUp.IsSuccess)
@@ -39,7 +39,7 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUp
             userAccount.User.Username,
             $"{userAccount.UserProfile.FirstName} {userAccount.UserProfile.LastName}",
             userAccount.UserProfile.DateOfBirth,
-            userAccount.User.Email,
+            userAccount.User.EmailAddress,
             userAccount.UserRoles.Select(role => role.ToString()).ToList());
 
         var ok = Result<SignUpCommandResponse>.Ok(response);

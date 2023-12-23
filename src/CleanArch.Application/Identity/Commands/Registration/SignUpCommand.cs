@@ -8,14 +8,14 @@ public record SignUpCommand : IRequest<Result<SignUpCommandResponse>>
         string firstName,
         string lastName,
         DateOnly dateOfBirth,
-        string email,
+        string emailAddress,
         string password)
     {
         Username = username;
         FirstName = firstName;
         LastName = lastName;
         DateOfBirth = dateOfBirth;
-        Email = email;
+        EmailAddress = emailAddress;
         Password = password;
     }
 
@@ -37,7 +37,7 @@ public record SignUpCommand : IRequest<Result<SignUpCommandResponse>>
 
     [Required]
     [EmailAddress]
-    public string Email { get; init; }
+    public string EmailAddress { get; init; }
 
     [Required]
     [RegularExpression(RegexPattern.StrongPassword)]

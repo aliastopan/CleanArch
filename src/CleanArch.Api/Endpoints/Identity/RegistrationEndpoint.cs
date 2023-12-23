@@ -17,7 +17,7 @@ public class RegistrationEndpoint : IEndpointDefinition
             request.FirstName,
             request.LastName,
             request.DateOfBirth,
-            request.Email,
+            request.EmailAddress,
             request.Password)
         );
 

@@ -26,7 +26,7 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             {
                 UserId = Guid.Parse("9dd0aa01-3a6e-4159-8c7b-8ee4caa1d4ea"),
                 Username = "aliastopan",
-                Email = "alias.topan@proton.me"
+                EmailAddress = "alias.topan@proton.me"
             },
             UserProfile = new UserProfile
             {
@@ -54,7 +54,7 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             {
                 UserId = Guid.Parse("e55204de-4de4-4101-91b7-672d3b9e5de2"),
                 Username = "vincent",
-                Email = "vincent.arkel@email"
+                EmailAddress = "vincent.arkel@email"
             },
             UserProfile = new UserProfile
             {
@@ -79,7 +79,7 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             {
                 UserId = Guid.Parse("a008959f-b4ef-4284-8ea4-fc88802e3b37"),
                 Username = "aram",
-                Email = "aram@email"
+                EmailAddress = "aram@email"
             },
             UserProfile = new UserProfile
             {
