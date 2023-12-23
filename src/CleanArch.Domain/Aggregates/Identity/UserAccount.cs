@@ -10,6 +10,9 @@ public class UserAccount : IAggregateRoot
     }
 
     public UserAccount(string username,
+        string firstName,
+        string lastName,
+        DateOnly dateOfBirth,
         string email,
         string passwordHash,
         string passwordSalt,
@@ -20,6 +23,14 @@ public class UserAccount : IAggregateRoot
             UserId = Guid.NewGuid(),
             Username = username,
             Email = email
+        };
+
+        UserProfile = new UserProfile
+        {
+            UserProfileId = Guid.NewGuid(),
+            FirstName = firstName,
+            LastName = lastName,
+            DateOfBirth = dateOfBirth
         };
 
         UserAccountId = Guid.NewGuid();
@@ -42,5 +53,6 @@ public class UserAccount : IAggregateRoot
     public DateTimeOffset LastSignedIn { get; set; }
 
     public virtual User User { get; init; }
+    public virtual UserProfile UserProfile { get; init; }
     public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
 }

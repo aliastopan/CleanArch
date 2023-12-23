@@ -9,6 +9,7 @@ public static class UserAccountExtensions
     {
         return await context.UserAccounts
             .Include(x => x.User)
+            .Include(x => x.UserProfile)
             .FirstOrDefaultAsync(x => x.UserAccountId == userAccountId);
     }
 
@@ -16,6 +17,7 @@ public static class UserAccountExtensions
     {
         return await context.UserAccounts
             .Include(x => x.User)
+            .Include(x => x.UserProfile)
             .FirstOrDefaultAsync(x => x.User.Username == username);
     }
 
@@ -23,6 +25,7 @@ public static class UserAccountExtensions
     {
         return await context.UserAccounts
             .Include(x => x.User)
+            .Include(x => x.UserProfile)
             .FirstOrDefaultAsync(x => x.User.Email == email);
     }
 
@@ -30,6 +33,7 @@ public static class UserAccountExtensions
     {
         return await context.UserAccounts
             .Include(x => x.User)
+            .Include(x => x.UserProfile)
             .ToListAsync();
     }
 }

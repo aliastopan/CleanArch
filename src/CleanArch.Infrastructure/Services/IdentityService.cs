@@ -18,7 +18,8 @@ internal sealed class IdentityService : IIdentityService
         _dateTimeService = dateTimeService;
     }
 
-    public async Task<Result<UserAccount>> TrySignUpAsync(string username, string email, string password)
+    public async Task<Result<UserAccount>> TrySignUpAsync(string username, string firstName, string lastName,
+        DateOnly dateOfBirth, string email, string password)
     {
         var TryValidateAvailability = await TryValidateAvailabilityAsync(username, email);
         if(!TryValidateAvailability.IsSuccess)
@@ -26,7 +27,7 @@ internal sealed class IdentityService : IIdentityService
             return Result<UserAccount>.Inherit(result: TryValidateAvailability);
         }
 
-        var userAccount = await CreateUserAccountAsync(username, email, password);
+        var userAccount = await CreateUserAccountAsync(username, firstName, lastName, dateOfBirth, email, password);
         return Result<UserAccount>.Ok(userAccount);
     }
 
@@ -102,11 +103,13 @@ internal sealed class IdentityService : IIdentityService
         return Result.Ok();
     }
 
-    private async Task<UserAccount> CreateUserAccountAsync(string username, string email, string password)
+    private async Task<UserAccount> CreateUserAccountAsync(string username, string firstName, string lastName,
+        DateOnly dateOfBirth, string email, string password)
     {
         var hash = _passwordService.HashPassword(password, out string salt);
         var creationDate = _dateTimeService.DateTimeOffsetNow;
-        var userAccount = new UserAccount(username, email, hash, salt, creationDate);
+        var userAccount = new UserAccount(username, firstName, lastName,
+            dateOfBirth, email, hash, salt, creationDate);
 
         using var dbContext = _dbContextFactory.CreateDbContext();
 

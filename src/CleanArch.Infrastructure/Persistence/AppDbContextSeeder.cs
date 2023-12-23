@@ -28,6 +28,12 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
                 Username = "aliastopan",
                 Email = "alias.topan@proton.me"
             },
+            UserProfile = new UserProfile
+            {
+                FirstName = "Taufan",
+                LastName = "Augusta",
+                DateOfBirth = new DateOnly(year: 1996, month: 8, day: 19)
+            },
             PasswordHash = _passwordService.HashPassword("LongPassword012", out var salt),
             PasswordSalt = salt,
             IsVerified = true,
@@ -47,8 +53,14 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             User = new User
             {
                 UserId = Guid.Parse("e55204de-4de4-4101-91b7-672d3b9e5de2"),
-                Username = "libromancer",
-                Email = "libromancer@email"
+                Username = "vincent",
+                Email = "vincent.arkel@email"
+            },
+            UserProfile = new UserProfile
+            {
+                FirstName = "Vincent",
+                LastName = "Arkel",
+                DateOfBirth = new DateOnly(year: 1995, month: 8, day: 19)
             },
             PasswordHash = _passwordService.HashPassword("LongPassword012", out salt),
             PasswordSalt = salt,
@@ -66,8 +78,14 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             User = new User
             {
                 UserId = Guid.Parse("a008959f-b4ef-4284-8ea4-fc88802e3b37"),
-                Username = "vanquishsoul",
-                Email = "vanquish.soul@email"
+                Username = "aram",
+                Email = "aram@email"
+            },
+            UserProfile = new UserProfile
+            {
+                FirstName = "Aram",
+                LastName = "",
+                DateOfBirth = new DateOnly(year: 1995, month: 8, day: 19)
             },
             PasswordHash = _passwordService.HashPassword("LongPassword012", out salt),
             PasswordSalt = salt,

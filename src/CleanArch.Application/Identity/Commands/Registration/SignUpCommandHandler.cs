@@ -21,7 +21,13 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUp
         }
 
         // registration
-        var trySignUp = await _identityService.TrySignUpAsync(request.Username, request.Email, request.Password);
+        var trySignUp = await _identityService.TrySignUpAsync(request.Username,
+            request.FirstName,
+            request.LastName,
+            request.DateOfBirth,
+            request.Email,
+            request.Password);
+
         if(!trySignUp.IsSuccess)
         {
             var failure = Result<SignUpCommandResponse>.Inherit(result: trySignUp);
@@ -31,6 +37,8 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUp
         var userAccount = trySignUp.Value;
         var response = new SignUpCommandResponse(userAccount.UserAccountId,
             userAccount.User.Username,
+            $"{userAccount.UserProfile.FirstName} {userAccount.UserProfile.LastName}",
+            userAccount.UserProfile.DateOfBirth,
             userAccount.User.Email,
             userAccount.UserRoles.Select(role => role.ToString()).ToList());
 

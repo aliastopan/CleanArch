@@ -15,6 +15,8 @@ public static class RefreshTokenExtensions
         return context.RefreshTokens
             .Include(x => x.UserAccount)
                 .ThenInclude(x => x.User)
+            .Include(x => x.UserAccount)
+                .ThenInclude(x => x.UserProfile)
             .SingleOrDefault(x => x.Token == token);
     }
 }
