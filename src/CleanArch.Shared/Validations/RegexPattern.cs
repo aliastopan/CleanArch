@@ -1,4 +1,4 @@
-namespace CleanArch.Application.Common.Validations;
+namespace CleanArch.Shared.Validations;
 
 public static class RegexPattern
 {

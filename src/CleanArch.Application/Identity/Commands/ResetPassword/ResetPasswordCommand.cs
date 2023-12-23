@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using CleanArch.Application.Common.Validations;
 
 namespace CleanArch.Application.Identity.Commands.ResetPassword;
 
