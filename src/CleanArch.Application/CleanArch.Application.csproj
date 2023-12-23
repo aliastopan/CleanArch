@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CleanArch.Domain\CleanArch.Domain.csproj" />
+    <ProjectReference Include="..\CleanArch.Shared\CleanArch.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AnnotatedResult" Version="1.0.0-preview.11" />
