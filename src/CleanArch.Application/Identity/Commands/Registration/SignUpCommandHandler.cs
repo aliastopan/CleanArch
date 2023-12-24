@@ -37,7 +37,7 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUp
         var userAccount = trySignUp.Value;
         var response = new SignUpCommandResponse(userAccount.UserAccountId,
             userAccount.User.Username,
-            $"{userAccount.UserProfile.FirstName} {userAccount.UserProfile.LastName}",
+            userAccount.UserProfile.FullName,
             userAccount.UserProfile.DateOfBirth,
             userAccount.User.EmailAddress,
             userAccount.UserRoles.Select(role => role.ToString()).ToList());
