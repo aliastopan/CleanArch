@@ -1,22 +1,23 @@
 using System.ComponentModel.DataAnnotations;
+using CleanArch.Shared.Models.Identity;
 
 namespace CleanArch.Application.Identity.Commands.UserRole.Grant;
 
-public record GrantUserRoleCommand : IRequest<Result>
+public class GrantUserRoleCommand : UserRoleUpdateModel, IRequest<Result>
 {
-    public GrantUserRoleCommand(Guid senderAccountId, string accessPassword, Guid subjectAccountId, string role)
+    public GrantUserRoleCommand(Guid senderAccountId, string accessPassword,
+        Guid subjectAccountId, string role)
     {
-        SenderAccountId = senderAccountId;
-        SubjectAccountId = subjectAccountId;
-        AccessPassword = accessPassword;
-        Role = role;
+        base.SenderAccountId = senderAccountId;
+        base.AccessPassword = accessPassword;
+        base.SubjectAccountId = subjectAccountId;
+        base.Role = role;
     }
-
-    [Required] public Guid SenderAccountId { get; init; }
-    [Required] public Guid SubjectAccountId { get; init; }
-    [Required] public string AccessPassword { get; init; }
 
     [Required]
     [EnumDataType(typeof(Domain.Enums.UserRole))]
-    public string Role { get; init; }
+    public new string Role
+    {
+        get { return base.Role; }
+    }
 }

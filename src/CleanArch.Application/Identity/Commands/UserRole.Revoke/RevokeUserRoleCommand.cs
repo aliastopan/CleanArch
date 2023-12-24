@@ -1,23 +1,24 @@
 using System.ComponentModel.DataAnnotations;
+using CleanArch.Shared.Models.Identity;
 
 namespace CleanArch.Application.Identity.Commands.UserRole.Revoke;
 
-public record RevokeUserRoleCommand : IRequest<Result>
+public class RevokeUserRoleCommand : UserRoleUpdateModel, IRequest<Result>
 {
-    public RevokeUserRoleCommand(Guid senderAccountId, string accessPassword, Guid subjectAccountId, string role)
+    public RevokeUserRoleCommand(Guid senderAccountId, string accessPassword,
+        Guid subjectAccountId, string role)
     {
-        SenderAccountId = senderAccountId;
-        SubjectAccountId = subjectAccountId;
-        AccessPassword = accessPassword;
-        Role = role;
+        base.SenderAccountId = senderAccountId;
+        base.AccessPassword = accessPassword;
+        base.SubjectAccountId = subjectAccountId;
+        base.Role = role;
     }
-
-    [Required] public Guid SenderAccountId { get; init; }
-    [Required] public Guid SubjectAccountId { get; init; }
-    [Required] public string AccessPassword { get; init; }
 
     [Required]
     [EnumDataType(typeof(Domain.Enums.UserRole))]
-    public string Role { get; init; }
+    public new string Role
+    {
+        get { return base.Role; }
+    }
 
 }
