@@ -5,10 +5,10 @@ namespace CleanArch.Application.Identity.Commands.UserRole.Grant;
 
 public class GrantUserRoleCommand : UserRoleUpdateModel, IRequest<Result>
 {
-    public GrantUserRoleCommand(Guid senderAccountId, string accessPassword,
+    public GrantUserRoleCommand(Guid authorityAccountId, string accessPassword,
         Guid subjectAccountId, string role)
     {
-        base.SenderAccountId = senderAccountId;
+        base.AuthorityAccountId = authorityAccountId;
         base.AccessPassword = accessPassword;
         base.SubjectAccountId = subjectAccountId;
         base.Role = role;

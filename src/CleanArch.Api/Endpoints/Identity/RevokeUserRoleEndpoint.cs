@@ -14,7 +14,7 @@ public class RevokeUserRoleEndpoint : IEndpointDefinition
     internal async Task<IResult> RevokeUserRole([FromServices] ISender sender,
         GrantUserRoleRequest request, HttpContext httpContext)
     {
-        var result = await sender.Send(new RevokeUserRoleCommand(request.SenderAccountId,
+        var result = await sender.Send(new RevokeUserRoleCommand(request.AuthorityAccountId,
             request.AccessPassword,
             request.SubjectAccountId,
             request.Role));

@@ -6,7 +6,7 @@ namespace CleanArch.Shared.Models.Identity;
 public class UserRoleUpdateModel
 {
     [Required]
-    public Guid SenderAccountId { get; init; }
+    public Guid AuthorityAccountId { get; init; }
 
     [Required]
     public Guid SubjectAccountId { get; init; }

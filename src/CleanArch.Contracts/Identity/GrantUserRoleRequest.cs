@@ -2,10 +2,10 @@ namespace CleanArch.Contracts.Identity;
 
 public class GrantUserRoleRequest : UserRoleUpdateModel
 {
-    public GrantUserRoleRequest(Guid SenderAccountId, string accessPassword,
+    public GrantUserRoleRequest(Guid AuthorityAccountId, string accessPassword,
         Guid subjectAccountId, string role)
     {
-        base.SenderAccountId = SenderAccountId;
+        base.AuthorityAccountId = AuthorityAccountId;
         base.AccessPassword = accessPassword;
         base.SubjectAccountId = subjectAccountId;
         base.Role = role;

@@ -23,7 +23,7 @@ public class RevokeUserRoleCommandHandler : IRequestHandler<RevokeUserRoleComman
             return await ValueTask.FromResult(invalid);
         }
 
-        var tryAccessPrompt = await _authenticationService.TryAccessPromptAsync(request.SenderAccountId, request.AccessPassword);
+        var tryAccessPrompt = await _authenticationService.TryAccessPromptAsync(request.AuthorityAccountId, request.AccessPassword);
         if(!tryAccessPrompt.IsSuccess)
         {
             var denied = Result.Inherit(result: tryAccessPrompt);

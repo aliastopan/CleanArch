@@ -5,10 +5,10 @@ namespace CleanArch.Application.Identity.Commands.UserRole.Revoke;
 
 public class RevokeUserRoleCommand : UserRoleUpdateModel, IRequest<Result>
 {
-    public RevokeUserRoleCommand(Guid senderAccountId, string accessPassword,
+    public RevokeUserRoleCommand(Guid authorityAccountId, string accessPassword,
         Guid subjectAccountId, string role)
     {
-        base.SenderAccountId = senderAccountId;
+        base.AuthorityAccountId = authorityAccountId;
         base.AccessPassword = accessPassword;
         base.SubjectAccountId = subjectAccountId;
         base.Role = role;
