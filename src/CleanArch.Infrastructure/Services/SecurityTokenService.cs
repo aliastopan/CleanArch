@@ -63,8 +63,8 @@ internal sealed class SecurityTokenService : ISecurityTokenService
             RefreshTokenId = Guid.NewGuid(),
             Token = Guid.NewGuid().ToString(),
             Jti = jti,
-            CreationDate = _dateTimeService.UtcNow,
-            ExpiryDate = _dateTimeService.UtcNow.Add(_securityTokenSettings.RefreshTokenLifeTime),
+            CreationDate = _dateTimeService.DateTimeOffsetNow,
+            ExpiryDate = _dateTimeService.DateTimeOffsetNow.Add(_securityTokenSettings.RefreshTokenLifeTime),
             UserAccountId = userAccount.UserAccountId,
             UserAccount = userAccount,
         };
