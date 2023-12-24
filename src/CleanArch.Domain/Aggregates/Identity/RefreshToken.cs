@@ -11,6 +11,7 @@ public class RefreshToken
     public DateTimeOffset ExpiryDate { get; set; }
     public bool IsUsed { get; set; }
     public bool IsInvalidated { get; set; }
+    public bool IsDeleted { get; set; }
 
     public Guid UserAccountId { get; set; }
     public virtual UserAccount UserAccount { get; set;}

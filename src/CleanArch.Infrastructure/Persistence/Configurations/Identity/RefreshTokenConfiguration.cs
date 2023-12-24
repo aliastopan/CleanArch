@@ -10,7 +10,7 @@ internal sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refre
     {
        builder.ToTable("dbo.refresh_token");
 
-        // primary key
+       // primary key
         builder.HasKey(rt => rt.RefreshTokenId);
 
        // configure properties
@@ -43,6 +43,12 @@ internal sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refre
               .HasColumnName("is_invalidated")
               .IsRequired();
 
+       builder.Property(rt => rt.IsDeleted)
+              .HasColumnName("is_deleted")
+              .IsRequired();
+
+
+       // foreign key
        builder.Property(rt => rt.UserAccountId)
               .HasColumnName("user_account_id")
               .IsRequired();
