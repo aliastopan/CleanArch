@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CleanArch.Shared.Models.Identity;
 
-public class UserAuthenticationModel
+public class AuthenticationModel
 {
     [Required]
     public string Username { get; init; }

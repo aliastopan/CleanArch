@@ -4,7 +4,7 @@ using CleanArch.Shared.Validations;
 
 namespace CleanArch.Shared.Models.Identity;
 
-public class UserRegistrationModel
+public class RegistrationModel
 {
     [Required]
     [RegularExpression(RegexPattern.Username)]

@@ -1,6 +1,6 @@
 namespace CleanArch.Contracts.Identity;
 
-public class SignInRequest : UserAuthenticationModel
+public class SignInRequest : AuthenticationModel
 {
     public SignInRequest(string username, string password)
     {

@@ -1,6 +1,6 @@
 namespace CleanArch.Contracts.Identity;
 
-public class SignUpRequest : UserRegistrationModel
+public class SignUpRequest : RegistrationModel
 {
     public SignUpRequest(string username, string firstName, string lastName,
         DateOnly dateOfBirth, string emailAddress, string password)

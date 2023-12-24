@@ -2,7 +2,7 @@ using CleanArch.Shared.Models.Identity;
 
 namespace CleanArch.Application.Identity.Commands.Registration;
 
-public class SignUpCommand : UserRegistrationModel, IRequest<Result<SignUpCommandResponse>>
+public class SignUpCommand : RegistrationModel, IRequest<Result<SignUpCommandResponse>>
 {
     public SignUpCommand(string username, string firstName, string lastName,
         DateOnly dateOfBirth, string emailAddress, string password)
