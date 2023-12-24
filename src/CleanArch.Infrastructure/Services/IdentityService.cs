@@ -70,7 +70,7 @@ internal sealed class IdentityService : IIdentityService
         if(!userAccount.UserRoles.Contains(userRole))
         {
             var error = new Error("Role does not exist.", ErrorSeverity.Warning);
-            return Result.Conflict(error);
+            return Result.Invalid(error);
         }
 
         using var dbContext = _dbContextFactory.CreateDbContext();
