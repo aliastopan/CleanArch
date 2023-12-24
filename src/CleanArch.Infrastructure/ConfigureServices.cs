@@ -17,6 +17,7 @@ public static class ConfigureServices
         services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorService>();
         services.AddSingleton<IDateTimeService, DateTimeService>();
         services.AddSingleton<IPasswordService, PasswordService>();
+        // TODO: Replace password service with Bcrypt
         // services.AddSingleton<IPasswordService, BcryptPasswordService>();
         services.AddScoped<ISecurityTokenService, SecurityTokenService>();
 
