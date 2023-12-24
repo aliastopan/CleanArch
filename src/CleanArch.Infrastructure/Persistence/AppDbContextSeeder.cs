@@ -22,9 +22,9 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
     {
         var userAccount01 = new UserAccount
         {
+            UserAccountId = Guid.Parse("9dd0aa01-3a6e-4159-8c7b-8ee4caa1d4ea"),
             User = new User
             {
-                UserId = Guid.Parse("9dd0aa01-3a6e-4159-8c7b-8ee4caa1d4ea"),
                 Username = "aliastopan",
                 EmailAddress = "alias.topan@proton.me"
             },
@@ -50,9 +50,9 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
 
         var userAccount02 = new UserAccount
         {
+            UserAccountId = Guid.Parse("e55204de-4de4-4101-91b7-672d3b9e5de2"),
             User = new User
             {
-                UserId = Guid.Parse("e55204de-4de4-4101-91b7-672d3b9e5de2"),
                 Username = "vincent",
                 EmailAddress = "vincent.arkel@email"
             },
@@ -75,9 +75,9 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
 
         var userAccount03 = new UserAccount
         {
+            UserAccountId = Guid.Parse("a008959f-b4ef-4284-8ea4-fc88802e3b37"),
             User = new User
             {
-                UserId = Guid.Parse("a008959f-b4ef-4284-8ea4-fc88802e3b37"),
                 Username = "aram",
                 EmailAddress = "aram@email"
             },
