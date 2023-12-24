@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using CleanArch.Application.Common.Validations;
 
 namespace CleanArch.Application.Identity.Commands.UserRole.Grant;
 
@@ -18,7 +17,6 @@ public record GrantUserRoleCommand : IRequest<Result>
     [Required] public string AccessPassword { get; init; }
 
     [Required]
-    [UserRoleValidation]
+    [EnumDataType(typeof(Domain.Enums.UserRole))]
     public string Role { get; init; }
-
 }
