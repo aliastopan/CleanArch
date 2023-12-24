@@ -54,5 +54,5 @@ public class UserAccount : IAggregateRoot
 
     public virtual User User { get; init; }
     public virtual UserProfile UserProfile { get; init; }
-    public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
+    public virtual ICollection<RefreshToken> RefreshTokens { get; init; }
 }
