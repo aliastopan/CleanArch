@@ -12,7 +12,7 @@ public class AuthenticationEndpoint : IEndpointDefinition
     }
 
     internal async Task<IResult> SignIn([FromServices] ISender sender,
-        LoginRequest request, HttpContext httpContext)
+        SignInRequest request, HttpContext httpContext)
     {
         var result = await sender.Send(new SignInCommand(request.Username, request.Password));
 

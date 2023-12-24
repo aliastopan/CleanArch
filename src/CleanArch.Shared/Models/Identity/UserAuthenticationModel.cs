@@ -1,0 +1,13 @@
+#nullable disable
+using System.ComponentModel.DataAnnotations;
+
+namespace CleanArch.Shared.Models.Identity;
+
+public class UserAuthenticationModel
+{
+    [Required]
+    public string Username { get; init; }
+
+    [Required]
+    public string Password { get; init; }
+}

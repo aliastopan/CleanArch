@@ -1,15 +1,12 @@
-using System.ComponentModel.DataAnnotations;
+using CleanArch.Shared.Models.Identity;
 
 namespace CleanArch.Application.Identity.Commands.Authentication;
 
-public record SignInCommand : IRequest<Result<SignInCommandResponse>>
+public class SignInCommand : UserAuthenticationModel, IRequest<Result<SignInCommandResponse>>
 {
     public SignInCommand(string username, string password)
     {
-        Username = username;
-        Password = password;
+        base.Username = username;
+        base.Password = password;
     }
-
-    [Required] public string Username { get; init; }
-    [Required] public string Password { get; init; }
 }
