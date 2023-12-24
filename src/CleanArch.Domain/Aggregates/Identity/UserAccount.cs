@@ -9,13 +9,8 @@ public class UserAccount : IAggregateRoot
 
     }
 
-    public UserAccount(string username,
-        string firstName,
-        string lastName,
-        DateOnly dateOfBirth,
-        string emailAddress,
-        string passwordHash,
-        string passwordSalt,
+    public UserAccount(string username, string firstName, string lastName,
+        DateOnly dateOfBirth, string emailAddress, string passwordHash, string passwordSalt,
         DateTimeOffset creationDate)
     {
         User = new User
@@ -38,6 +33,7 @@ public class UserAccount : IAggregateRoot
         {
             UserRole.Viewer
         };
+
         PasswordHash = passwordHash;
         PasswordSalt = passwordSalt;
         CreationDate = creationDate;
