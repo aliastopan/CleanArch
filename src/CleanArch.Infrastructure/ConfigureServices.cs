@@ -23,6 +23,7 @@ public static class ConfigureServices
 
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IIdentityService, IdentityService>();
+        services.AddScoped<IMailService, MailService>();
 
         services.AddDbContext(configuration, environment);
 
