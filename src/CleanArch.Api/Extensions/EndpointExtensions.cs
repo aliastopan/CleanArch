@@ -8,21 +8,23 @@ internal static class EndpointExtensions
         params Assembly[] assemblies)
     {
         var endpointDefinitions = new List<IEndpointDefinition>();
+
         foreach(var assembly in assemblies)
         {
             endpointDefinitions.AddRange(assembly.ExportedTypes
-                .Where(x => typeof(IEndpointDefinition).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
-                .Select(Activator.CreateInstance).Cast<IEndpointDefinition>()
-            );
+                .Where(x => typeof(IEndpointDefinition)
+                    .IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
+                .Select(Activator.CreateInstance)
+                .Cast<IEndpointDefinition>());
         }
 
-        endpointDefinitions.ForEach(service =>
+        foreach(var endpoint in endpointDefinitions)
         {
-            if(service is IEndpointService routeService)
+            if (endpoint is IEndpointService endpointService)
             {
-                routeService.DefineServices(services);
+                endpointService.DefineServices(services);
             }
-        });
+        }
 
         services.AddSingleton(endpointDefinitions as IReadOnlyCollection<IEndpointDefinition>);
         return services;
