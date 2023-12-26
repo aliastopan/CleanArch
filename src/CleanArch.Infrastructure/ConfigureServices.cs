@@ -2,7 +2,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using CleanArch.Infrastructure.Services;
 
 namespace CleanArch.Infrastructure;
 
@@ -11,6 +10,8 @@ public static class ConfigureServices
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
         IConfiguration configuration, IHostEnvironment environment)
     {
+        services.AddScoped<IIdentityAggregateService, IdentityAggregateService>();
+
         services.Configure<UserSecrets>(configuration.GetSection(UserSecrets.SectionName));
         services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
 
