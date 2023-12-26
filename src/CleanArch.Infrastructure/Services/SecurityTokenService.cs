@@ -92,6 +92,8 @@ internal sealed class SecurityTokenService : ISecurityTokenService
             return Result<RefreshToken>.NotFound(error);
         }
 
+        //TODO: validate every condition and stack the error result as array
+
         if(currentRefreshToken.ExpiryDate < _dateTimeService.UtcNow)
         {
             var error = new Error("Refresh token was expired.", ErrorSeverity.Warning);
