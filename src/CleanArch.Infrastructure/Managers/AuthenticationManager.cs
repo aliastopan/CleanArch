@@ -4,25 +4,19 @@ namespace CleanArch.Infrastructure.Managers;
 
 internal sealed class AuthenticationManager : IAuthenticationManager
 {
-    private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
-    private readonly IPasswordService _passwordService;
+    private readonly IIdentityAggregateService _identityAggregateService;
     private readonly ISecurityTokenService _securityTokenService;
-    private readonly IDateTimeService _dateTimeService;
 
-    public AuthenticationManager(IAppDbContextFactory<IAppDbContext> dbContextFactory,
-        IPasswordService passwordService,
-        ISecurityTokenService securityTokenService,
-        IDateTimeService dateTimeService)
+    public AuthenticationManager(IIdentityAggregateService identityAggregateService,
+        ISecurityTokenService securityTokenService)
     {
-        _dbContextFactory = dbContextFactory;
-        _passwordService = passwordService;
+        _identityAggregateService = identityAggregateService;
         _securityTokenService = securityTokenService;
-        _dateTimeService = dateTimeService;
     }
 
     public async Task<Result<(string accessToken, RefreshToken refreshToken)>> TrySignInAsync(string username, string password)
     {
-        var tryGetUserAccount = await TryGetUserAccountAsync(username);
+        var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(username);
         if(!tryGetUserAccount.IsSuccess)
         {
             return Result<(string, RefreshToken)>.Inherit(result: tryGetUserAccount);
@@ -30,7 +24,7 @@ internal sealed class AuthenticationManager : IAuthenticationManager
 
         var userAccount = tryGetUserAccount.Value;
 
-        var validatePassword = TryValidatePassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
+        var validatePassword = _identityAggregateService.TryValidatePassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
         if(!validatePassword.IsSuccess)
         {
             return Result<(string, RefreshToken)>.Inherit(result: validatePassword);
@@ -45,13 +39,7 @@ internal sealed class AuthenticationManager : IAuthenticationManager
         }
 
         var refreshToken = tryGetRefreshToken.Value;
-
-        using var dbContext = _dbContextFactory.CreateDbContext();
-
-        userAccount.LastSignedIn = _dateTimeService.DateTimeOffsetNow;
-        dbContext.UserAccounts.Update(userAccount);
-        dbContext.RefreshTokens.Add(refreshToken);
-        await dbContext.SaveChangesAsync();
+        await _identityAggregateService.SignUserAsync(userAccount, refreshToken);
 
         return Result<(string, RefreshToken)>.Ok((accessToken, refreshToken));
     }
@@ -74,14 +62,14 @@ internal sealed class AuthenticationManager : IAuthenticationManager
 
         var previousRefreshToken = tryValidateSecurityToken.Value;
         var currentRefreshToken = tryGetRefreshToken.Value;
-        await RotateRefreshTokenAsync(previousRefreshToken, currentRefreshToken);
+        await _identityAggregateService.RotateRefreshTokenAsync(previousRefreshToken, currentRefreshToken);
 
         return Result<(string, RefreshToken)>.Ok((accessToken, currentRefreshToken));
     }
 
     public async Task<Result> TryAccessPromptAsync(Guid userAccountId, string password)
     {
-        var tryGetUserAccount = await TryGetUserAccountAsync(userAccountId);
+        var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(userAccountId);
         if(!tryGetUserAccount.IsSuccess)
         {
             return Result.Inherit(result: tryGetUserAccount);
@@ -89,58 +77,12 @@ internal sealed class AuthenticationManager : IAuthenticationManager
 
         var userAccount = tryGetUserAccount.Value;
 
-        var validatePassword = TryValidatePassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
+        var validatePassword = _identityAggregateService.TryValidatePassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
         if(!validatePassword.IsSuccess)
         {
             return Result.Inherit(result: validatePassword);
         }
 
         return Result.Ok();
-    }
-
-    private async Task<Result<UserAccount>> TryGetUserAccountAsync(Func<IAppDbContext, Task<UserAccount?>> getUserAccount)
-    {
-        using var dbContext = _dbContextFactory.CreateDbContext();
-
-        var userAccount = await getUserAccount(dbContext);
-        if(userAccount is null)
-        {
-            var error = new Error("User does not exist.", ErrorSeverity.Warning);
-            return Result<UserAccount>.NotFound(error);
-        }
-
-        return Result<UserAccount>.Ok(userAccount);
-    }
-
-    private async Task<Result<UserAccount>> TryGetUserAccountAsync(Guid userAccountId)
-    {
-        return await TryGetUserAccountAsync(db => db.GetUserAccountByIdAsync(userAccountId));
-    }
-
-    private async Task<Result<UserAccount>> TryGetUserAccountAsync(string username)
-    {
-        return await TryGetUserAccountAsync(db => db.GetUserAccountByUsernameAsync(username));
-    }
-
-    private Result TryValidatePassword(string password, string passwordSalt, string passwordHash)
-    {
-        var isVerified = _passwordService.VerifyPassword(password, passwordSalt, passwordHash);
-        if(!isVerified)
-        {
-            var error = new Error("Incorrect password.", ErrorSeverity.Warning);
-            return Result.Unauthorized(error);
-        }
-
-        return Result.Ok();
-    }
-
-    private async Task RotateRefreshTokenAsync(RefreshToken previous, RefreshToken current)
-    {
-        using var dbContext = _dbContextFactory.CreateDbContext();
-
-        dbContext.RefreshTokens.Update(previous);
-        dbContext.RefreshTokens.Add(current);
-
-        await dbContext.SaveChangesAsync();
     }
 }
