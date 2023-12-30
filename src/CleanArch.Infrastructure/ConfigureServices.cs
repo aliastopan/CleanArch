@@ -12,6 +12,8 @@ public static class ConfigureServices
     {
         services.AddScoped<IIdentityAggregateService, IdentityAggregateService>();
 
+        services.AddScoped<IIdentityManager, IdentityManager>();
+
         services.Configure<UserSecrets>(configuration.GetSection(UserSecrets.SectionName));
         services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
 
