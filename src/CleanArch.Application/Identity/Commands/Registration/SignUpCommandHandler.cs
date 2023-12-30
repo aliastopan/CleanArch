@@ -1,12 +1,14 @@
+using CleanArch.Application.Common.Interfaces.Managers;
+
 namespace CleanArch.Application.Identity.Commands.Registration;
 
 public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUpCommandResponse>>
 {
-    private readonly IIdentityService _identityService;
+    private readonly IIdentityManager _identityManager;
 
-    public SignUpCommandHandler(IIdentityService identityService)
+    public SignUpCommandHandler(IIdentityManager identityManager)
     {
-        _identityService = identityService;
+        _identityManager = identityManager;
     }
 
     public async ValueTask<Result<SignUpCommandResponse>> Handle(SignUpCommand request,
@@ -21,7 +23,7 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUp
         }
 
         // registration
-        var trySignUp = await _identityService.TrySignUpAsync(request.Username,
+        var trySignUp = await _identityManager.TrySignUpAsync(request.Username,
             request.FirstName,
             request.LastName,
             request.DateOfBirth,

@@ -1,15 +1,17 @@
+using CleanArch.Application.Common.Interfaces.Managers;
+
 namespace CleanArch.Application.Identity.Commands.UserRole.Revoke;
 
 public class RevokeUserRoleCommandHandler : IRequestHandler<RevokeUserRoleCommand, Result>
 {
     private readonly IAuthenticationService _authenticationService;
-    private readonly IIdentityService _identityService;
+    private readonly IIdentityManager _identityManager;
 
     public RevokeUserRoleCommandHandler(IAuthenticationService authenticationService,
-        IIdentityService identityService)
+        IIdentityManager identityManager)
     {
         _authenticationService = authenticationService;
-        _identityService = identityService;
+        _identityManager = identityManager;
     }
 
     public async ValueTask<Result> Handle(RevokeUserRoleCommand request,
@@ -31,7 +33,7 @@ public class RevokeUserRoleCommandHandler : IRequestHandler<RevokeUserRoleComman
         }
 
         // revoke user role
-        var tryRevokeRole = await _identityService.TryRevokeRoleAsync(request.SubjectAccountId, request.Role);
+        var tryRevokeRole = await _identityManager.TryRevokeRoleAsync(request.SubjectAccountId, request.Role);
         if(!tryRevokeRole.IsSuccess)
         {
             var failure = Result.Inherit(result: tryRevokeRole);

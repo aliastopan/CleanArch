@@ -1,14 +1,14 @@
-using CleanArch.Domain.Aggregates.Identity;
+using CleanArch.Application.Common.Interfaces.Managers;
 
 namespace CleanArch.Application.Identity.Commands.ResetPassword;
 
 public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, Result>
 {
-    private readonly IIdentityService _identityService;
+    private readonly IIdentityManager _identityManager;
 
-    public ResetPasswordCommandHandler(IIdentityService identityService)
+    public ResetPasswordCommandHandler(IIdentityManager identityManager)
     {
-        _identityService = identityService;
+        _identityManager = identityManager;
     }
 
     public async ValueTask<Result> Handle(ResetPasswordCommand request,
@@ -23,7 +23,10 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
         }
 
         // reset password
-        var tryResetPassword = await _identityService.TryResetPasswordAsync(request.UserAccountId, request.OldPassword, request.NewPassword);
+        var tryResetPassword = await _identityManager.TryResetPasswordAsync(request.UserAccountId,
+            request.OldPassword,
+            request.NewPassword);
+
         if(!tryResetPassword.IsSuccess)
         {
             var failure = Result.Inherit(result: tryResetPassword);
