@@ -1,16 +1,14 @@
-using CleanArch.Application.Common.Interfaces.Managers;
-
 namespace CleanArch.Application.Identity.Commands.UserRole.Revoke;
 
 public class RevokeUserRoleCommandHandler : IRequestHandler<RevokeUserRoleCommand, Result>
 {
-    private readonly IAuthenticationService _authenticationService;
+    private readonly IAuthenticationManager _authenticationManager;
     private readonly IIdentityManager _identityManager;
 
-    public RevokeUserRoleCommandHandler(IAuthenticationService authenticationService,
+    public RevokeUserRoleCommandHandler(IAuthenticationManager authenticationManager,
         IIdentityManager identityManager)
     {
-        _authenticationService = authenticationService;
+        _authenticationManager = authenticationManager;
         _identityManager = identityManager;
     }
 
@@ -25,7 +23,7 @@ public class RevokeUserRoleCommandHandler : IRequestHandler<RevokeUserRoleComman
             return await ValueTask.FromResult(invalid);
         }
 
-        var tryAccessPrompt = await _authenticationService.TryAccessPromptAsync(request.AuthorityAccountId, request.AccessPassword);
+        var tryAccessPrompt = await _authenticationManager.TryAccessPromptAsync(request.AuthorityAccountId, request.AccessPassword);
         if(!tryAccessPrompt.IsSuccess)
         {
             var denied = Result.Inherit(result: tryAccessPrompt);

@@ -2,17 +2,17 @@ namespace CleanArch.Application.Identity.Commands.Authentication.Refresh;
 
 public class RefreshCommandHandler : IRequestHandler<RefreshCommand, Result<RefreshCommandResponse>>
 {
-    private readonly IAuthenticationService _userAuthenticationService;
+    private readonly IAuthenticationManager _authenticationManager;
 
-    public RefreshCommandHandler(IAuthenticationService userAuthenticationService)
+    public RefreshCommandHandler(IAuthenticationManager authenticationManager)
     {
-        _userAuthenticationService = userAuthenticationService;
+        _authenticationManager = authenticationManager;
     }
 
     public async ValueTask<Result<RefreshCommandResponse>> Handle(RefreshCommand request,
         CancellationToken cancellationToken)
     {
-        var tryRefreshAccess = await _userAuthenticationService.TryRefreshAccessAsync(request.AccessToken, request.RefreshToken);
+        var tryRefreshAccess = await _authenticationManager.TryRefreshAccessAsync(request.AccessToken, request.RefreshToken);
         if(!tryRefreshAccess.IsSuccess)
         {
             var failure = Result<RefreshCommandResponse>.Inherit(result: tryRefreshAccess);

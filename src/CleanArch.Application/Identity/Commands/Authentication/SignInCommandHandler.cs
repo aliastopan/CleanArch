@@ -2,11 +2,11 @@ namespace CleanArch.Application.Identity.Commands.Authentication;
 
 public class SignInCommandHandler : IRequestHandler<SignInCommand, Result<SignInCommandResponse>>
 {
-    private readonly IAuthenticationService _authenticationService;
+    private readonly IAuthenticationManager _authenticationManager;
 
-    public SignInCommandHandler(IAuthenticationService authenticationService)
+    public SignInCommandHandler(IAuthenticationManager authenticationManager)
     {
-        _authenticationService = authenticationService;
+        _authenticationManager = authenticationManager;
     }
 
     public async ValueTask<Result<SignInCommandResponse>> Handle(SignInCommand request,
@@ -21,7 +21,7 @@ public class SignInCommandHandler : IRequestHandler<SignInCommand, Result<SignIn
         }
 
         // authentication
-        var trySignIn = await _authenticationService.TrySignInAsync(request.Username, request.Password);
+        var trySignIn = await _authenticationManager.TrySignInAsync(request.Username, request.Password);
         if(!trySignIn.IsSuccess)
         {
             var failure = Result<SignInCommandResponse>.Inherit(result: trySignIn);

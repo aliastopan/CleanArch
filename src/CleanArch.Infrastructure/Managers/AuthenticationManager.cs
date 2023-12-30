@@ -1,15 +1,15 @@
 using CleanArch.Domain.Aggregates.Identity;
 
-namespace CleanArch.Infrastructure.Services;
+namespace CleanArch.Infrastructure.Managers;
 
-internal sealed class AuthenticationService : IAuthenticationService
+internal sealed class AuthenticationManager : IAuthenticationManager
 {
     private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
     private readonly IPasswordService _passwordService;
     private readonly ISecurityTokenService _securityTokenService;
     private readonly IDateTimeService _dateTimeService;
 
-    public AuthenticationService(IAppDbContextFactory<IAppDbContext> dbContextFactory,
+    public AuthenticationManager(IAppDbContextFactory<IAppDbContext> dbContextFactory,
         IPasswordService passwordService,
         ISecurityTokenService securityTokenService,
         IDateTimeService dateTimeService)

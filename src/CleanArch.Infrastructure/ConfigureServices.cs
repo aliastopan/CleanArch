@@ -13,6 +13,7 @@ public static class ConfigureServices
         services.AddScoped<IIdentityAggregateService, IdentityAggregateService>();
 
         services.AddScoped<IIdentityManager, IdentityManager>();
+        services.AddScoped<IAuthenticationManager, AuthenticationManager>();
 
         services.Configure<UserSecrets>(configuration.GetSection(UserSecrets.SectionName));
         services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
@@ -24,8 +25,6 @@ public static class ConfigureServices
         // services.AddSingleton<IPasswordService, BcryptPasswordService>();
         services.AddScoped<ISecurityTokenService, SecurityTokenService>();
 
-        services.AddScoped<IAuthenticationService, AuthenticationService>();
-        services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IMailService, MailService>();
 
         services.AddDbContext(configuration, environment);

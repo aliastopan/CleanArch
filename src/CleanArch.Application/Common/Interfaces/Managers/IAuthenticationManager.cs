@@ -1,8 +1,8 @@
 using CleanArch.Domain.Aggregates.Identity;
 
-namespace CleanArch.Application.Common.Interfaces.Services;
+namespace CleanArch.Application.Common.Interfaces.Managers;
 
-public interface IAuthenticationService
+public interface IAuthenticationManager
 {
     Task<Result<(string accessToken, RefreshToken refreshToken)>> TrySignInAsync(string username, string password);
     Task<Result<(string accessToken, RefreshToken refreshToken)>> TryRefreshAccessAsync(string accessToken, string refreshToken);

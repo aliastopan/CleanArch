@@ -34,6 +34,16 @@ internal sealed class IdentityAggregateService : IIdentityAggregateService
         return userAccount;
     }
 
+    public async Task SignUserAsync(UserAccount userAccount, RefreshToken refreshToken)
+    {
+        using var dbContext = _dbContextFactory.CreateDbContext();
+
+        userAccount.LastSignedIn = _dateTimeService.DateTimeOffsetNow;
+        dbContext.UserAccounts.Update(userAccount);
+        dbContext.RefreshTokens.Add(refreshToken);
+        await dbContext.SaveChangesAsync();
+    }
+
     internal async Task<Result<UserAccount>> TryGetUserAccountAsync(Func<IAppDbContext, Task<UserAccount?>> getUserAccount)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
@@ -112,6 +122,18 @@ internal sealed class IdentityAggregateService : IIdentityAggregateService
             userAccount.UserRoles.Remove(userRole);
             return userAccount;
         });
+    }
+
+    public Result TryValidatePassword(string password, string passwordSalt, string passwordHash)
+    {
+        var isVerified = _passwordService.VerifyPassword(password, passwordSalt, passwordHash);
+        if(!isVerified)
+        {
+            var error = new Error("Incorrect password.", ErrorSeverity.Warning);
+            return Result.Unauthorized(error);
+        }
+
+        return Result.Ok();
     }
 
     public Result TryValidatePassword(string newPassword, string oldPassword, string passwordSalt, string passwordHash)
