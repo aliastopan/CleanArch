@@ -47,16 +47,15 @@ internal sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refre
               .HasColumnName("is_deleted")
               .IsRequired();
 
-
        // foreign key
-       builder.Property(rt => rt.UserAccountId)
-              .HasColumnName("user_account_id")
+       builder.Property(rt => rt.FkUserAccountId)
+              .HasColumnName("fk_user_account_id")
               .IsRequired();
 
        // configure relationships
        builder.HasOne(rt => rt.UserAccount)
               .WithMany(u => u.RefreshTokens)
-              .HasForeignKey(rt => rt.UserAccountId)
+              .HasForeignKey(rt => rt.FkUserAccountId)
               .OnDelete(DeleteBehavior.Cascade);
     }
 }

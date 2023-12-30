@@ -51,6 +51,15 @@ internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAc
             .HasColumnType("last_signed_in")
             .IsRequired();
 
+        // foreign key
+        builder.Property(u => u.FkUserId)
+            .HasColumnName("fk_user_id")
+            .IsRequired();
+
+        builder.Property(u => u.FkUserProfileId)
+            .HasColumnName("fk_user_profile_id")
+            .IsRequired();
+
         // configure relationships
         builder.HasOne(u => u.User)
             .WithOne()
@@ -64,7 +73,7 @@ internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAc
 
         builder.HasMany(u => u.RefreshTokens)
             .WithOne(rt => rt.UserAccount)
-            .HasForeignKey(rt => rt.UserAccountId)
+            .HasForeignKey(rt => rt.FkUserAccountId)
             .OnDelete(DeleteBehavior.Cascade);
 
     }

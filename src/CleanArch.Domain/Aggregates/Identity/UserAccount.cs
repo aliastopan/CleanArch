@@ -48,6 +48,9 @@ public class UserAccount : IAggregateRoot
     public DateTimeOffset CreationDate { get; init; }
     public DateTimeOffset LastSignedIn { get; set; }
 
+    public Guid FkUserId { get; init; }
+    public Guid FkUserProfileId { get; init; }
+
     public virtual User User { get; init; }
     public virtual UserProfile UserProfile { get; init; }
     public virtual ICollection<RefreshToken> RefreshTokens { get; init; }

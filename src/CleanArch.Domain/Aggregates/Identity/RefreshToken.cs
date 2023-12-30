@@ -13,6 +13,7 @@ public class RefreshToken
     public bool IsInvalidated { get; set; }
     public bool IsDeleted { get; set; }
 
-    public Guid UserAccountId { get; set; }
+    public Guid FkUserAccountId { get; set; }
+
     public virtual UserAccount UserAccount { get; set;}
 }

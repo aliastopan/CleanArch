@@ -7,7 +7,7 @@ public static class RefreshTokenExtensions
 {
     public static async Task<List<RefreshToken>> GetRefreshTokensByUserAccountIdAsync(this IAppDbContext context, Guid userAccountId)
     {
-        return await context.RefreshTokens.Where(x => x.UserAccountId == userAccountId).ToListAsync();
+        return await context.RefreshTokens.Where(x => x.FkUserAccountId == userAccountId).ToListAsync();
     }
 
     public static RefreshToken? GetRefreshToken(this IAppDbContext context, string token)
