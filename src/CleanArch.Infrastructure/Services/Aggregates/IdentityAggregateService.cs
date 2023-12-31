@@ -96,32 +96,24 @@ internal sealed class IdentityAggregateService : IIdentityAggregateService
         return Result.Ok();
     }
 
-    internal async Task UpdateRoleAsync(Func<UserAccount> updateUserRole)
+    public async Task GrantRoleAsync(UserAccount userAccount, UserRole userRole)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        var userAccount = updateUserRole.Invoke();
+        userAccount.UserRoles.Add(userRole);
         dbContext.UserAccounts.Update(userAccount);
 
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task GrantRoleAsync(UserAccount userAccount, UserRole userRole)
-    {
-        await UpdateRoleAsync(() =>
-        {
-            userAccount.UserRoles.Add(userRole);
-            return userAccount;
-        });
-    }
-
     public async Task RevokeRoleAsync(UserAccount userAccount, UserRole userRole)
     {
-        await UpdateRoleAsync(() =>
-        {
-            userAccount.UserRoles.Remove(userRole);
-            return userAccount;
-        });
+        using var dbContext = _dbContextFactory.CreateDbContext();
+
+        userAccount.UserRoles.Remove(userRole);
+        dbContext.UserAccounts.Update(userAccount);
+
+        await dbContext.SaveChangesAsync();
     }
 
     public Result TryValidatePassword(string password, string passwordSalt, string passwordHash)
