@@ -12,7 +12,7 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, Result<Refr
     public async ValueTask<Result<RefreshCommandResponse>> Handle(RefreshCommand request,
         CancellationToken cancellationToken)
     {
-        var tryRefreshAccess = await _authenticationManager.TryRefreshAccessAsync(request.AccessToken, request.RefreshToken);
+        var tryRefreshAccess = await _authenticationManager.TryRefreshAccessAsync(request.AccessToken, request.RefreshTokenStr);
         if(!tryRefreshAccess.IsSuccess)
         {
             var failure = Result<RefreshCommandResponse>.Inherit(result: tryRefreshAccess);
