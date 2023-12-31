@@ -71,7 +71,7 @@ internal sealed class SecurityTokenService : ISecurityTokenService
         return Result<RefreshToken>.Ok(refreshToken);
     }
 
-    public Result<RefreshToken> TryValidateSecurityToken(string accessToken, string refreshToken)
+    public Result<RefreshToken> TryValidateSecurityToken(string accessToken, string refreshTokenStr)
     {
         var principal = GetPrincipalFromToken(accessToken);
         if(principal is null)
@@ -83,7 +83,7 @@ internal sealed class SecurityTokenService : ISecurityTokenService
         RefreshToken? currentRefreshToken;
         using(var dbContext = _dbContextFactory.CreateDbContext())
         {
-            currentRefreshToken = dbContext.GetRefreshToken(refreshToken);
+            currentRefreshToken = dbContext.GetRefreshToken(token: refreshTokenStr);
         }
 
         if(currentRefreshToken is null)

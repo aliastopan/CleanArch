@@ -44,9 +44,9 @@ internal sealed class AuthenticationManager : IAuthenticationManager
         return Result<(string, RefreshToken)>.Ok((accessToken, refreshToken));
     }
 
-    public async Task<Result<(string accessToken, RefreshToken refreshToken)>> TryRefreshAccessAsync(string accessToken, string refreshToken)
+    public async Task<Result<(string accessToken, RefreshToken refreshToken)>> TryRefreshAccessAsync(string accessToken, string refreshTokenStr)
     {
-        var tryValidateSecurityToken = _securityTokenService.TryValidateSecurityToken(accessToken, refreshToken);
+        var tryValidateSecurityToken = _securityTokenService.TryValidateSecurityToken(accessToken, refreshTokenStr);
         if(!tryValidateSecurityToken.IsSuccess)
         {
             return Result<(string, RefreshToken)>.Inherit(result: tryValidateSecurityToken);
