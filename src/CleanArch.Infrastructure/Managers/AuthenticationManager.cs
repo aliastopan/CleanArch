@@ -24,10 +24,10 @@ internal sealed class AuthenticationManager : IAuthenticationManager
 
         var userAccount = tryGetUserAccount.Value;
 
-        var validatePassword = _identityAggregateService.TryValidatePassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
-        if(!validatePassword.IsSuccess)
+        var tryValidatePassword = _identityAggregateService.TryValidatePassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
+        if(!tryValidatePassword.IsSuccess)
         {
-            return Result<(string, RefreshToken)>.Inherit(result: validatePassword);
+            return Result<(string, RefreshToken)>.Inherit(result: tryValidatePassword);
         }
 
         // sign-in protocol
