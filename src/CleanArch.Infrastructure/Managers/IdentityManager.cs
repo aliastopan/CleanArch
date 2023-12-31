@@ -37,7 +37,8 @@ internal sealed class IdentityManager : IIdentityManager
         var userAccount = tryGetUserAccount.Value;
 
         var userRole = (UserRole)Enum.Parse(typeof(UserRole), role);
-        if (userAccount.UserRoles.Contains(userRole))
+        var hasDuplicateRole = userAccount.UserRoles.Contains(userRole);
+        if (hasDuplicateRole)
         {
             var error = new Error("Cannot have duplicate role.", ErrorSeverity.Warning);
             return Result.Conflict(error);
@@ -58,7 +59,8 @@ internal sealed class IdentityManager : IIdentityManager
 
         var userAccount = tryGetUserAccount.Value;
         var userRole = (UserRole)Enum.Parse(typeof(UserRole), role);
-        if (!userAccount.UserRoles.Contains(userRole))
+        var hasMissingRole = !userAccount.UserRoles.Contains(userRole);
+        if (hasMissingRole)
         {
             var error = new Error("Role does not exist.", ErrorSeverity.Warning);
             return Result.Invalid(error);
