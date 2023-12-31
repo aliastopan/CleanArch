@@ -13,8 +13,8 @@ public class SignInCommandHandler : IRequestHandler<SignInCommand, Result<SignIn
         CancellationToken cancellationToken)
     {
         // data annotation validations
-        var isValid = request.TryValidate(out var errors);
-        if(!isValid)
+        var isInvalid = !request.TryValidate(out var errors);
+        if (isInvalid)
         {
             var invalid = Result<SignInCommandResponse>.Invalid(errors);
             return await ValueTask.FromResult(invalid);
@@ -22,7 +22,7 @@ public class SignInCommandHandler : IRequestHandler<SignInCommand, Result<SignIn
 
         // authentication
         var trySignIn = await _authenticationManager.TrySignInAsync(request.Username, request.Password);
-        if(!trySignIn.IsSuccess)
+        if (trySignIn.IsFailure)
         {
             var failure = Result<SignInCommandResponse>.Inherit(result: trySignIn);
             return await ValueTask.FromResult(failure);

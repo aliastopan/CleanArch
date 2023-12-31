@@ -16,15 +16,15 @@ public class GrantUserRoleCommandHandler : IRequestHandler<GrantUserRoleCommand,
         CancellationToken cancellationToken)
     {
         // data annotation validations
-        var isValid = request.TryValidate(out var errors);
-        if(!isValid)
+        var isInvalid = !request.TryValidate(out var errors);
+        if (isInvalid)
         {
             var invalid = Result.Invalid(errors);
             return await ValueTask.FromResult(invalid);
         }
 
         var tryAccessPrompt = await _authenticationManager.TryAccessPromptAsync(request.AuthorityAccountId, request.AccessPassword);
-        if(!tryAccessPrompt.IsSuccess)
+        if (tryAccessPrompt.IsFailure)
         {
             var denied = Result.Inherit(result: tryAccessPrompt);
             return await ValueTask.FromResult(denied);
@@ -32,7 +32,7 @@ public class GrantUserRoleCommandHandler : IRequestHandler<GrantUserRoleCommand,
 
         // grant user role
         var tryGrantRole = await _identityManager.TryGrantRoleAsync(request.SubjectAccountId, request.Role);
-        if(!tryGrantRole.IsSuccess)
+        if (tryGrantRole.IsFailure)
         {
             var failure = Result.Inherit(result: tryGrantRole);
             return await ValueTask.FromResult(failure);

@@ -16,7 +16,7 @@ internal sealed class IdentityManager : IIdentityManager
         DateOnly dateOfBirth, string emailAddress, string password)
     {
         var TryValidateAvailability = await _identityAggregateService.TryValidateAvailabilityAsync(username, emailAddress);
-        if(!TryValidateAvailability.IsSuccess)
+        if (TryValidateAvailability.IsFailure)
         {
             return Result<UserAccount>.Inherit(result: TryValidateAvailability);
         }
@@ -29,7 +29,7 @@ internal sealed class IdentityManager : IIdentityManager
     public async Task<Result> TryGrantRoleAsync(Guid userAccountId, string role)
     {
         var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(userAccountId);
-        if(!tryGetUserAccount.IsSuccess)
+        if (tryGetUserAccount.IsFailure)
         {
             return Result.Inherit(result: tryGetUserAccount);
         }
@@ -37,7 +37,7 @@ internal sealed class IdentityManager : IIdentityManager
         var userAccount = tryGetUserAccount.Value;
 
         var userRole = (UserRole)Enum.Parse(typeof(UserRole), role);
-        if(userAccount.UserRoles.Contains(userRole))
+        if (userAccount.UserRoles.Contains(userRole))
         {
             var error = new Error("Cannot have duplicate role.", ErrorSeverity.Warning);
             return Result.Conflict(error);
@@ -51,14 +51,14 @@ internal sealed class IdentityManager : IIdentityManager
     public async Task<Result> TryRevokeRoleAsync(Guid userAccountId, string role)
     {
         var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(userAccountId);
-        if(!tryGetUserAccount.IsSuccess)
+        if (tryGetUserAccount.IsFailure)
         {
             return Result.Inherit(result: tryGetUserAccount);
         }
 
         var userAccount = tryGetUserAccount.Value;
         var userRole = (UserRole)Enum.Parse(typeof(UserRole), role);
-        if(!userAccount.UserRoles.Contains(userRole))
+        if (!userAccount.UserRoles.Contains(userRole))
         {
             var error = new Error("Role does not exist.", ErrorSeverity.Warning);
             return Result.Invalid(error);
@@ -72,14 +72,14 @@ internal sealed class IdentityManager : IIdentityManager
     public async Task<Result> TryResetPasswordAsync(Guid userAccountId, string oldPassword, string newPassword)
     {
         var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(userAccountId);
-        if(!tryGetUserAccount.IsSuccess)
+        if (tryGetUserAccount.IsFailure)
         {
             return Result.Inherit(result: tryGetUserAccount);
         }
 
         var userAccount = tryGetUserAccount.Value;
         var tryValidatePassword = _identityAggregateService.TryValidatePassword(newPassword, oldPassword, userAccount.PasswordSalt, userAccount.PasswordHash);
-        if(!tryValidatePassword.IsSuccess)
+        if (tryValidatePassword.IsFailure)
         {
             return Result.Inherit(result: tryValidatePassword);
         }

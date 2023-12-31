@@ -16,15 +16,15 @@ public class RevokeUserRoleCommandHandler : IRequestHandler<RevokeUserRoleComman
         CancellationToken cancellationToken)
     {
         // data annotation validations
-        var isValid = request.TryValidate(out var errors);
-        if(!isValid)
+        var isInvalid = !request.TryValidate(out var errors);
+        if (isInvalid)
         {
             var invalid = Result.Invalid(errors);
             return await ValueTask.FromResult(invalid);
         }
 
         var tryAccessPrompt = await _authenticationManager.TryAccessPromptAsync(request.AuthorityAccountId, request.AccessPassword);
-        if(!tryAccessPrompt.IsSuccess)
+        if (tryAccessPrompt.IsFailure)
         {
             var denied = Result.Inherit(result: tryAccessPrompt);
             return await ValueTask.FromResult(denied);
@@ -32,7 +32,7 @@ public class RevokeUserRoleCommandHandler : IRequestHandler<RevokeUserRoleComman
 
         // revoke user role
         var tryRevokeRole = await _identityManager.TryRevokeRoleAsync(request.SubjectAccountId, request.Role);
-        if(!tryRevokeRole.IsSuccess)
+        if (tryRevokeRole.IsFailure)
         {
             var failure = Result.Inherit(result: tryRevokeRole);
             return await ValueTask.FromResult(failure);

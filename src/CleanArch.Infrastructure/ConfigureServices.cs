@@ -35,7 +35,7 @@ public static class ConfigureServices
     internal static IServiceCollection AddDbContext(this IServiceCollection services,
         IConfiguration configuration, IHostEnvironment environment)
     {
-        if(environment.IsDevelopment() && configuration.UseInMemoryDatabase())
+        if (environment.IsDevelopment() && configuration.UseInMemoryDatabase())
         {
             services.AddDbContext<IAppDbContext, AppDbContext>(options =>
             {

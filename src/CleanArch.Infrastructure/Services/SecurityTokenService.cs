@@ -50,7 +50,7 @@ internal sealed class SecurityTokenService : ISecurityTokenService
     public Result<RefreshToken> TryGenerateRefreshToken(string accessToken, UserAccount userAccount)
     {
         var principal = GetPrincipalFromToken(accessToken);
-        if(principal is null)
+        if (principal is null)
         {
             var error = new Error("Refresh token has invalid null principal.", ErrorSeverity.Warning);
             return Result<RefreshToken>.Unauthorized(error);
@@ -74,19 +74,19 @@ internal sealed class SecurityTokenService : ISecurityTokenService
     public Result<RefreshToken> TryValidateSecurityToken(string accessToken, string refreshTokenStr)
     {
         var principal = GetPrincipalFromToken(accessToken);
-        if(principal is null)
+        if (principal is null)
         {
             var error = new Error("Refresh token has invalid null principal.", ErrorSeverity.Warning);
             return Result<RefreshToken>.Unauthorized(error);
         }
 
         RefreshToken? currentRefreshToken;
-        using(var dbContext = _dbContextFactory.CreateDbContext())
+        using (var dbContext = _dbContextFactory.CreateDbContext())
         {
             currentRefreshToken = dbContext.GetRefreshToken(token: refreshTokenStr);
         }
 
-        if(currentRefreshToken is null)
+        if (currentRefreshToken is null)
         {
             var error = new Error("Refresh token not found.", ErrorSeverity.Warning);
             return Result<RefreshToken>.NotFound(error);
@@ -94,19 +94,19 @@ internal sealed class SecurityTokenService : ISecurityTokenService
 
         //TODO: validate every condition and stack the error result as array
 
-        if(currentRefreshToken.ExpiryDate < _dateTimeService.UtcNow)
+        if (currentRefreshToken.ExpiryDate < _dateTimeService.UtcNow)
         {
             var error = new Error("Refresh token was expired.", ErrorSeverity.Warning);
             return Result<RefreshToken>.Unauthorized(error);
         }
 
-        if(currentRefreshToken.IsInvalidated)
+        if (currentRefreshToken.IsInvalidated)
         {
             var error = new Error("Refresh token was invalidated.", ErrorSeverity.Warning);
             return Result<RefreshToken>.Invalid(error);
         }
 
-        if(currentRefreshToken.IsUsed)
+        if (currentRefreshToken.IsUsed)
         {
             var error = new Error("Refresh token was used.", ErrorSeverity.Warning);
             return Result<RefreshToken>.Error(error);
@@ -123,7 +123,7 @@ internal sealed class SecurityTokenService : ISecurityTokenService
             var validationParameters = _securityTokenValidatorService.GetRefreshTokenValidationParameters();
             var tokenHandler = new JwtSecurityTokenHandler();
             var principal = tokenHandler.ValidateToken(accessToken, validationParameters, out var securityToken);
-            if(!HasValidSecurityAlgorithm(securityToken))
+            if (!HasValidSecurityAlgorithm(securityToken))
             {
                 return null!;
             }
@@ -154,7 +154,7 @@ internal sealed class SecurityTokenService : ISecurityTokenService
             new Claim(JwtClaimTypes.IsVerified, userAccount.IsVerified ? "true" : "false")
         };
 
-        foreach(var role in userAccount.UserRoles)
+        foreach (var role in userAccount.UserRoles)
         {
             claims.Add(new Claim(JwtClaimTypes.Roles, role.ToString()));
         }

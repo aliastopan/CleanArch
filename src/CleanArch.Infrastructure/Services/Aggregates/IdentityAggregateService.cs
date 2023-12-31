@@ -49,7 +49,7 @@ internal sealed class IdentityAggregateService : IIdentityAggregateService
         using var dbContext = _dbContextFactory.CreateDbContext();
 
         var userAccount = await getUserAccount(dbContext);
-        if(userAccount is null)
+        if (userAccount is null)
         {
             var error = new Error("User not found.", ErrorSeverity.Warning);
             return Result<UserAccount>.NotFound(error);
@@ -76,19 +76,19 @@ internal sealed class IdentityAggregateService : IIdentityAggregateService
         var isEmailAvailable = (await dbContext.GetUserAccountByUsernameAsync(username)) is null;
 
         var errors = Array.Empty<Error>();
-        if(!isUsernameAvailable)
+        if (!isUsernameAvailable)
         {
             var usernameTaken = new Error("Username is already taken.", ErrorSeverity.Warning);
             errors = [.. errors, usernameTaken];
         }
 
-        if(!isEmailAvailable)
+        if (!isEmailAvailable)
         {
             var emailInUse = new Error("Email address is already in use.", ErrorSeverity.Warning);
             errors = [.. errors, emailInUse];
         }
 
-        if(errors.Length > 0)
+        if (errors.Length > 0)
         {
             return Result.Conflict(errors);
         }
@@ -126,8 +126,8 @@ internal sealed class IdentityAggregateService : IIdentityAggregateService
 
     public Result TryValidatePassword(string password, string passwordSalt, string passwordHash)
     {
-        var isVerified = _passwordService.VerifyPassword(password, passwordSalt, passwordHash);
-        if(!isVerified)
+        var isIncorrectPassword = !_passwordService.VerifyPassword(password, passwordSalt, passwordHash);
+        if (isIncorrectPassword)
         {
             var error = new Error("Incorrect password.", ErrorSeverity.Warning);
             return Result.Unauthorized(error);
@@ -138,15 +138,14 @@ internal sealed class IdentityAggregateService : IIdentityAggregateService
 
     public Result TryValidatePassword(string newPassword, string oldPassword, string passwordSalt, string passwordHash)
     {
-        var isVerified = _passwordService.VerifyPassword(oldPassword, passwordSalt, passwordHash);
-        if(!isVerified)
+        var tryValidateAccess = TryValidatePassword(oldPassword, passwordSalt, passwordHash);
+        if (tryValidateAccess.IsFailure)
         {
-            var error = new Error("Incorrect password.", ErrorSeverity.Warning);
-            return Result.Unauthorized(error);
+            return Result.Inherit(result: tryValidateAccess);
         }
 
-        var isNew = !_passwordService.VerifyPassword(newPassword, passwordSalt, passwordHash);
-        if(!isNew)
+        var isSamePassword = _passwordService.VerifyPassword(newPassword, passwordSalt, passwordHash);
+        if (isSamePassword)
         {
             var error = new Error("New password cannot be the same as the old password.", ErrorSeverity.Warning);
             return Result.Invalid(error);
@@ -171,7 +170,7 @@ internal sealed class IdentityAggregateService : IIdentityAggregateService
         using var dbContext = _dbContextFactory.CreateDbContext();
 
         var refreshTokens = await dbContext.GetRefreshTokensByUserAccountIdAsync(userAccount.UserAccountId);
-        foreach(var refreshToken in refreshTokens)
+        foreach (var refreshToken in refreshTokens)
         {
             refreshToken.IsInvalidated = true;
         }

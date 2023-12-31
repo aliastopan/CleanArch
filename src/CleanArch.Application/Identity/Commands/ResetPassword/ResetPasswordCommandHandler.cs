@@ -15,8 +15,8 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
         CancellationToken cancellationToken)
     {
         // data annotation validations
-        var isValid = request.TryValidate(out var errors);
-        if(!isValid)
+        var isInvalid = !request.TryValidate(out var errors);
+        if (isInvalid)
         {
             var invalid = Result.Invalid(errors);
             return await ValueTask.FromResult(invalid);
@@ -27,7 +27,7 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
             request.OldPassword,
             request.NewPassword);
 
-        if(!tryResetPassword.IsSuccess)
+        if (tryResetPassword.IsFailure)
         {
             var failure = Result.Inherit(result: tryResetPassword);
             return await ValueTask.FromResult(failure);

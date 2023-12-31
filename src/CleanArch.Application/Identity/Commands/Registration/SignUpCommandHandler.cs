@@ -15,8 +15,8 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUp
         CancellationToken cancellationToken)
     {
         // data annotation validations
-        var isValid = request.TryValidate(out var errors);
-        if(!isValid)
+        var isInvalid = !request.TryValidate(out var errors);
+        if (isInvalid)
         {
             var invalid = Result<SignUpCommandResponse>.Invalid(errors);
             return await ValueTask.FromResult(invalid);
@@ -30,7 +30,7 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUp
             request.EmailAddress,
             request.Password);
 
-        if(!trySignUp.IsSuccess)
+        if (trySignUp.IsFailure)
         {
             var failure = Result<SignUpCommandResponse>.Inherit(result: trySignUp);
             return await ValueTask.FromResult(failure);

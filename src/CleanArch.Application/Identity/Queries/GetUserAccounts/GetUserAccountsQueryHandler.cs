@@ -17,14 +17,14 @@ public class GetUserAccountsQueryHandler : IRequestHandler<GetUserAccountsQuery,
         using var dbContext = _dbContextFactory.CreateDbContext();
 
         var userAccounts = await dbContext.GetUserAccountAsync();
-        if(userAccounts.Count == 0)
+        if (userAccounts.Count == 0)
         {
             result = Result<GetUserAccountsQueryResponse>.NotFound();
             return await ValueTask.FromResult(result);
         }
 
         var userAccountDtos = new List<UserAccountDto>();
-        foreach(var userAccount in userAccounts)
+        foreach (var userAccount in userAccounts)
         {
             var userAccountDto = new UserAccountDto(userAccount.UserAccountId,
                 userAccount.UserRoles.Select(role => role.ToString()).ToList(),
