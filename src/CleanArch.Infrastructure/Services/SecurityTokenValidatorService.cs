@@ -15,7 +15,7 @@ internal sealed class SecurityTokenValidatorService : ISecurityTokenValidatorSer
 
     public TokenValidationParameters GetAccessTokenValidationParameters()
     {
-        var apiKey = _configuration[UserSecrets.Element.ApiKey];
+        var apiKey = _configuration[UserSecretSettings.Element.ApiKey];
         return new TokenValidationParameters
         {
             ValidIssuer = _configuration[SecurityTokenSettings.Element.Issuer],
@@ -32,7 +32,7 @@ internal sealed class SecurityTokenValidatorService : ISecurityTokenValidatorSer
 
     public TokenValidationParameters GetRefreshTokenValidationParameters()
     {
-        var apiKey = _configuration[UserSecrets.Element.ApiKey];
+        var apiKey = _configuration[UserSecretSettings.Element.ApiKey];
         return new TokenValidationParameters
         {
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(apiKey!)),
