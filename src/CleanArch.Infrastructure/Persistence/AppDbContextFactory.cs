@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+[assembly: InternalsVisibleTo("CleanArch.Tests")]
 namespace CleanArch.Infrastructure.Persistence;
 
 internal sealed class AppDbContextFactory : IAppDbContextFactory<AppDbContext>

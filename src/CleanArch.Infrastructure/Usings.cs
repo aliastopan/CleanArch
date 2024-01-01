@@ -10,5 +10,7 @@ global using CleanArch.Infrastructure.Security;
 global using CleanArch.Infrastructure.Services;
 global using CleanArch.Infrastructure.Services.Aggregates;
 
+global using System.Runtime.CompilerServices;
+
 global using AnnotatedResult;
 global using Serilog;
