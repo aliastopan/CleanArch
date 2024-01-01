@@ -1,6 +1,7 @@
 using CleanArch.Domain.Aggregates.Identity;
 using CleanArch.Domain.Enums;
 
+[assembly: InternalsVisibleTo("CleanArch.Tests")]
 namespace CleanArch.Infrastructure.Persistence;
 
 internal sealed class AppDbContextSeeder : IAppDbContextSeeder

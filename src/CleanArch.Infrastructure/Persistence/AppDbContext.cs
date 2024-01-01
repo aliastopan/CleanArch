@@ -2,6 +2,7 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using CleanArch.Domain.Aggregates.Identity;
 
+[assembly: InternalsVisibleTo("CleanArch.Tests")]
 namespace CleanArch.Infrastructure.Persistence;
 
 internal sealed class AppDbContext : DbContext, IAppDbContext
