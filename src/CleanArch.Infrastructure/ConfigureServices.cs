@@ -15,7 +15,7 @@ public static class ConfigureServices
         services.AddScoped<IIdentityManager, IdentityManager>();
         services.AddScoped<IAuthenticationManager, AuthenticationManager>();
 
-        services.Configure<UserSecrets>(configuration.GetSection(UserSecrets.SectionName));
+        services.Configure<UserSecretSettings>(configuration.GetSection(UserSecretSettings.SectionName));
         services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
 
         services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorService>();

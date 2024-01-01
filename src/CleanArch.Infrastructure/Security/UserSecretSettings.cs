@@ -1,6 +1,6 @@
 namespace CleanArch.Infrastructure.Security;
 
-internal class UserSecrets
+internal class UserSecretSettings
 {
     internal static class Element
     {
