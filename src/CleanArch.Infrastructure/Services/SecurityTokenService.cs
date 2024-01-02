@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using CleanArch.Domain.Aggregates.Identity;
 
+[assembly: InternalsVisibleTo("CleanArch.Tests")]
 namespace CleanArch.Infrastructure.Services;
 
 internal sealed class SecurityTokenService : ISecurityTokenService
