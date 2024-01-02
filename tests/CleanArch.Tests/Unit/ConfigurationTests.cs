@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Configuration;
-
 namespace CleanArch.Tests.Unit;
 
 public class ConfigurationTests : UnitTest
@@ -26,5 +24,13 @@ public class ConfigurationTests : UnitTest
         Configuration["SecurityToken:Audience"]
             .Should()
             .Be("CleanArch");
+    }
+
+    [Fact]
+    public void UserSecrets_ApiKey_ShouldNotBeNull()
+    {
+        Configuration["UserSecrets:ApiKey"]
+            .Should()
+            .NotBeNull();
     }
 }
