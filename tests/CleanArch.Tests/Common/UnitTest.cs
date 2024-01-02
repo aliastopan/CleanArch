@@ -18,7 +18,7 @@ public class UnitTest
             .Build();
 
         ServicesProvider = new ServiceCollection()
-            .AddServices()
+            .AddServices(Configuration)
             .BuildServiceProvider();
     }
 }
