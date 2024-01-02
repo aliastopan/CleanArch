@@ -1,3 +1,5 @@
+using CleanArch.Tests.Unit;
+
 namespace CleanArch.Tests;
 
 public class UnitTest
@@ -7,13 +9,16 @@ public class UnitTest
 
     public UnitTest()
     {
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "..\\..\\..\\", "appsettings.Test.json");
+
+        var appSettings = Path.Combine(Directory.GetCurrentDirectory(), "..\\..\\..\\", "appsettings.Test.json");
+
         Configuration = new ConfigurationBuilder()
-            .AddJsonFile(path)
+            .AddJsonFile(appSettings)
+            .AddUserSecrets<ConfigurationTests>()
             .Build();
 
-    ServicesProvider = new ServiceCollection()
-        .AddServices()
-        .BuildServiceProvider();
+        ServicesProvider = new ServiceCollection()
+            .AddServices()
+            .BuildServiceProvider();
     }
 }
