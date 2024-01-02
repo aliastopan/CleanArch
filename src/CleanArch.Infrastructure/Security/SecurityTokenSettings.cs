@@ -1,3 +1,4 @@
+[assembly: InternalsVisibleTo("CleanArch.Tests")]
 namespace CleanArch.Infrastructure.Security;
 
 internal sealed class SecurityTokenSettings
