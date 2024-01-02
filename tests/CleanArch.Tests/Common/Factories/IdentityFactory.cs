@@ -21,8 +21,8 @@ public static class IdentityFactory
                 LastName = "",
                 DateOfBirth = new DateOnly(year: 1999, month: 9, day: 9)
             },
-            PasswordHash = "",
-            PasswordSalt = "",
+            PasswordHash = "15ebbed109775ec3bf1a1be98871dfbcb534f593bda7be6269db573efa4822065772cc6de99313b194d4321954372bf0",
+            PasswordSalt = "14O2U0D902x96xZR",
             IsVerified = true,
             UserRoles = new List<UserRole>()
             {
