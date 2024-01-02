@@ -1,8 +1,8 @@
-using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Microsoft.Extensions.Options;
+using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Options;
 using CleanArch.Domain.Aggregates.Identity;
 
 namespace CleanArch.Infrastructure.Services;
