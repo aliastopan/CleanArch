@@ -1,0 +1,18 @@
+@namespace CleanArch.WebApp.Components.Reusable
+
+<div>
+    <FluentCard Width="250px" Height="200px">
+        <h3>Sign In</h3>
+        <div class="form-container">
+            <FluentTextField @bind-Value=username Placeholder="Username"></FluentTextField>
+            <FluentTextField @bind-Value=password Placeholder="Password" TextFieldType="TextFieldType.Password"></FluentTextField>
+
+            <FluentButton Appearance="Appearance.Accent">Sign In</FluentButton>
+        </div>
+    </FluentCard>
+</div>
+
+@code
+{
+    string? username, password;
+}
