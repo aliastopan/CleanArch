@@ -1,8 +1,9 @@
+using CleanArch.Shared.Contracts.Identity;
 using CleanArch.Shared.Models.Identity;
 
 namespace CleanArch.Application.Identity.Commands.Authentication;
 
-public class SignInCommand : AuthenticationModel, IRequest<Result<SignInCommandResponse>>
+public class SignInCommand : AuthenticationModel, IRequest<Result<SignInResponse>>
 {
     public SignInCommand(string username, string password)
     {

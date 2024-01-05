@@ -1,5 +1,5 @@
 using CleanArch.Application.Identity.Commands.UserRole.Grant;
-using CleanArch.Contracts.Identity;
+using CleanArch.Shared.Contracts.Identity;
 
 namespace CleanArch.Api.Endpoints.Identity;
 

@@ -1,4 +1,4 @@
-namespace CleanArch.Contracts.Common;
+namespace CleanArch.Shared.Contracts.Common;
 
 public record SendEmailRequest(string EmailAddressTo, string EmailAddressFrom, string Password,
         string Subject, string Body, string SmtpHost, int Port);

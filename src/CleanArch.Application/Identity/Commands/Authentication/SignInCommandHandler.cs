@@ -1,6 +1,9 @@
+using CleanArch.Domain.Aggregates.Identity;
+using CleanArch.Shared.Contracts.Identity;
+
 namespace CleanArch.Application.Identity.Commands.Authentication;
 
-public class SignInCommandHandler : IRequestHandler<SignInCommand, Result<SignInCommandResponse>>
+public class SignInCommandHandler : IRequestHandler<SignInCommand, Result<SignInResponse>>
 {
     private readonly IAuthenticationManager _authenticationManager;
 
@@ -9,14 +12,14 @@ public class SignInCommandHandler : IRequestHandler<SignInCommand, Result<SignIn
         _authenticationManager = authenticationManager;
     }
 
-    public async ValueTask<Result<SignInCommandResponse>> Handle(SignInCommand request,
+    public async ValueTask<Result<SignInResponse>> Handle(SignInCommand request,
         CancellationToken cancellationToken)
     {
         // data annotation validations
         var isInvalid = !request.TryValidate(out var errors);
         if (isInvalid)
         {
-            var invalid = Result<SignInCommandResponse>.Invalid(errors);
+            var invalid = Result<SignInResponse>.Invalid(errors);
             return await ValueTask.FromResult(invalid);
         }
 
@@ -24,14 +27,14 @@ public class SignInCommandHandler : IRequestHandler<SignInCommand, Result<SignIn
         var trySignIn = await _authenticationManager.TrySignInAsync(request.Username, request.Password);
         if (trySignIn.IsFailure)
         {
-            var failure = Result<SignInCommandResponse>.Inherit(result: trySignIn);
+            var failure = Result<SignInResponse>.Inherit(result: trySignIn);
             return await ValueTask.FromResult(failure);
         }
 
         var (accessToken, refreshToken) = trySignIn.Value;
-        var response = new SignInCommandResponse(accessToken, refreshToken.Token);
+        var response = new SignInResponse(accessToken, refreshToken.Token);
 
-        var ok = Result<SignInCommandResponse>.Ok(response);
+        var ok = Result<SignInResponse>.Ok(response);
         return await ValueTask.FromResult(ok);
     }
 }

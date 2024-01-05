@@ -1,5 +1,5 @@
 using CleanArch.Application.Common.Interfaces.Services;
-using CleanArch.Contracts.Common;
+using CleanArch.Shared.Contracts.Common;
 
 namespace CleanArch.Api.Endpoints.Common;
 
