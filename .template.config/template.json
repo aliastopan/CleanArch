@@ -13,5 +13,14 @@
       "type": "project"
     },
     "sourceName": "CleanArch",
-    "preferNameDirectory": true
+    "preferNameDirectory": true,
+    "sources": [
+      {
+        "modifiers": [
+          {
+            "exclude": [ ".git/**", ".gitignore" ]
+          }
+        ]
+      }
+    ]
 }
