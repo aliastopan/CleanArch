@@ -1,15 +1,18 @@
 using Microsoft.FluentUI.AspNetCore.Components;
 using CleanArch.WebApp.Components;
+using CleanArch.WebApp.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+builder.ConfigureLogging();
 
-builder.Services.AddFluentUIComponents();
-
-builder.Services.AddHttpContextAccessor();
+builder.Host.ConfigureServices((_, services) =>
+{
+    services.AddRazorComponents()
+            .AddInteractiveServerComponents();
+    services.AddFluentUIComponents();
+    services.AddHttpContextAccessor();
+});
 
 var app = builder.Build();
 
@@ -17,7 +20,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
