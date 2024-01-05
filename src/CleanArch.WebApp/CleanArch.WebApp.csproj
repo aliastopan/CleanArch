@@ -11,4 +11,8 @@
     <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.2.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CleanArch.Application\CleanArch.Application.csproj" />
+    <ProjectReference Include="..\CleanArch.Contracts\CleanArch.Contracts.csproj" />
+  </ItemGroup>
 </Project>
