@@ -1,18 +1,49 @@
+@using CleanArch.WebApp.Services
+@using CleanArch.Shared.Models.Identity
+
 @namespace CleanArch.WebApp.Components.Reusable
+
+@inject IdentityClientService IdentityClient
 
 <div>
     <FluentCard Width="250px" Height="200px">
         <h3>Sign In</h3>
         <div class="form-container">
-            <FluentTextField Class="m-1" @bind-Value=username Placeholder="Username"></FluentTextField>
-            <FluentTextField Class="m-1" @bind-Value=password Placeholder="Password" TextFieldType="TextFieldType.Password"></FluentTextField>
+            <FluentTextField Class="m-1" @bind-Value=signInForm.Username Placeholder="Username"></FluentTextField>
+            <FluentTextField Class="m-1" @bind-Value=signInForm.Password Placeholder="Password" TextFieldType="TextFieldType.Password"></FluentTextField>
 
-            <FluentButton Class="m-1" Appearance="Appearance.Accent">Sign In</FluentButton>
+            <FluentButton Class="m-1" Appearance="Appearance.Accent" OnClick="SubmitAsync">Sign In</FluentButton>
         </div>
     </FluentCard>
+</div>
+<div class="p-1">
+    <span>@result</span>
 </div>
 
 @code
 {
-    string? username, password;
+    private readonly AuthenticationModel signInForm = new();
+    string? result = "fairly empty...";
+
+    private async Task SubmitAsync()
+    {
+        result = await SignInAsync();
+        StateHasChanged();
+    }
+
+    public async Task<string> SignInAsync()
+    {
+        var trySignIn = await IdentityClient.SignInAsync(
+            signInForm.Username,
+            signInForm.Password);
+
+        if (trySignIn.IsSuccess)
+        {
+            return trySignIn.Value.AccessToken;
+        }
+        else
+        {
+            return "Something went wrong...";
+        }
+    }
 }

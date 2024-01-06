@@ -3,6 +3,7 @@ using CleanArch.Application;
 using CleanArch.Infrastructure;
 using CleanArch.WebApp.Components;
 using CleanArch.WebApp.Logging;
+using CleanArch.WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,12 +11,16 @@ builder.ConfigureLogging();
 
 builder.Host.ConfigureServices((context, services) =>
 {
-    services.AddApplicationServices();
-    services.AddInfrastructureServices(context.Configuration, context.HostingEnvironment);
+    // services.AddApplicationServices();
+    // services.AddInfrastructureServices(context.Configuration, context.HostingEnvironment);
     services.AddRazorComponents()
             .AddInteractiveServerComponents();
     services.AddFluentUIComponents();
     services.AddHttpContextAccessor();
+    services.AddHttpClient<IdentityClientService>((_, httpClient) =>
+    {
+        httpClient.BaseAddress = new Uri("https://localhost:7244");
+    });
 });
 
 var app = builder.Build();
