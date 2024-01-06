@@ -10,42 +10,51 @@ public static class ConfigureServices
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, Scope scope,
         HostBuilderContext context)
     {
-        var configuration = context.Configuration;
-        var environment = context.HostingEnvironment;
-
-        services.AddScoped<IMailService, MailService>();
-
         if (scope is Scope.API_ONLY_SERVICE)
         {
             Log.Warning("Infrastructure:API-ONLY SERVICE");
-            services.AddDbContext(configuration, environment);
-
-            services.AddScoped<IIdentityAggregateService, IdentityAggregateService>();
-
-            services.AddScoped<IIdentityManager, IdentityManager>();
-            services.AddScoped<IAuthenticationManager, AuthenticationManager>();
-
-            services.Configure<UserSecretSettings>(configuration.GetSection(UserSecretSettings.SectionName));
-            services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
-
-            services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorService>();
-            services.AddSingleton<IDateTimeService, DateTimeService>();
-            services.AddSingleton<IPasswordService, PasswordService>();
-            // TODO: Replace password service with Bcrypt
-            // services.AddSingleton<IPasswordService, BcryptPasswordService>();
-            services.AddScoped<ISecurityTokenService, SecurityTokenService>();
-
+            services.ConfigureApiServices(context.Configuration, context.HostingEnvironment);
         }
 
         if (scope is Scope.WEBAPP_ONLY_SERVICE)
         {
             Log.Warning("Infrastructure:WEBAPP-ONLY SERVICE");
+            services.ConfigureWebAppServices();
         }
+
+        services.AddScoped<IMailService, MailService>();
 
         return services;
     }
 
-    internal static IServiceCollection AddDbContext(this IServiceCollection services,
+    internal static IServiceCollection ConfigureApiServices(this IServiceCollection services,
+        IConfiguration configuration, IHostEnvironment environment)
+    {
+        services.ConfigureDataPersistence(configuration, environment);
+
+        services.Configure<UserSecretSettings>(configuration.GetSection(UserSecretSettings.SectionName));
+        services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
+
+        services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorService>();
+        services.AddSingleton<IDateTimeService, DateTimeService>();
+        services.AddSingleton<IPasswordService, PasswordService>();
+        // TODO: Replace password service with Bcrypt
+        // services.AddSingleton<IPasswordService, BcryptPasswordService>();
+
+        services.AddScoped<IIdentityAggregateService, IdentityAggregateService>();
+        services.AddScoped<IIdentityManager, IdentityManager>();
+        services.AddScoped<IAuthenticationManager, AuthenticationManager>();
+        services.AddScoped<ISecurityTokenService, SecurityTokenService>();
+
+        return services;
+    }
+
+    internal static IServiceCollection ConfigureWebAppServices(this IServiceCollection services)
+    {
+        return services;
+    }
+
+    internal static IServiceCollection ConfigureDataPersistence(this IServiceCollection services,
         IConfiguration configuration, IHostEnvironment environment)
     {
         if (environment.IsDevelopment() && configuration.UseInMemoryDatabase())
