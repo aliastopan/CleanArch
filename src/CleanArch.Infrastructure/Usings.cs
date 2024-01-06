@@ -1,3 +1,4 @@
+global using CleanArch.Application;
 global using CleanArch.Application.Common.Interfaces.Managers;
 global using CleanArch.Application.Common.Extensions.Repository;
 global using CleanArch.Application.Common.Interfaces.Persistence;

@@ -7,33 +7,41 @@ namespace CleanArch.Infrastructure;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
-        IConfiguration configuration, IHostEnvironment environment)
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, Scope scope,
+        HostBuilderContext context)
     {
+        var configuration = context.Configuration;
+        var environment = context.HostingEnvironment;
+
         services.AddScoped<IMailService, MailService>();
 
-#if API_ONLY_SERVICE || TEST_INCLUDED_SERVICE
-        services.AddDbContext(configuration, environment);
+        if (scope is Scope.API_ONLY_SERVICE)
+        {
+            Log.Warning("Infrastructure:API-ONLY SERVICE");
+            services.AddDbContext(configuration, environment);
 
-        services.AddScoped<IIdentityAggregateService, IdentityAggregateService>();
+            services.AddScoped<IIdentityAggregateService, IdentityAggregateService>();
 
-        services.AddScoped<IIdentityManager, IdentityManager>();
-        services.AddScoped<IAuthenticationManager, AuthenticationManager>();
+            services.AddScoped<IIdentityManager, IdentityManager>();
+            services.AddScoped<IAuthenticationManager, AuthenticationManager>();
 
-        services.Configure<UserSecretSettings>(configuration.GetSection(UserSecretSettings.SectionName));
-        services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
+            services.Configure<UserSecretSettings>(configuration.GetSection(UserSecretSettings.SectionName));
+            services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
 
-        services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorService>();
-        services.AddSingleton<IDateTimeService, DateTimeService>();
-        services.AddSingleton<IPasswordService, PasswordService>();
-        // TODO: Replace password service with Bcrypt
-        // services.AddSingleton<IPasswordService, BcryptPasswordService>();
-        services.AddScoped<ISecurityTokenService, SecurityTokenService>();
-#endif
+            services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorService>();
+            services.AddSingleton<IDateTimeService, DateTimeService>();
+            services.AddSingleton<IPasswordService, PasswordService>();
+            // TODO: Replace password service with Bcrypt
+            // services.AddSingleton<IPasswordService, BcryptPasswordService>();
+            services.AddScoped<ISecurityTokenService, SecurityTokenService>();
 
-#if WEBAPP_ONLY_SERVICE
+        }
 
-#endif
+        if (scope is Scope.WEBAPP_ONLY_SERVICE)
+        {
+            Log.Warning("Infrastructure:WEBAPP-ONLY SERVICE");
+        }
+
         return services;
     }
 

@@ -8,8 +8,8 @@ builder.ConfigureLogging();
 
 builder.Host.ConfigureServices((context, services) =>
 {
-    services.AddApplicationServices();
-    services.AddInfrastructureServices(context.Configuration, context.HostingEnvironment);
+    services.AddApplicationServices(Scope.API_ONLY_SERVICE);
+    services.AddInfrastructureServices(Scope.API_ONLY_SERVICE, context);
     services.AddEndpointDefinitions(Assembly.GetExecutingAssembly());
     services.AddSecurityTokenAuthentication();
     services.AddSecurityTokenAuthorization();

@@ -7,9 +7,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>fdebdfe8-9f9c-4226-8cab-94bfa4e6366d</UserSecretsId>
   </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants>API_ONLY_SERVICE</DefineConstants>
-  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CleanArch.Application\CleanArch.Application.csproj" />
     <ProjectReference Include="..\CleanArch.Infrastructure\CleanArch.Infrastructure.csproj" />
