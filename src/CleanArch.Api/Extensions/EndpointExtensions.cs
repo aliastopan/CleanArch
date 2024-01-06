@@ -9,7 +9,7 @@ internal static class EndpointExtensions
     {
         var endpointDefinitions = new List<IEndpointDefinition>();
 
-        foreach(var assembly in assemblies)
+        foreach (var assembly in assemblies)
         {
             endpointDefinitions.AddRange(assembly.ExportedTypes
                 .Where(x => typeof(IEndpointDefinition)
@@ -18,7 +18,7 @@ internal static class EndpointExtensions
                 .Cast<IEndpointDefinition>());
         }
 
-        foreach(var endpoint in endpointDefinitions)
+        foreach (var endpoint in endpointDefinitions)
         {
             if (endpoint is IEndpointService endpointService)
             {
@@ -33,7 +33,7 @@ internal static class EndpointExtensions
     internal static WebApplication UseEndpointDefinitions(this WebApplication app)
     {
         var routeEndpoints = app.Services.GetRequiredService<IReadOnlyCollection<IEndpointDefinition>>();
-        foreach(var route in routeEndpoints)
+        foreach (var route in routeEndpoints)
         {
             route.DefineEndpoints(app);
         }
