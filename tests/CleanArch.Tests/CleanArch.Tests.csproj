@@ -9,6 +9,9 @@
     <IsTestProject>true</IsTestProject>
     <UserSecretsId>fdebdfe8-9f9c-4226-8cab-94bfa4e6366d</UserSecretsId>
   </PropertyGroup>
+  <PropertyGroup>
+    <DefineConstants>TEST_INCLUDED_SERVICE</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
