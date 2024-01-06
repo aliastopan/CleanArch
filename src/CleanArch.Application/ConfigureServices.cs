@@ -2,17 +2,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CleanArch.Application;
 
-public enum Scope
-{
-    API_ONLY_SERVICE,
-    WEBAPP_ONLY_SERVICE
-}
-
 public static class ConfigureServices
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services, Scope scope)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, ServiceScope scope)
     {
-        if (scope is Scope.API_ONLY_SERVICE)
+        if (scope is ServiceScope.API_ONLY_SERVICE)
         {
             Log.Warning("Application:API-ONLY SERVICE");
             services.AddMediator(options =>

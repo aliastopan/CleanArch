@@ -7,16 +7,16 @@ namespace CleanArch.Infrastructure;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, Scope scope,
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, ServiceScope scope,
         HostBuilderContext context)
     {
-        if (scope is Scope.API_ONLY_SERVICE)
+        if (scope is ServiceScope.API_ONLY_SERVICE)
         {
             Log.Warning("Infrastructure:API-ONLY SERVICE");
             services.ConfigureApiServices(context.Configuration, context.HostingEnvironment);
         }
 
-        if (scope is Scope.WEBAPP_ONLY_SERVICE)
+        if (scope is ServiceScope.WEBAPP_ONLY_SERVICE)
         {
             Log.Warning("Infrastructure:WEBAPP-ONLY SERVICE");
             services.ConfigureWebAppServices();

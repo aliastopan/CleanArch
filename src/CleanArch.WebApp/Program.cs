@@ -11,8 +11,8 @@ builder.ConfigureLogging();
 
 builder.Host.ConfigureServices((context, services) =>
 {
-    services.AddApplicationServices(Scope.WEBAPP_ONLY_SERVICE);
-    services.AddInfrastructureServices(Scope.WEBAPP_ONLY_SERVICE, context);
+    services.AddApplicationServices(ServiceScope.WEBAPP_ONLY_SERVICE);
+    services.AddInfrastructureServices(ServiceScope.WEBAPP_ONLY_SERVICE, context);
     services.AddRazorComponents()
             .AddInteractiveServerComponents();
     services.AddFluentUIComponents();
