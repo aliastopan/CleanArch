@@ -4,6 +4,7 @@
 @namespace CleanArch.WebApp.Components.Reusable
 
 @inject IdentityClientService IdentityClient
+@inject ProtectedSessionStorage SessionStorage
 
 <div>
     <FluentCard Width="250px" Height="200px">
@@ -36,6 +37,8 @@
         var httpResult = await IdentityClient.SignInAsync(
             signInForm.Username,
             signInForm.Password);
+
+        await SessionStorage.SetAsync("access-token", httpResult.Content);
 
         return httpResult.Content;
     }
