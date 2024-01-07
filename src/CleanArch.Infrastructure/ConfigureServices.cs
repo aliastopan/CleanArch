@@ -31,6 +31,7 @@ public static class ConfigureServices
         // TODO: Replace password service with Bcrypt
         // services.AddSingleton<IPasswordService, BcryptPasswordService>();
 
+        services.AddScoped<IAccessTokenService, AccessTokenService>();
         services.AddScoped<IMailService, MailService>();
 
         return services;
