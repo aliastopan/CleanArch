@@ -23,7 +23,7 @@
 @code
 {
     private readonly AuthenticationModel signInForm = new();
-    string? result = "fairly empty...";
+    string? result = "[http result]";
 
     private async Task SubmitAsync()
     {
@@ -33,17 +33,10 @@
 
     public async Task<string> SignInAsync()
     {
-        var trySignIn = await IdentityClient.SignInAsync(
+        var httpResult = await IdentityClient.SignInAsync(
             signInForm.Username,
             signInForm.Password);
 
-        if (trySignIn.IsSuccess)
-        {
-            return trySignIn.Value.AccessToken;
-        }
-        else
-        {
-            return "Something went wrong...";
-        }
+        return httpResult.Content;
     }
 }
