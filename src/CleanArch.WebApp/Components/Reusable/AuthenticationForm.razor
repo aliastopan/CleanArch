@@ -1,4 +1,5 @@
 @using CleanArch.WebApp.Services
+@using CleanArch.Shared.Contracts.Identity
 @using CleanArch.Shared.Models.Identity
 
 @namespace CleanArch.WebApp.Components.Reusable
@@ -38,7 +39,21 @@
             signInForm.Username,
             signInForm.Password);
 
-        await SessionStorage.SetAsync("access-token", httpResult.Content);
+        if (httpResult.IsSuccessStatusCode)
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var response = JsonSerializer.Deserialize<SignInResponse>(httpResult.Content, options);
+            var accessToken = response!.AccessToken;
+            var refreshToken = response!.RefreshTokenStr;
+
+            await SessionStorage.SetAsync("access-token", accessToken);
+            await SessionStorage.SetAsync("refresh-token", refreshToken);
+
+            return accessToken;
+        }
 
         return httpResult.Content;
     }
