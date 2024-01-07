@@ -47,6 +47,7 @@ public static class ConfigureServices
         services.AddScoped<IIdentityAggregateService, IdentityAggregateService>();
         services.AddScoped<IIdentityManager, IdentityManager>();
         services.AddScoped<IAuthenticationManager, AuthenticationManager>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
         services.AddScoped<ISecurityTokenService, SecurityTokenService>();
 
         return services;
