@@ -22,6 +22,15 @@ public static class ConfigureServices
             services.ConfigureWebAppServices();
         }
 
+        Log.Warning("Infrastructure:COMMON SERVICE");
+        services.Configure<UserSecretSettings>(context.Configuration.GetSection(UserSecretSettings.SectionName));
+
+        services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorService>();
+        services.AddSingleton<IDateTimeService, DateTimeService>();
+        services.AddSingleton<IPasswordService, PasswordService>();
+        // TODO: Replace password service with Bcrypt
+        // services.AddSingleton<IPasswordService, BcryptPasswordService>();
+
         services.AddScoped<IMailService, MailService>();
 
         return services;
@@ -32,14 +41,7 @@ public static class ConfigureServices
     {
         services.ConfigureDataPersistence(configuration, environment);
 
-        services.Configure<UserSecretSettings>(configuration.GetSection(UserSecretSettings.SectionName));
         services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
-
-        services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorService>();
-        services.AddSingleton<IDateTimeService, DateTimeService>();
-        services.AddSingleton<IPasswordService, PasswordService>();
-        // TODO: Replace password service with Bcrypt
-        // services.AddSingleton<IPasswordService, BcryptPasswordService>();
 
         services.AddScoped<IIdentityAggregateService, IdentityAggregateService>();
         services.AddScoped<IIdentityManager, IdentityManager>();
