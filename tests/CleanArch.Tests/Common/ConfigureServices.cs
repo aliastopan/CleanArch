@@ -8,7 +8,7 @@ public static class ConfigureService
     {
         services.AddSingleton<IConfiguration>(configuration);
 
-        services.Configure<UserSecretSettings>(configuration.GetSection(UserSecretSettings.SectionName));
+        services.Configure<InfrastructureSecretSettings>(configuration.GetSection(InfrastructureSecretSettings.SectionName));
         services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
 
         services.AddScoped<IDateTimeService, DateTimeService>();

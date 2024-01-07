@@ -13,25 +13,25 @@ internal sealed class SecurityTokenService : ISecurityTokenService
     private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
     private readonly IDateTimeService _dateTimeService;
     private readonly ISecurityTokenValidatorService _securityTokenValidatorService;
-    private readonly UserSecretSettings _userSecretSettings;
+    private readonly InfrastructureSecretSettings _infrastructureSecretSettings;
     private readonly SecurityTokenSettings _securityTokenSettings;
 
     public SecurityTokenService(IAppDbContextFactory<IAppDbContext> dbContextFactory,
         IDateTimeService dateTimeService,
         ISecurityTokenValidatorService securityTokenValidatorService,
-        IOptions<UserSecretSettings> userSecretSettings,
+        IOptions<InfrastructureSecretSettings> infrastructureSecretSettings,
         IOptions<SecurityTokenSettings> securityTokenSettings)
     {
         _dbContextFactory = dbContextFactory;
         _dateTimeService = dateTimeService;
         _securityTokenValidatorService = securityTokenValidatorService;
-        _userSecretSettings = userSecretSettings.Value;
+        _infrastructureSecretSettings = infrastructureSecretSettings.Value;
         _securityTokenSettings = securityTokenSettings.Value;
     }
 
     public string GenerateAccessToken(UserAccount userAccount)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_userSecretSettings.ApiKey));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_infrastructureSecretSettings.MasterKey));
         var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
