@@ -30,7 +30,9 @@ public class AuthenticationEndpoint : IEndpointDefinition
             },
             fault => fault.AsProblem(new ProblemDetails
             {
-                Title = "Authentication Failed"
+                Type = "https://localhost:7244/errors/authentication",
+                Title = "Authentication Failed",
+                Instance = httpContext.Request.Path
             },
             context: httpContext));
     }
