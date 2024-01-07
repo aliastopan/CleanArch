@@ -9,7 +9,14 @@ public static class AccessControl
 {
     public static IServiceCollection AddSecurityTokenAuthentication(this IServiceCollection services)
     {
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
         {
             var securityTokenValidator = services.BuildServiceProvider().GetRequiredService<ISecurityTokenValidatorService>();
             options.TokenValidationParameters = securityTokenValidator.GetAccessTokenValidationParameters();
