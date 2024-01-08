@@ -8,6 +8,7 @@ using CleanArch.Domain.Aggregates.Identity;
 [assembly: InternalsVisibleTo("CleanArch.Tests")]
 namespace CleanArch.Infrastructure.Services;
 
+[Obsolete("Use 'IAccessTokenService' or 'IRefreshTokenService' instead")]
 internal sealed class SecurityTokenService : ISecurityTokenService
 {
     private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
