@@ -48,7 +48,6 @@ public static class ConfigureServices
         services.AddScoped<IIdentityManager, IdentityManager>();
         services.AddScoped<IAuthenticationManager, AuthenticationManager>();
         services.AddScoped<IRefreshTokenService, RefreshTokenService>();
-        services.AddScoped<ISecurityTokenService, SecurityTokenService>();
 
         return services;
     }

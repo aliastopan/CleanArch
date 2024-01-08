@@ -5,15 +5,15 @@ namespace CleanArch.Tests.Unit;
 
 public class SecurityTokenTests : UnitTest
 {
-    private readonly ISecurityTokenService _securityTokenService;
+    private readonly IAccessTokenService _accessTokenService;
     private string _accessToken;
 
     public SecurityTokenTests()
     {
-        _securityTokenService = base.ServicesProvider.GetRequiredService<ISecurityTokenService>();
+        _accessTokenService = base.ServicesProvider.GetRequiredService<IAccessTokenService>();
 
         var userAccount = IdentityFactory.GetTestUserAccount();
-        _accessToken = _securityTokenService.GenerateAccessToken(userAccount);
+        _accessToken = _accessTokenService.GenerateAccessToken(userAccount);
     }
 
     [Fact]

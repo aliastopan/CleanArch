@@ -5,13 +5,16 @@ namespace CleanArch.Infrastructure.Managers;
 internal sealed class AuthenticationManager : IAuthenticationManager
 {
     private readonly IIdentityAggregateService _identityAggregateService;
-    private readonly ISecurityTokenService _securityTokenService;
+    private readonly IAccessTokenService _accessTokenService;
+    private readonly IRefreshTokenService _refreshTokenService;
 
     public AuthenticationManager(IIdentityAggregateService identityAggregateService,
-        ISecurityTokenService securityTokenService)
+        IAccessTokenService accessTokenService,
+        IRefreshTokenService refreshTokenService)
     {
         _identityAggregateService = identityAggregateService;
-        _securityTokenService = securityTokenService;
+        _accessTokenService = accessTokenService;
+        _refreshTokenService = refreshTokenService;
     }
 
     public async Task<Result<(string accessToken, RefreshToken refreshToken)>> TrySignInAsync(string username, string password)
@@ -31,8 +34,8 @@ internal sealed class AuthenticationManager : IAuthenticationManager
         }
 
         // sign-in protocol
-        var accessToken = _securityTokenService.GenerateAccessToken(userAccount);
-        var tryGetRefreshToken = _securityTokenService.TryGenerateRefreshToken(accessToken, userAccount);
+        var accessToken = _accessTokenService.GenerateAccessToken(userAccount);
+        var tryGetRefreshToken = _refreshTokenService.TryGenerateRefreshToken(accessToken, userAccount);
         if (tryGetRefreshToken.IsFailure)
         {
             return Result<(string, RefreshToken)>.Inherit(result: tryGetRefreshToken);
@@ -46,15 +49,15 @@ internal sealed class AuthenticationManager : IAuthenticationManager
 
     public async Task<Result<(string accessToken, RefreshToken refreshToken)>> TryRefreshAccessAsync(string accessToken, string refreshTokenStr)
     {
-        var tryValidateSecurityToken = _securityTokenService.TryValidateSecurityToken(accessToken, refreshTokenStr);
+        var tryValidateSecurityToken = _refreshTokenService.TryValidateSecurityToken(accessToken, refreshTokenStr);
         if (tryValidateSecurityToken.IsFailure)
         {
             return Result<(string, RefreshToken)>.Inherit(result: tryValidateSecurityToken);
         }
 
         var userAccount = tryValidateSecurityToken.Value.UserAccount;
-        accessToken = _securityTokenService.GenerateAccessToken(userAccount);
-        var tryGetRefreshToken = _securityTokenService.TryGenerateRefreshToken(accessToken, userAccount);
+        accessToken = _accessTokenService.GenerateAccessToken(userAccount);
+        var tryGetRefreshToken = _refreshTokenService.TryGenerateRefreshToken(accessToken, userAccount);
         if (tryGetRefreshToken.IsFailure)
         {
             return Result<(string, RefreshToken)>.Inherit(result: tryGetRefreshToken);

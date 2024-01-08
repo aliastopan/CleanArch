@@ -13,7 +13,8 @@ public static class ConfigureService
 
         services.AddScoped<IDateTimeService, DateTimeService>();
         services.AddScoped<IPasswordService, PasswordService>();
-        services.AddScoped<ISecurityTokenService, SecurityTokenService>();
+        services.AddScoped<IAccessTokenService, AccessTokenService>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
         services.AddScoped<ISecurityTokenValidatorService, SecurityTokenValidatorService>();
 
         services.AddDbContext<IAppDbContext, AppDbContext>(options =>
