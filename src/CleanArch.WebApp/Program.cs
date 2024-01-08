@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.FluentUI.AspNetCore.Components;
 using CleanArch.Application;
 using CleanArch.Infrastructure;
@@ -21,6 +22,7 @@ builder.Host.ConfigureServices((context, services) =>
     {
         httpClient.BaseAddress = new Uri("https://localhost:7244");
     });
+    services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 });
 
 var app = builder.Build();

@@ -1,11 +1,16 @@
+@rendermode InteractiveServer
+
 @using CleanArch.WebApp.Services
 @using CleanArch.Shared.Contracts.Identity
 @using CleanArch.Shared.Models.Identity
 
 @namespace CleanArch.WebApp.Components.Reusable
+@attribute [Authorize]
 
 @inject IdentityClientService IdentityClient
 @inject ProtectedSessionStorage SessionStorage
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavManager
 
 <div>
     <FluentCard Width="250px" Height="200px">
@@ -21,11 +26,25 @@
 <div class="p-1">
     <span>@result</span>
 </div>
+<div class="p-1">
+    <span>@state</span>
+    <AuthorizeView>
+        <Authorized>
+            <p>You are authenticated.</p>
+        </Authorized>
+        <NotAuthorized>
+            <p>You are not authenticated.</p>
+        </NotAuthorized>
+    </AuthorizeView>
+    <FluentButton Class="m-1" Appearance="Appearance.Accent" OnClick="CheckAsync">Check</FluentButton>
+</div>
 
 @code
 {
+    private AuthenticationState? authenticationState;
     private readonly AuthenticationModel signInForm = new();
     string? result = "[http result]";
+    string? state = "[waiting...]";
 
     private async Task SubmitAsync()
     {
@@ -57,4 +76,18 @@
 
         return httpResult.Content;
     }
+
+    public async Task CheckAsync()
+    {
+        var authenticationState = await AuthStateProvider.GetAuthenticationStateAsync();
+        if (authenticationState is not null)
+        {
+            state = "authentication has successful";
+            Serilog.Log.Warning("Identity: {0}", authenticationState.User.Identity!.IsAuthenticated);
+        }
+
+        this.StateHasChanged();
+        NavManager.NavigateTo("/");
+    }
+
 }
