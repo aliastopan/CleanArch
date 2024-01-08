@@ -16,6 +16,11 @@ public static class ConfigureServices
             });
         }
 
+        if (scope is ServiceScope.WEBAPP_ONLY_SERVICE)
+        {
+            Log.Warning("Application:WEBAPP-ONLY SERVICE");
+        }
+
         return services;
     }
 }
