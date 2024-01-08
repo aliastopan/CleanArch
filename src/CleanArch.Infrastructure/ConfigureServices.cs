@@ -23,7 +23,7 @@ public static class ConfigureServices
         }
 
         Log.Warning("Infrastructure:COMMON SERVICE");
-        services.Configure<InfrastructureSecretSettings>(context.Configuration.GetSection(InfrastructureSecretSettings.SectionName));
+        services.Configure<AppSecretSettings>(context.Configuration.GetSection(AppSecretSettings.SectionName));
 
         services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorService>();
         services.AddSingleton<IDateTimeService, DateTimeService>();

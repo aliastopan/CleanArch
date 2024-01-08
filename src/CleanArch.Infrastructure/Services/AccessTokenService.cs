@@ -11,23 +11,23 @@ internal sealed class AccessTokenService : IAccessTokenService
 {
     private readonly IDateTimeService _dateTimeService;
     private readonly ISecurityTokenValidatorService _securityTokenValidatorService;
-    private readonly InfrastructureSecretSettings _infrastructureSecretSettings;
+    private readonly AppSecretSettings _appSecretSettings;
     private readonly SecurityTokenSettings _securityTokenSettings;
 
     public AccessTokenService(IDateTimeService dateTimeService,
         ISecurityTokenValidatorService securityTokenValidatorService,
-        IOptions<InfrastructureSecretSettings> infrastructureSecretSettings,
+        IOptions<AppSecretSettings> appSecretSettings,
         IOptions<SecurityTokenSettings> securityTokenSettings)
     {
         _dateTimeService = dateTimeService;
         _securityTokenValidatorService = securityTokenValidatorService;
-        _infrastructureSecretSettings = infrastructureSecretSettings.Value;
+        _appSecretSettings = appSecretSettings.Value;
         _securityTokenSettings = securityTokenSettings.Value;
     }
 
     public string GenerateAccessToken(UserAccount userAccount)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_infrastructureSecretSettings.MasterKey));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSecretSettings.MasterKey));
         var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
