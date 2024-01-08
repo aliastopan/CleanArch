@@ -9,7 +9,7 @@ using CleanArch.Domain.Aggregates.Identity;
 namespace CleanArch.Infrastructure.Services;
 
 [Obsolete("Use 'IAccessTokenService' or 'IRefreshTokenService' instead")]
-internal sealed class SecurityTokenService : ISecurityTokenService
+internal sealed class SecurityTokenProvider : ISecurityTokenService
 {
     private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
     private readonly IDateTimeService _dateTimeService;
@@ -17,7 +17,7 @@ internal sealed class SecurityTokenService : ISecurityTokenService
     private readonly AppSecretSettings _appSecretSettings;
     private readonly SecurityTokenSettings _securityTokenSettings;
 
-    public SecurityTokenService(IAppDbContextFactory<IAppDbContext> dbContextFactory,
+    public SecurityTokenProvider(IAppDbContextFactory<IAppDbContext> dbContextFactory,
         IDateTimeService dateTimeService,
         ISecurityTokenValidatorService securityTokenValidatorService,
         IOptions<AppSecretSettings> appSecretSettings,

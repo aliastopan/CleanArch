@@ -25,14 +25,14 @@ public static class ConfigureServices
         Log.Warning("Infrastructure:COMMON SERVICE");
         services.Configure<AppSecretSettings>(context.Configuration.GetSection(AppSecretSettings.SectionName));
 
-        services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorService>();
-        services.AddSingleton<IDateTimeService, DateTimeService>();
-        services.AddSingleton<IPasswordService, PasswordService>();
+        services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorProvider>();
+        services.AddSingleton<IDateTimeService, DateTimeProvider>();
+        services.AddSingleton<IPasswordService, PasswordProvider>();
         // TODO: Replace password service with Bcrypt
         // services.AddSingleton<IPasswordService, BcryptPasswordService>();
 
-        services.AddScoped<IAccessTokenService, AccessTokenService>();
-        services.AddScoped<IMailService, MailService>();
+        services.AddScoped<IAccessTokenService, AccessTokenProvider>();
+        services.AddScoped<IMailService, MailProvider>();
 
         return services;
     }
@@ -44,10 +44,10 @@ public static class ConfigureServices
 
         services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
 
-        services.AddScoped<IIdentityAggregateService, IdentityAggregateService>();
+        services.AddScoped<IIdentityAggregateService, IdentityAggregateProvider>();
         services.AddScoped<IIdentityManager, IdentityManager>();
         services.AddScoped<IAuthenticationManager, AuthenticationManager>();
-        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenProvider>();
 
         return services;
     }

@@ -11,11 +11,11 @@ public static class ConfigureService
         services.Configure<AppSecretSettings>(configuration.GetSection(AppSecretSettings.SectionName));
         services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
 
-        services.AddScoped<IDateTimeService, DateTimeService>();
-        services.AddScoped<IPasswordService, PasswordService>();
-        services.AddScoped<IAccessTokenService, AccessTokenService>();
-        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
-        services.AddScoped<ISecurityTokenValidatorService, SecurityTokenValidatorService>();
+        services.AddScoped<IDateTimeService, DateTimeProvider>();
+        services.AddScoped<IPasswordService, PasswordProvider>();
+        services.AddScoped<IAccessTokenService, AccessTokenProvider>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenProvider>();
+        services.AddScoped<ISecurityTokenValidatorService, SecurityTokenValidatorProvider>();
 
         services.AddDbContext<IAppDbContext, AppDbContext>(options =>
         {

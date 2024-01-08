@@ -3,13 +3,13 @@ using CleanArch.Domain.Enums;
 
 namespace CleanArch.Infrastructure.Services.Aggregates;
 
-internal sealed class IdentityAggregateService : IIdentityAggregateService
+internal sealed class IdentityAggregateProvider : IIdentityAggregateService
 {
     private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
     private readonly IPasswordService _passwordService;
     private readonly IDateTimeService _dateTimeService;
 
-    public IdentityAggregateService(IAppDbContextFactory<IAppDbContext> dbContextFactory,
+    public IdentityAggregateProvider(IAppDbContextFactory<IAppDbContext> dbContextFactory,
         IPasswordService passwordService,
         IDateTimeService dateTimeService)
     {

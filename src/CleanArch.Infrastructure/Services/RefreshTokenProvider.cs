@@ -3,14 +3,14 @@ using CleanArch.Domain.Aggregates.Identity;
 
 namespace CleanArch.Infrastructure.Services;
 
-internal sealed class RefreshTokenService : IRefreshTokenService
+internal sealed class RefreshTokenProvider : IRefreshTokenService
 {
     private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
     private readonly IAccessTokenService _accessTokenService;
     private readonly IDateTimeService _dateTimeService;
     private readonly SecurityTokenSettings _securityTokenSettings;
 
-    public RefreshTokenService(IAppDbContextFactory<IAppDbContext> dbContextFactory,
+    public RefreshTokenProvider(IAppDbContextFactory<IAppDbContext> dbContextFactory,
         IAccessTokenService accessTokenService,
         IDateTimeService dateTimeService,
         IOptions<SecurityTokenSettings> securityTokenSettings)

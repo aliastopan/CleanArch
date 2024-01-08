@@ -5,7 +5,7 @@ using MimeKit.Text;
 
 namespace CleanArch.Infrastructure.Services;
 
-internal sealed class MailService : IMailService
+internal sealed class MailProvider : IMailService
 {
     public async Task Send(string emailAddressTo, string emailAddressFrom, string password,
         string subject, string body, string smtpHost, int port)

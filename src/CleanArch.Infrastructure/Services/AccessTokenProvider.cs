@@ -7,14 +7,14 @@ using CleanArch.Domain.Aggregates.Identity;
 
 namespace CleanArch.Infrastructure.Services;
 
-internal sealed class AccessTokenService : IAccessTokenService
+internal sealed class AccessTokenProvider : IAccessTokenService
 {
     private readonly IDateTimeService _dateTimeService;
     private readonly ISecurityTokenValidatorService _securityTokenValidatorService;
     private readonly AppSecretSettings _appSecretSettings;
     private readonly SecurityTokenSettings _securityTokenSettings;
 
-    public AccessTokenService(IDateTimeService dateTimeService,
+    public AccessTokenProvider(IDateTimeService dateTimeService,
         ISecurityTokenValidatorService securityTokenValidatorService,
         IOptions<AppSecretSettings> appSecretSettings,
         IOptions<SecurityTokenSettings> securityTokenSettings)

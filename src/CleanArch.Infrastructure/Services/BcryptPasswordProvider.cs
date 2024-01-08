@@ -1,6 +1,6 @@
 namespace CleanArch.Infrastructure.Services;
 
-internal sealed class BcryptPasswordService : IPasswordService
+internal sealed class BcryptPasswordProvider : IPasswordService
 {
     public string HashPassword(string password, out string passwordSalt)
     {

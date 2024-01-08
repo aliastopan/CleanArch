@@ -4,7 +4,7 @@ using SecretSauce = CCred.Sauce;
 
 namespace CleanArch.Infrastructure.Services;
 
-internal sealed class PasswordService : IPasswordService
+internal sealed class PasswordProvider : IPasswordService
 {
     private readonly Encoding _encoding = Encoding.UTF8;
 
