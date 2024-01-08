@@ -28,8 +28,10 @@ public sealed class CustomAuthenticationStateProvider : AuthenticationStateProvi
 
         var accessToken = tryAuth.Value;
         var principal = _accessTokenService.GetPrincipalFromToken(accessToken);
+        var authenticationState = new AuthenticationState(principal);
 
-        return new AuthenticationState(principal);
+        NotifyAuthenticationStateChanged(Task.FromResult(authenticationState));
+        return authenticationState;
     }
 
     private async Task<Result<string>> TryAuthenticateAsync()
