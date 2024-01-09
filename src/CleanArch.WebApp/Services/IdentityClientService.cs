@@ -16,8 +16,8 @@ public sealed class IdentityClientService
     public async Task<HttpResult> SignInAsync(string username, string password)
     {
         var request = new SignInRequest(username, password);
-        var bodyString = JsonSerializer.Serialize(request);
-        var content = new StringContent(bodyString, Encoding.UTF8, "application/json");
+        var jsonBody = JsonSerializer.Serialize(request);
+        var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
         using var responseMessage = await _httpClient.PostAsync("api/sign-in", content);
 
