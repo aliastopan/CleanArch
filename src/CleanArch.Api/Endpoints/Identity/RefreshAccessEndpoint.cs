@@ -1,5 +1,5 @@
 using System.Net;
-using CleanArch.Application.Identity.Commands.Authentication.Refresh;
+using CleanArch.Application.Identity.Commands.Authentication;
 using CleanArch.Shared.Contracts.Identity;
 
 namespace CleanArch.Api.Endpoints.Identity;

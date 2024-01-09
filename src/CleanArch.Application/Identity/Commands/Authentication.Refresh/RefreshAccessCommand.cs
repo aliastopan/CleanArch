@@ -1,7 +1,7 @@
 using CleanArch.Shared.Contracts.Identity;
 using CleanArch.Shared.Models.Identity;
 
-namespace CleanArch.Application.Identity.Commands.Authentication.Refresh;
+namespace CleanArch.Application.Identity.Commands.Authentication;
 
 public class RefreshAccessCommand : RefreshAuthenticationModel, IRequest<Result<RefreshAccessResponse>>
 {

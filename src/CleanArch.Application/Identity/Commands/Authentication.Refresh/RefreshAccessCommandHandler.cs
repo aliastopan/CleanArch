@@ -1,6 +1,6 @@
 using CleanArch.Shared.Contracts.Identity;
 
-namespace CleanArch.Application.Identity.Commands.Authentication.Refresh;
+namespace CleanArch.Application.Identity.Commands.Authentication;
 
 public class RefreshAccessCommandHandler : IRequestHandler<RefreshAccessCommand, Result<RefreshAccessResponse>>
 {
