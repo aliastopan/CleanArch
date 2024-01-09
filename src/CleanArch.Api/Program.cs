@@ -19,7 +19,6 @@ var app = builder.Build();
 
 app.InitializeDbContext();
 
-app.UseMiddleware<AnonymousAwarenessMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseEndpointDefinitions();
