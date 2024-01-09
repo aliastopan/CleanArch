@@ -4,6 +4,7 @@ using CleanArch.Application;
 using CleanArch.Infrastructure;
 using CleanArch.WebApp.Components;
 using CleanArch.WebApp.Logging;
+using CleanArch.WebApp.Security;
 using CleanArch.WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);

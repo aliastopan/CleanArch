@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using CleanArch.Application.Common.Interfaces.Services;
 
-namespace CleanArch.WebApp.Services;
+namespace CleanArch.WebApp.Security;
 
 public sealed class CustomAuthenticationStateProvider : AuthenticationStateProvider
 {
