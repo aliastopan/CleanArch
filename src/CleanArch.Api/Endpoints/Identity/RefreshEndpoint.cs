@@ -1,5 +1,6 @@
 using System.Net;
 using CleanArch.Application.Identity.Commands.Authentication.Refresh;
+using CleanArch.Shared.Contracts.Identity;
 
 namespace CleanArch.Api.Endpoints.Identity;
 
@@ -11,6 +12,23 @@ public class RefreshEndpoint : IEndpointDefinition
     }
 
     internal async Task<IResult> Refresh([FromServices] ISender sender,
+        RefreshRequest request, HttpContext httpContext)
+    {
+        var result = await sender.Send(new RefreshCommand(request.AccessToken, request.RefreshTokenStr));
+
+        return result.Match(
+            value =>
+            {
+                return Results.Ok(value);
+            },
+            error => error.AsProblem(new ProblemDetails
+            {
+                Title = "Failed to Refresh Authentication",
+            },
+            httpContext));
+    }
+
+    internal async Task<IResult> HttpCookieRefresh([FromServices] ISender sender,
         HttpContext httpContext)
     {
         var accessToken = httpContext.Request.Cookies["access-token"];
