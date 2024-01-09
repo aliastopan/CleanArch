@@ -1,4 +1,4 @@
-namespace CleanArch.Application.Identity.Commands.UserPrivilege.Grant;
+namespace CleanArch.Application.Identity.Commands.UserPrivilege;
 
 public class GrantPrivilegeCommandHandler : IRequestHandler<GrantPrivilegeCommand, Result>
 {
