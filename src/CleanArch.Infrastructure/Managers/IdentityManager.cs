@@ -26,7 +26,7 @@ internal sealed class IdentityManager : IIdentityManager
         return Result<UserAccount>.Ok(userAccount);
     }
 
-    public async Task<Result> TryGrantRoleAsync(Guid userAccountId, string role)
+    public async Task<Result> TryGrantPrivilegeAsync(Guid userAccountId, string privilege)
     {
         var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(userAccountId);
         if (tryGetUserAccount.IsFailure)
@@ -36,20 +36,20 @@ internal sealed class IdentityManager : IIdentityManager
 
         var userAccount = tryGetUserAccount.Value;
 
-        var userRole = (UserRole)Enum.Parse(typeof(UserRole), role);
-        var hasDuplicateRole = userAccount.UserRoles.Contains(userRole);
-        if (hasDuplicateRole)
+        var userPrivilege = (UserPrivilege)Enum.Parse(typeof(UserPrivilege), privilege);
+        var hasDuplicatePrivilege = userAccount.UserPrivileges.Contains(userPrivilege);
+        if (hasDuplicatePrivilege)
         {
-            var error = new Error("Cannot have duplicate role.", ErrorSeverity.Warning);
+            var error = new Error("Cannot have duplicate privilege.", ErrorSeverity.Warning);
             return Result.Conflict(error);
         }
 
-        await _identityAggregateService.GrantRoleAsync(userAccount, userRole);
+        await _identityAggregateService.GrantPrivilegeAsync(userAccount, userPrivilege);
 
         return Result.Ok();
     }
 
-    public async Task<Result> TryRevokeRoleAsync(Guid userAccountId, string role)
+    public async Task<Result> TryRevokePrivilegeAsync(Guid userAccountId, string privilege)
     {
         var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(userAccountId);
         if (tryGetUserAccount.IsFailure)
@@ -58,15 +58,15 @@ internal sealed class IdentityManager : IIdentityManager
         }
 
         var userAccount = tryGetUserAccount.Value;
-        var userRole = (UserRole)Enum.Parse(typeof(UserRole), role);
-        var hasMissingRole = !userAccount.UserRoles.Contains(userRole);
-        if (hasMissingRole)
+        var userPrivilege = (UserPrivilege)Enum.Parse(typeof(UserPrivilege), privilege);
+        var hasMissingPrivilege = !userAccount.UserPrivileges.Contains(userPrivilege);
+        if (hasMissingPrivilege)
         {
-            var error = new Error("Role does not exist.", ErrorSeverity.Warning);
+            var error = new Error("Privilege does not exist.", ErrorSeverity.Warning);
             return Result.Invalid(error);
         }
 
-        await _identityAggregateService.RevokeRoleAsync(userAccount, userRole);;
+        await _identityAggregateService.RevokePrivilegeAsync(userAccount, userPrivilege);;
 
         return Result.Ok();
     }

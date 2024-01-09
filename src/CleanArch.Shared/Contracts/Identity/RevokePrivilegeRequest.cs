@@ -2,14 +2,14 @@ using CleanArch.Shared.Models.Identity;
 
 namespace CleanArch.Shared.Contracts.Identity;
 
-public class RevokeUserRoleRequest : UserRoleUpdateModel
+public class RevokePrivilegeRequest : UserPrivilegeUpdateModel
 {
-    public RevokeUserRoleRequest(Guid authorityAccountId, string accessPassword,
-        Guid subjectAccountId, string role)
+    public RevokePrivilegeRequest(Guid authorityAccountId, string accessPassword,
+        Guid subjectAccountId, string privilege)
     {
         base.AuthorityAccountId = authorityAccountId;
         base.AccessPassword = accessPassword;
         base.SubjectAccountId = subjectAccountId;
-        base.Role = role;
+        base.Privilege = privilege;
     }
 }

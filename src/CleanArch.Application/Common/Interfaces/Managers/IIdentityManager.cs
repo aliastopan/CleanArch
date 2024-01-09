@@ -6,7 +6,7 @@ public interface IIdentityManager
 {
     Task<Result<UserAccount>> TrySignUpAsync(string username, string firstName, string lastName,
         DateOnly dateOfBirth, string emailAddress, string password);
-    Task<Result> TryGrantRoleAsync(Guid userAccountId, string role);
-    Task<Result> TryRevokeRoleAsync(Guid userAccountId, string role);
+    Task<Result> TryGrantPrivilegeAsync(Guid userAccountId, string privilege);
+    Task<Result> TryRevokePrivilegeAsync(Guid userAccountId, string privilege);
     Task<Result> TryResetPasswordAsync(Guid userAccountId, string oldPassword, string newPassword);
 }

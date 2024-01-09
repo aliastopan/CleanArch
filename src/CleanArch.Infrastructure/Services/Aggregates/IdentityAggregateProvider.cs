@@ -96,21 +96,21 @@ internal sealed class IdentityAggregateProvider : IIdentityAggregateService
         return Result.Ok();
     }
 
-    public async Task GrantRoleAsync(UserAccount userAccount, UserRole userRole)
+    public async Task GrantPrivilegeAsync(UserAccount userAccount, UserPrivilege userPrivilege)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        userAccount.UserRoles.Add(userRole);
+        userAccount.UserPrivileges.Add(userPrivilege);
         dbContext.UserAccounts.Update(userAccount);
 
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task RevokeRoleAsync(UserAccount userAccount, UserRole userRole)
+    public async Task RevokePrivilegeAsync(UserAccount userAccount, UserPrivilege userPrivilege)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        userAccount.UserRoles.Remove(userRole);
+        userAccount.UserPrivileges.Remove(userPrivilege);
         dbContext.UserAccounts.Update(userAccount);
 
         await dbContext.SaveChangesAsync();

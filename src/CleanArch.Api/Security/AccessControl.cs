@@ -47,7 +47,7 @@ public static class AccessControl
             options.AddPolicy(Policies.AdministratorPrivilege, policy =>
             {
                 policy.RequireAuthenticatedUser();
-                policy.RequireClaim("roles", "Administrator");
+                policy.RequireClaim("privileges", "Administrator");
             });
             options.AddPolicy(Policies.VerifiedUserPolicy, policy =>
             {

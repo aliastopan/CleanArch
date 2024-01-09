@@ -1,18 +1,18 @@
-namespace CleanArch.Application.Identity.Commands.UserRole.Grant;
+namespace CleanArch.Application.Identity.Commands.UserPrivilege.Grant;
 
-public class GrantUserRoleCommandHandler : IRequestHandler<GrantUserRoleCommand, Result>
+public class GrantPrivilegeCommandHandler : IRequestHandler<GrantPrivilegeCommand, Result>
 {
     private readonly IAuthenticationManager _authenticationManager;
     private readonly IIdentityManager _identityManager;
 
-    public GrantUserRoleCommandHandler(IAuthenticationManager authenticationManager,
+    public GrantPrivilegeCommandHandler(IAuthenticationManager authenticationManager,
         IIdentityManager identityManager)
     {
         _authenticationManager = authenticationManager;
         _identityManager = identityManager;
     }
 
-    public async ValueTask<Result> Handle(GrantUserRoleCommand request,
+    public async ValueTask<Result> Handle(GrantPrivilegeCommand request,
         CancellationToken cancellationToken)
     {
         // data annotation validations
@@ -30,11 +30,11 @@ public class GrantUserRoleCommandHandler : IRequestHandler<GrantUserRoleCommand,
             return await ValueTask.FromResult(denied);
         }
 
-        // grant user role
-        var tryGrantRole = await _identityManager.TryGrantRoleAsync(request.SubjectAccountId, request.Role);
-        if (tryGrantRole.IsFailure)
+        // grant privilege
+        var tryGrantPrivilege = await _identityManager.TryGrantPrivilegeAsync(request.SubjectAccountId, request.Privilege);
+        if (tryGrantPrivilege.IsFailure)
         {
-            var failure = Result.Inherit(result: tryGrantRole);
+            var failure = Result.Inherit(result: tryGrantPrivilege);
             return await ValueTask.FromResult(failure);
         }
 

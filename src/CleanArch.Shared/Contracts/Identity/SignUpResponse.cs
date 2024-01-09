@@ -5,4 +5,4 @@ public record SignUpResponse(Guid UserAccountId,
     string FullName,
     DateOnly DateOfBirth,
     string EmailAddress,
-    List<string> UserRoles);
+    List<string> UserPrivileges);

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CleanArch.Shared.Models.Identity;
 
-public class UserRoleUpdateModel
+public class UserPrivilegeUpdateModel
 {
     [Required]
     public Guid AuthorityAccountId { get; init; }
@@ -15,5 +15,5 @@ public class UserRoleUpdateModel
     public string AccessPassword { get; init; }
 
     [Required]
-    public string Role { get; init; }
+    public string Privilege { get; init; }
 }

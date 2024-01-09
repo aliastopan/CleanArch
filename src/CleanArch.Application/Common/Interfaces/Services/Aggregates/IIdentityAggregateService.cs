@@ -13,9 +13,9 @@ public interface IIdentityAggregateService
     Task<Result<UserAccount>> TryGetUserAccountAsync(string username);
     Task<Result> TryValidateAvailabilityAsync(string username, string emailAddress);
 
-    // user role
-    Task GrantRoleAsync(UserAccount userAccount, UserRole userRole);
-    Task RevokeRoleAsync(UserAccount userAccount, UserRole userRole);
+    // user privilege
+    Task GrantPrivilegeAsync(UserAccount userAccount, UserPrivilege userPrivilege);
+    Task RevokePrivilegeAsync(UserAccount userAccount, UserPrivilege userPrivilege);
 
     // password
     Result TryValidatePassword(string password, string passwordSalt, string passwordHash);

@@ -1,18 +1,18 @@
-namespace CleanArch.Application.Identity.Commands.UserRole.Revoke;
+namespace CleanArch.Application.Identity.Commands.UserPrivilege.Revoke;
 
-public class RevokeUserRoleCommandHandler : IRequestHandler<RevokeUserRoleCommand, Result>
+public class RevokePrivilegeCommandHandler : IRequestHandler<RevokePrivilegeCommand, Result>
 {
     private readonly IAuthenticationManager _authenticationManager;
     private readonly IIdentityManager _identityManager;
 
-    public RevokeUserRoleCommandHandler(IAuthenticationManager authenticationManager,
+    public RevokePrivilegeCommandHandler(IAuthenticationManager authenticationManager,
         IIdentityManager identityManager)
     {
         _authenticationManager = authenticationManager;
         _identityManager = identityManager;
     }
 
-    public async ValueTask<Result> Handle(RevokeUserRoleCommand request,
+    public async ValueTask<Result> Handle(RevokePrivilegeCommand request,
         CancellationToken cancellationToken)
     {
         // data annotation validations
@@ -30,11 +30,11 @@ public class RevokeUserRoleCommandHandler : IRequestHandler<RevokeUserRoleComman
             return await ValueTask.FromResult(denied);
         }
 
-        // revoke user role
-        var tryRevokeRole = await _identityManager.TryRevokeRoleAsync(request.SubjectAccountId, request.Role);
-        if (tryRevokeRole.IsFailure)
+        // revoke user privilege
+        var tryRevokePrivilege = await _identityManager.TryRevokePrivilegeAsync(request.SubjectAccountId, request.Privilege);
+        if (tryRevokePrivilege.IsFailure)
         {
-            var failure = Result.Inherit(result: tryRevokeRole);
+            var failure = Result.Inherit(result: tryRevokePrivilege);
             return await ValueTask.FromResult(failure);
         }
 

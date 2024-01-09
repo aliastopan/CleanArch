@@ -20,12 +20,12 @@ internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAc
             .HasMaxLength(36)
             .IsRequired();
 
-        builder.Property(u => u.UserRoles)
-            .HasColumnName("user_roles")
+        builder.Property(u => u.UserPrivileges)
+            .HasColumnName("user_privileges")
             .HasConversion(
-                x => string.Join(',', x.Select(role => role.ToString())),
+                x => string.Join(',', x.Select(privilege => privilege.ToString())),
                 x => x.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                      .Select(roleString => Enum.Parse<UserRole>(roleString))
+                      .Select(privilegeStr => Enum.Parse<UserPrivilege>(privilegeStr))
                       .ToList())
             .IsRequired();
 

@@ -38,12 +38,11 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             PasswordHash = _passwordService.HashPassword("LongPassword012", out var salt),
             PasswordSalt = salt,
             IsVerified = true,
-            UserRoles = new List<UserRole>()
+            UserPrivileges = new List<UserPrivilege>()
             {
-                UserRole.Viewer,
-                UserRole.Editor,
-                UserRole.Manager,
-                UserRole.Administrator
+                UserPrivilege.Viewer,
+                UserPrivilege.Editor,
+                UserPrivilege.Administrator
             },
             CreationDate = _dateTimeService.DateTimeOffsetNow,
             LastSignedIn = _dateTimeService.DateTimeOffsetNow
@@ -66,9 +65,9 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             PasswordHash = _passwordService.HashPassword("LongPassword012", out salt),
             PasswordSalt = salt,
             IsVerified = true,
-            UserRoles = new List<UserRole>()
+            UserPrivileges = new List<UserPrivilege>()
             {
-                UserRole.Viewer
+                UserPrivilege.Viewer
             },
             CreationDate = _dateTimeService.DateTimeOffsetNow,
             LastSignedIn = _dateTimeService.DateTimeOffsetNow
@@ -91,9 +90,9 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             PasswordHash = _passwordService.HashPassword("LongPassword012", out salt),
             PasswordSalt = salt,
             IsVerified = true,
-            UserRoles = new List<UserRole>()
+            UserPrivileges = new List<UserPrivilege>()
             {
-                UserRole.Viewer
+                UserPrivilege.Viewer
             },
             CreationDate = _dateTimeService.DateTimeOffsetNow,
             LastSignedIn = _dateTimeService.DateTimeOffsetNow

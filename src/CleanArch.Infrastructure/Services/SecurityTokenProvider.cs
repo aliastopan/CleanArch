@@ -156,9 +156,9 @@ internal sealed class SecurityTokenProvider : ISecurityTokenService
             new Claim(JwtClaimTypes.IsVerified, userAccount.IsVerified ? "true" : "false")
         };
 
-        foreach (var role in userAccount.UserRoles)
+        foreach (var privilege in userAccount.UserPrivileges)
         {
-            claims.Add(new Claim(JwtClaimTypes.Roles, role.ToString()));
+            claims.Add(new Claim(JwtClaimTypes.Privileges, privilege.ToString()));
         }
 
         return claims;
