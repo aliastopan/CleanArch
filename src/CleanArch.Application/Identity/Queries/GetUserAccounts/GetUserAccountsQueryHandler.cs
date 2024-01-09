@@ -1,3 +1,5 @@
+using CleanArch.Shared.Contracts.Identity;
+
 namespace CleanArch.Application.Identity.Queries.GetUserAccounts;
 
 public class GetUserAccountsQueryHandler : IRequestHandler<GetUserAccountsQuery, Result<GetUserAccountsQueryResponse>>
@@ -26,11 +28,16 @@ public class GetUserAccountsQueryHandler : IRequestHandler<GetUserAccountsQuery,
         var userAccountDtos = new List<UserAccountDto>();
         foreach (var userAccount in userAccounts)
         {
-            var userAccountDto = new UserAccountDto(userAccount.UserAccountId,
-                userAccount.UserPrivileges.Select(privilege => privilege.ToString()).ToList(),
-                userAccount.LastSignedIn.DateTime.ToLocalTime());
+            var userAccountDto = new UserAccountDto
+            {
+                UserAccountId = userAccount.UserAccountId,
+                UserPrivileges = userAccount.UserPrivileges.Select(privilege => privilege.ToString()).ToList(),
+                LastLoggedIn = userAccount.LastSignedIn.DateTime.ToLocalTime()
+            };
 
             userAccountDtos.Add(userAccountDto);
+
+            Log.Warning("USER: {0}", userAccount.User.Username);
         }
 
         var response = new GetUserAccountsQueryResponse(userAccountDtos);
