@@ -28,4 +28,20 @@ public sealed class IdentityClientService
             Content = await responseMessage.Content.ReadAsStringAsync()
         };
     }
+
+    public async Task<HttpResult> RefreshAccessAsync(string accessToken, string refreshTokenStr)
+    {
+        var request = new RefreshAccessRequest(accessToken, refreshTokenStr);
+        var jsonBody = JsonSerializer.Serialize(request);
+        var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+        using var responseMessage = await _httpClient.PostAsync("api/sign-in/refresh", content);
+
+        return new HttpResult
+        {
+            IsSuccessStatusCode = responseMessage.IsSuccessStatusCode,
+            Headers = responseMessage.Headers,
+            Content = await responseMessage.Content.ReadAsStringAsync()
+        };
+    }
 }
