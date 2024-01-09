@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using CleanArch.Domain.Aggregates.Identity;
 using CleanArch.Domain.Enums;
@@ -25,8 +26,12 @@ internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAc
             .HasConversion(
                 x => string.Join(',', x.Select(privilege => privilege.ToString())),
                 x => x.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                      .Select(privilegeStr => Enum.Parse<UserPrivilege>(privilegeStr))
-                      .ToList())
+                        .Select(privilegeStr => Enum.Parse<UserPrivilege>(privilegeStr))
+                        .ToList(),
+                new ValueComparer<ICollection<UserPrivilege>>(
+                    (c1, c2) => c1!.SequenceEqual(c2!),
+                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                    c => c.ToList()))
             .IsRequired();
 
         builder.Property(u => u.IsVerified)
