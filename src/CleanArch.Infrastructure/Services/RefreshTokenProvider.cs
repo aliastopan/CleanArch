@@ -66,24 +66,28 @@ internal sealed class RefreshTokenProvider : IRefreshTokenService
             return Result<RefreshToken>.NotFound(error);
         }
 
-        //TODO: validate every condition and stack the error result as array
-
+        var errors = Array.Empty<Error>();
         if (currentRefreshToken.ExpiryDate < _dateTimeService.UtcNow)
         {
-            var error = new Error("Refresh token was expired.", ErrorSeverity.Warning);
-            return Result<RefreshToken>.Unauthorized(error);
+            var expiredToken = new Error("Refresh token was expired.", ErrorSeverity.Warning);
+            errors = [.. errors, expiredToken];
         }
 
         if (currentRefreshToken.IsInvalidated)
         {
-            var error = new Error("Refresh token was invalidated.", ErrorSeverity.Warning);
-            return Result<RefreshToken>.Invalid(error);
+            var invalidatedToken = new Error("Refresh token was invalidated.", ErrorSeverity.Warning);
+            errors = [.. errors, invalidatedToken];
         }
 
         if (currentRefreshToken.IsUsed)
         {
-            var error = new Error("Refresh token was used.", ErrorSeverity.Warning);
-            return Result<RefreshToken>.Error(error);
+            var usedToken = new Error("Refresh token was used.", ErrorSeverity.Warning);
+            errors = [.. errors, usedToken];
+        }
+
+        if (errors.Length > 0)
+        {
+            return Result<RefreshToken>.Invalid(errors);
         }
 
         currentRefreshToken.IsUsed = true;
