@@ -4,7 +4,7 @@ using CleanArch.Shared.Contracts.Identity;
 
 namespace CleanArch.Api.Endpoints.Identity;
 
-public class RefreshEndpoint : IEndpointDefinition
+public class RefreshAccessEndpoint : IEndpointDefinition
 {
     public void DefineEndpoints(WebApplication app)
     {
@@ -12,9 +12,9 @@ public class RefreshEndpoint : IEndpointDefinition
     }
 
     internal async Task<IResult> Refresh([FromServices] ISender sender,
-        RefreshRequest request, HttpContext httpContext)
+        RefreshAccessRequest request, HttpContext httpContext)
     {
-        var result = await sender.Send(new RefreshCommand(request.AccessToken, request.RefreshTokenStr));
+        var result = await sender.Send(new RefreshAccessCommand(request.AccessToken, request.RefreshTokenStr));
 
         return result.Match(
             value =>
@@ -41,7 +41,7 @@ public class RefreshEndpoint : IEndpointDefinition
             });
         }
 
-        var result = await sender.Send(new RefreshCommand(accessToken, refreshToken));
+        var result = await sender.Send(new RefreshAccessCommand(accessToken, refreshToken));
 
         return result.Match(
             value =>

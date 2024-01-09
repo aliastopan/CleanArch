@@ -2,9 +2,9 @@ using CleanArch.Shared.Models.Identity;
 
 namespace CleanArch.Shared.Contracts.Identity;
 
-public class RefreshRequest : RefreshAuthenticationModel
+public class RefreshAccessRequest : RefreshAuthenticationModel
 {
-    public RefreshRequest(string accessToken, string refreshTokenStr)
+    public RefreshAccessRequest(string accessToken, string refreshTokenStr)
     {
         base.AccessToken = accessToken;
         base.RefreshTokenStr = refreshTokenStr;
