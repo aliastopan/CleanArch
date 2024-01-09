@@ -60,23 +60,28 @@ internal sealed class AccessTokenProvider : IAccessTokenService
         }
     }
 
-    public ClaimsPrincipal GetPrincipalFromToken(string accessToken)
+    public ClaimsPrincipal? GetPrincipalFromToken(string accessToken)
     {
         try
         {
-            var validationParameters = _securityTokenValidatorService.GetRefreshTokenValidationParameters();
             var tokenHandler = new JwtSecurityTokenHandler();
+            if (!tokenHandler.CanReadToken(accessToken))
+            {
+                return null;
+            }
+
+            var validationParameters = _securityTokenValidatorService.GetRefreshTokenValidationParameters();
             var principal = tokenHandler.ValidateToken(accessToken, validationParameters, out var securityToken);
             if (!HasValidSecurityAlgorithm(securityToken))
             {
-                return null!;
+                return null;
             }
 
             return principal;
         }
         catch
         {
-            return null!;
+            return null;
         }
     }
 

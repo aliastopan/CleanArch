@@ -7,5 +7,5 @@ public interface IAccessTokenService
 {
     string GenerateAccessToken(UserAccount user);
     bool ValidateAccessToken(string accessToken);
-    ClaimsPrincipal GetPrincipalFromToken(string accessToken);
+    ClaimsPrincipal? GetPrincipalFromToken(string accessToken);
 }
