@@ -44,7 +44,7 @@ internal sealed class AccessTokenProvider : IAccessTokenService
         return jwtHandler.WriteToken(jwt);
     }
 
-    public bool ValidateAccessToken(string accessToken)
+    public Result TryValidateAccessToken(string accessToken)
     {
         try
         {
@@ -52,11 +52,12 @@ internal sealed class AccessTokenProvider : IAccessTokenService
             var tokenHandler = new JwtSecurityTokenHandler();
             var principal = tokenHandler.ValidateToken(accessToken, validationParameters, out var securityToken);
 
-            return true;
+            return Result.Ok();
         }
-        catch
+        catch (SecurityTokenException exception)
         {
-            return false;
+            var error = new Error(exception.Message, ErrorSeverity.Warning);
+            return Result.Unauthorized(error);
         }
     }
 

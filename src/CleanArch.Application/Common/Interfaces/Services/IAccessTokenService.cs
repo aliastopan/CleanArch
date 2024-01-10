@@ -6,6 +6,6 @@ namespace CleanArch.Application.Common.Interfaces.Services;
 public interface IAccessTokenService
 {
     string GenerateAccessToken(UserAccount user);
-    bool ValidateAccessToken(string accessToken);
+    Result TryValidateAccessToken(string accessToken);
     ClaimsPrincipal? GetPrincipalFromToken(string accessToken);
 }
