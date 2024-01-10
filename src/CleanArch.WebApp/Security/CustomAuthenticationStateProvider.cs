@@ -1,7 +1,9 @@
 using System.Security.Claims;
+using System.Text.Json;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using CleanArch.Application.Common.Interfaces.Services;
+using CleanArch.Shared.Contracts.Identity;
 using CleanArch.WebApp.Services;
 
 namespace CleanArch.WebApp.Security;
@@ -23,6 +25,8 @@ public sealed class CustomAuthenticationStateProvider : AuthenticationStateProvi
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
+        Log.Warning("GetAuthenticationStateAsync");
+
         var tryGetAccessToken = await TryGetAccessTokenAsync();
         var tryGetRefreshToken = await TryGetRefreshTokenAsync();
 
@@ -47,20 +51,28 @@ public sealed class CustomAuthenticationStateProvider : AuthenticationStateProvi
         if (tryAuthenticate.IsFailure)
         {
             Log.Warning("Authentication failed.");
+            Log.Warning("{0}", tryAuthenticate.Errors[0].Message);
             Log.Warning("Trying to refresh authentication.");
-            var response = await _identityClientService.RefreshAccessAsync(accessToken, refreshToken);
-            Log.Warning("Response: {0}", response.IsSuccessStatusCode);
-            Log.Warning("Response: {0}", response.Content);
-            if (response.IsSuccessStatusCode)
+            var httpResult = await _identityClientService.RefreshAccessAsync(accessToken, refreshToken);
+            Log.Warning("Response: {0}", httpResult.IsSuccessStatusCode);
+            if (httpResult.IsSuccessStatusCode)
             {
                 Log.Warning("Refresh authentication has successful.");
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                var response = JsonSerializer.Deserialize<RefreshAccessResponse>(httpResult.Content, options);
+                accessToken = response!.AccessToken;
+                refreshToken = response!.RefreshTokenStr;
                 await _sessionStorage.SetAsync("access-token", accessToken);
                 await _sessionStorage.SetAsync("refresh-token", refreshToken);
             }
             else
             {
-                Log.Fatal("Refresh token has expired");
+                Log.Fatal("Refresh token was invalid.");
                 Log.Fatal("Unauthorized.");
+                NotifyAuthenticationStateChanged(Task.FromResult(UnauthorizedState()));
                 return UnauthorizedState();
             }
         }
