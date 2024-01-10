@@ -41,7 +41,6 @@
 
 @code
 {
-    private AuthenticationState? authenticationState;
     private readonly AuthenticationModel signInForm = new();
     string? result = "[http result]";
     string? state = "[waiting...]";
@@ -80,10 +79,14 @@
     public async Task CheckAsync()
     {
         var authenticationState = await AuthStateProvider.GetAuthenticationStateAsync();
-        if (authenticationState is not null)
+        if (authenticationState.User.Identity is not null)
         {
             state = "authentication has successful";
             Serilog.Log.Warning("Identity: {0}", authenticationState.User.Identity!.IsAuthenticated);
+        }
+        else
+        {
+            state = "authentication has failed";
         }
 
         this.StateHasChanged();
