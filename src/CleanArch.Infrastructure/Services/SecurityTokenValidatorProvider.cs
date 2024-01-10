@@ -19,7 +19,7 @@ internal sealed class SecurityTokenValidatorProvider : ISecurityTokenValidatorSe
         return new TokenValidationParameters
         {
             ValidIssuer = _configuration[SecurityTokenSettings.Element.Issuer],
-            ValidAudience = _configuration[SecurityTokenSettings.Element.Issuer],
+            ValidAudience = _configuration[SecurityTokenSettings.Element.Audience],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(masterKey!)),
             ValidateIssuer = true,
             ValidateAudience = true,
