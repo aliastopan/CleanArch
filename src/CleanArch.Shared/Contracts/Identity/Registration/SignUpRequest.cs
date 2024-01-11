@@ -1,17 +1,6 @@
-using CleanArch.Shared.Models.Identity;
+using CleanArch.Shared.Interfaces.Models.Identity;
 
 namespace CleanArch.Shared.Contracts.Identity.Registration;
 
-public class SignUpRequest : RegistrationModel
-{
-    public SignUpRequest(string username, string firstName, string lastName,
-        DateOnly dateOfBirth, string emailAddress, string password)
-    {
-        base.Username = username;
-        base.FirstName = firstName;
-        base.LastName = lastName;
-        base.DateOfBirth = dateOfBirth;
-        base.EmailAddress = emailAddress;
-        base.Password = password;
-    }
-}
+public record SignUpRequest(string Username, string FirstName, string LastName, DateOnly DateOfBirth, string EmailAddress, string Password)
+    : IRegistrationModel;

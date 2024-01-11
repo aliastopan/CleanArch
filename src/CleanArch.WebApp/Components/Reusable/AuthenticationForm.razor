@@ -2,7 +2,7 @@
 
 @using CleanArch.WebApp.Services
 @using CleanArch.Shared.Contracts.Identity.Authentication
-@using CleanArch.Shared.Models.Identity
+@using CleanArch.WebApp.Models.Identity
 
 @namespace CleanArch.WebApp.Components.Reusable
 @attribute [Authorize]
@@ -41,7 +41,7 @@
 
 @code
 {
-    private readonly AuthenticationModel signInForm = new();
+    private readonly SignInModel signInForm = new();
     string? result = "[http result]";
     string? state = "[waiting...]";
 

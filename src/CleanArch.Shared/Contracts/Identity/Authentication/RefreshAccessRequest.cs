@@ -1,12 +1,5 @@
-using CleanArch.Shared.Models.Identity;
+using CleanArch.Shared.Interfaces.Models.Identity;
 
 namespace CleanArch.Shared.Contracts.Identity.Authentication;
 
-public class RefreshAccessRequest : RefreshAuthenticationModel
-{
-    public RefreshAccessRequest(string accessToken, string refreshTokenStr)
-    {
-        base.AccessToken = accessToken;
-        base.RefreshTokenStr = refreshTokenStr;
-    }
-}
+public record RefreshAccessRequest(string AccessToken, string RefreshTokenStr) : IRefreshAccessModel;

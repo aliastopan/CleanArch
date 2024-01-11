@@ -1,23 +1,21 @@
 using System.ComponentModel.DataAnnotations;
-using CleanArch.Shared.Models.Identity;
+using CleanArch.Shared.Interfaces.Models.Identity;
 
 namespace CleanArch.Application.Identity.Commands.SetUserRole;
 
-public class SetUserRoleCommand : UserRoleUpdateModel, IRequest<Result>
+public class SetUserRoleCommand(Guid authorityAccountId, string accessPassword, Guid subjectAccountId, string role)
+    : IRoleUpdateModel, IRequest<Result>
 {
-    public SetUserRoleCommand(Guid authorityAccountId, string accessPassword,
-        Guid subjectAccountId, string role)
-    {
-        base.AuthorityAccountId = authorityAccountId;
-        base.AccessPassword = accessPassword;
-        base.SubjectAccountId = subjectAccountId;
-        base.Role = role;
-    }
+    [Required]
+    public Guid AuthorityAccountId { get; } = authorityAccountId;
 
     [Required]
-    [EnumDataType(typeof(Domain.Enums.UserPrivilege))]
-    public new string Role
-    {
-        get { return base.Role; }
-    }
+    public Guid SubjectAccountId { get; } = subjectAccountId;
+
+    [Required]
+    public string AccessPassword { get; } = accessPassword;
+
+    [Required]
+    [EnumDataType(typeof(Domain.Enums.UserRole))]
+    public string Role { get; } = role;
 }

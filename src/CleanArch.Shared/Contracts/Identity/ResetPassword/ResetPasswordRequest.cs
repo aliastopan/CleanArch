@@ -1,14 +1,6 @@
-using CleanArch.Shared.Models.Identity;
+using CleanArch.Shared.Interfaces.Models.Identity;
 
 namespace CleanArch.Shared.Contracts.Identity.ResetPassword;
 
-public class ResetPasswordRequest : ResetPasswordModel
-{
-    public ResetPasswordRequest(Guid userAccountId, string oldPassword, string newPassword, string confirmPassword)
-    {
-        base.UserAccountId = userAccountId;
-        base.OldPassword = oldPassword;
-        base.NewPassword = newPassword;
-        base.ConfirmPassword = confirmPassword;
-    }
-}
+public record ResetPasswordRequest(Guid UserAccountId, string OldPassword, string NewPassword, string ConfirmPassword)
+    : IResetPasswordModel;
