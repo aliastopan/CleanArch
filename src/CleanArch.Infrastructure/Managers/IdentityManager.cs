@@ -36,6 +36,7 @@ internal sealed class IdentityManager : IIdentityManager
 
         var userAccount = tryGetUserAccount.Value;
 
+        // TODO: add redundancy parsing guard to return error
         var userPrivilege = (UserPrivilege)Enum.Parse(typeof(UserPrivilege), privilege);
         var hasDuplicatePrivilege = userAccount.UserPrivileges.Contains(userPrivilege);
         if (hasDuplicatePrivilege)
