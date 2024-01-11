@@ -1,4 +1,4 @@
-namespace CleanArch.Shared.Contracts.Identity;
+namespace CleanArch.Shared.Contracts.Identity.Registration;
 
 public record SignUpResponse(Guid UserAccountId,
     string Username,

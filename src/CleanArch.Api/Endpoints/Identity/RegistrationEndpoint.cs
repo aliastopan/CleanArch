@@ -1,5 +1,5 @@
 using CleanArch.Application.Identity.Commands.Registration;
-using CleanArch.Shared.Contracts.Identity;
+using CleanArch.Shared.Contracts.Identity.Registration;
 
 namespace CleanArch.Api.Endpoints.Identity;
 

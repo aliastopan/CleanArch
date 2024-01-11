@@ -1,4 +1,4 @@
-using CleanArch.Shared.Contracts.Identity;
+using CleanArch.Shared.Contracts.Identity.Registration;
 using CleanArch.Shared.Models.Identity;
 
 namespace CleanArch.Application.Identity.Commands.Registration;
