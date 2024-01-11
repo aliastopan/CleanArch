@@ -1,6 +1,6 @@
 using CleanArch.Shared.Models.Identity;
 
-namespace CleanArch.Shared.Contracts.Identity;
+namespace CleanArch.Shared.Contracts.Identity.SetUserRole;
 
 public class SetRoleRequest : UserRoleUpdateModel
 {

@@ -1,5 +1,5 @@
 using CleanArch.Application.Identity.Commands.SetUserRole;
-using CleanArch.Shared.Contracts.Identity;
+using CleanArch.Shared.Contracts.Identity.SetUserRole;
 
 namespace CleanArch.Api.Endpoints.Identity;
 
