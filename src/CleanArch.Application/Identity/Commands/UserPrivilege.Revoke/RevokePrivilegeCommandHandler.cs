@@ -1,4 +1,4 @@
-namespace CleanArch.Application.Identity.Commands.UserPrivilege;
+namespace CleanArch.Application.Identity.Commands.RevokeUserPrivilege;
 
 public class RevokePrivilegeCommandHandler : IRequestHandler<RevokePrivilegeCommand, Result>
 {

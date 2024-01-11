@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using CleanArch.Shared.Models.Identity;
 
-namespace CleanArch.Application.Identity.Commands.UserPrivilege;
+namespace CleanArch.Application.Identity.Commands.GrantUserPrivilege;
 
 public class GrantPrivilegeCommand : UserPrivilegeUpdateModel, IRequest<Result>
 {

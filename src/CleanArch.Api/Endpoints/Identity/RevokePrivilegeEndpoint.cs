@@ -1,4 +1,4 @@
-using CleanArch.Application.Identity.Commands.UserPrivilege;
+using CleanArch.Application.Identity.Commands.RevokeUserPrivilege;
 using CleanArch.Shared.Contracts.Identity;
 
 namespace CleanArch.Api.Endpoints.Identity;
