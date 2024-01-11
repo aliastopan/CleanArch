@@ -31,6 +31,7 @@ public class GetUserAccountsQueryHandler : IRequestHandler<GetUserAccountsQuery,
             var userAccountDto = new UserAccountDto
             {
                 UserAccountId = userAccount.UserAccountId,
+                UserRole = userAccount.UserRole.ToString(),
                 UserPrivileges = userAccount.UserPrivileges.Select(privilege => privilege.ToString()).ToList(),
                 LastLoggedIn = userAccount.LastSignedIn.DateTime.ToLocalTime()
             };

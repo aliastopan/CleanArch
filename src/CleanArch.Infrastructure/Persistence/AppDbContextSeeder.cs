@@ -38,6 +38,7 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             PasswordHash = _passwordService.HashPassword("LongPassword012", out var salt),
             PasswordSalt = salt,
             IsVerified = true,
+            UserRole = UserRole.Administrator,
             UserPrivileges = new List<UserPrivilege>()
             {
                 UserPrivilege.Viewer,
@@ -65,6 +66,7 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             PasswordHash = _passwordService.HashPassword("LongPassword012", out salt),
             PasswordSalt = salt,
             IsVerified = true,
+            UserRole = UserRole.Standard,
             UserPrivileges = new List<UserPrivilege>()
             {
                 UserPrivilege.Viewer
@@ -90,6 +92,7 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             PasswordHash = _passwordService.HashPassword("LongPassword012", out salt),
             PasswordSalt = salt,
             IsVerified = true,
+            UserRole = UserRole.Standard,
             UserPrivileges = new List<UserPrivilege>()
             {
                 UserPrivilege.Viewer

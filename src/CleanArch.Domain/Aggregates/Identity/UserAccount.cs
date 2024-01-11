@@ -29,6 +29,7 @@ public class UserAccount : IAggregateRoot
         };
 
         UserAccountId = Guid.NewGuid();
+        UserRole = UserRole.Standard;
         UserPrivileges = new List<UserPrivilege>()
         {
             UserPrivilege.Viewer
@@ -41,6 +42,7 @@ public class UserAccount : IAggregateRoot
     }
 
     public Guid UserAccountId { get; init; }
+    public UserRole UserRole { get; set; }
     public ICollection<UserPrivilege> UserPrivileges { get; set; }
     public bool IsVerified { get; set; }
     public string PasswordHash { get; set; }

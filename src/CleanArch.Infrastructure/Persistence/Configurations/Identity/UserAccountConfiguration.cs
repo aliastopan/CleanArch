@@ -21,6 +21,10 @@ internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAc
             .HasMaxLength(36)
             .IsRequired();
 
+        builder.Property(u => u.UserRole)
+            .HasColumnName("user_role")
+            .IsRequired();
+
         builder.Property(u => u.UserPrivileges)
             .HasColumnName("user_privileges")
             .HasConversion(
