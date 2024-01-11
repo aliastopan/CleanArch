@@ -1,5 +1,5 @@
 using CleanArch.Application.Identity.Commands.ResetPassword;
-using CleanArch.Shared.Contracts.Identity;
+using CleanArch.Shared.Contracts.Identity.ResetPassword;
 
 namespace CleanArch.Api.Endpoints.Identity;
 

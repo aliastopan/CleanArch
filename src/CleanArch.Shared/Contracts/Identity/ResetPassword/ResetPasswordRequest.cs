@@ -1,6 +1,6 @@
 using CleanArch.Shared.Models.Identity;
 
-namespace CleanArch.Shared.Contracts.Identity;
+namespace CleanArch.Shared.Contracts.Identity.ResetPassword;
 
 public class ResetPasswordRequest : ResetPasswordModel
 {
