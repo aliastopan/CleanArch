@@ -24,6 +24,7 @@ public static class ConfigureServices
 
         Log.Warning("Infrastructure:COMMON SERVICE");
         services.Configure<AppSecretSettings>(context.Configuration.GetSection(AppSecretSettings.SectionName));
+        services.Configure<SecurityTokenSettings>(context.Configuration.GetSection(SecurityTokenSettings.SectionName));
 
         services.AddSingleton<ISecurityTokenValidatorService, SecurityTokenValidatorProvider>();
         services.AddSingleton<IDateTimeService, DateTimeProvider>();
@@ -41,8 +42,6 @@ public static class ConfigureServices
         IConfiguration configuration, IHostEnvironment environment)
     {
         services.ConfigureDataPersistence(configuration, environment);
-
-        services.Configure<SecurityTokenSettings>(configuration.GetSection(SecurityTokenSettings.SectionName));
 
         services.AddScoped<IIdentityAggregateService, IdentityAggregateProvider>();
         services.AddScoped<IIdentityManager, IdentityManager>();
