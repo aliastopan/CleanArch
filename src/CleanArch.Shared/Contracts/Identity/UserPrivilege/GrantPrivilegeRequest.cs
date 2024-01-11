@@ -1,6 +1,6 @@
 using CleanArch.Shared.Models.Identity;
 
-namespace CleanArch.Shared.Contracts.Identity;
+namespace CleanArch.Shared.Contracts.Identity.UserPrivilege;
 
 public class GrantPrivilegeRequest : UserPrivilegeUpdateModel
 {
