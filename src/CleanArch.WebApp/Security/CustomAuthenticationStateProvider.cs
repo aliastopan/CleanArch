@@ -77,10 +77,8 @@ public sealed class CustomAuthenticationStateProvider : AuthenticationStateProvi
             }
         }
 
-        var authenticationState = new AuthenticationState(principal);
-
-        NotifyAuthenticationStateChanged(Task.FromResult(authenticationState));
-        return authenticationState;
+        NotifyAuthenticationStateChanged(Task.FromResult(AuthenticatedState(principal)));
+        return AuthenticatedState(principal);
     }
 
     private async Task<Result<string>> TryGetAccessTokenAsync()
@@ -107,6 +105,11 @@ public sealed class CustomAuthenticationStateProvider : AuthenticationStateProvi
         }
 
         return Result<string>.Error();
+    }
+
+    private static AuthenticationState AuthenticatedState(ClaimsPrincipal principal)
+    {
+        return new AuthenticationState(principal);
     }
 
     private static AuthenticationState UnauthenticatedState()
