@@ -42,6 +42,7 @@ public class UserAccount : IAggregateRoot
     }
 
     public Guid UserAccountId { get; init; }
+    // TODO: move 'UserRole' and 'UserPrivileges' as 'User' properties
     public UserRole UserRole { get; set; }
     public ICollection<UserPrivilege> UserPrivileges { get; set; }
     public bool IsVerified { get; set; }
