@@ -1,4 +1,4 @@
-using CleanArch.Shared.Contracts.Identity;
+using CleanArch.Shared.Contracts.Identity.Authentication;
 
 namespace CleanArch.Application.Identity.Commands.Authentication;
 

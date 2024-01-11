@@ -3,7 +3,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using CleanArch.Application.Common.Interfaces.Services;
-using CleanArch.Shared.Contracts.Identity;
+using CleanArch.Shared.Contracts.Identity.Authentication;
 using CleanArch.WebApp.Services;
 
 namespace CleanArch.WebApp.Security;

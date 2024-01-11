@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using CleanArch.Shared.Contracts.Identity;
+using CleanArch.Shared.Contracts.Identity.Authentication;
 
 namespace CleanArch.WebApp.Services;
 
