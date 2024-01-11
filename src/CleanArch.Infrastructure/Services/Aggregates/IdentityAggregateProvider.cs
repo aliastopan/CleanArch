@@ -96,6 +96,16 @@ internal sealed class IdentityAggregateProvider : IIdentityAggregateService
         return Result.Ok();
     }
 
+    public async Task UpdateUserRoleAsync(UserAccount userAccount, UserRole userRole)
+    {
+        using var dbContext = _dbContextFactory.CreateDbContext();
+
+        userAccount.UserRole = userRole;
+        dbContext.UserAccounts.Update(userAccount);
+
+        await dbContext.SaveChangesAsync();
+    }
+
     public async Task GrantPrivilegeAsync(UserAccount userAccount, UserPrivilege userPrivilege)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();

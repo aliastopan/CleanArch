@@ -26,6 +26,23 @@ internal sealed class IdentityManager : IIdentityManager
         return Result<UserAccount>.Ok(userAccount);
     }
 
+
+    public async Task<Result> TrySetRoleAsync(Guid userAccountId, string role)
+    {
+        var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(userAccountId);
+        if (tryGetUserAccount.IsFailure)
+        {
+            return Result.Inherit(result: tryGetUserAccount);
+        }
+
+        var userAccount = tryGetUserAccount.Value;
+        var userRole = (UserRole)Enum.Parse(typeof(UserRole), role);
+
+        await _identityAggregateService.UpdateUserRoleAsync(userAccount, userRole);
+
+        return Result.Ok();
+    }
+
     public async Task<Result> TryGrantPrivilegeAsync(Guid userAccountId, string privilege)
     {
         var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(userAccountId);
