@@ -13,7 +13,6 @@ public class GetUsersEndpoint : IEndpointDefinition
         HttpContext httpContext)
     {
         var request = new GetUserAccountsQuery();
-        Log.Fatal("request: {0}", request.ToString());
         var result = await sender.Send(request);
 
         return result.Match(
