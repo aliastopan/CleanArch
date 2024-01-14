@@ -27,7 +27,14 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             User = new User
             {
                 Username = "aliastopan",
-                EmailAddress = "alias.topan@proton.me"
+                EmailAddress = "alias.topan@proton.me",
+                UserRole = UserRole.Administrator,
+                UserPrivileges = new List<UserPrivilege>()
+                {
+                    UserPrivilege.Viewer,
+                    UserPrivilege.Editor,
+                    UserPrivilege.Administrator
+                }
             },
             UserProfile = new UserProfile
             {
@@ -38,13 +45,6 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             PasswordHash = _passwordService.HashPassword("LongPassword012", out var salt),
             PasswordSalt = salt,
             IsVerified = true,
-            UserRole = UserRole.Administrator,
-            UserPrivileges = new List<UserPrivilege>()
-            {
-                UserPrivilege.Viewer,
-                UserPrivilege.Editor,
-                UserPrivilege.Administrator
-            },
             CreationDate = _dateTimeService.DateTimeOffsetNow,
             LastSignedIn = _dateTimeService.DateTimeOffsetNow
         };
@@ -55,7 +55,12 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             User = new User
             {
                 Username = "vincent",
-                EmailAddress = "vincent.arkel@email"
+                EmailAddress = "vincent.arkel@email",
+                UserRole = UserRole.Standard,
+                UserPrivileges = new List<UserPrivilege>()
+                {
+                    UserPrivilege.Viewer
+                }
             },
             UserProfile = new UserProfile
             {
@@ -66,11 +71,6 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             PasswordHash = _passwordService.HashPassword("LongPassword012", out salt),
             PasswordSalt = salt,
             IsVerified = true,
-            UserRole = UserRole.Standard,
-            UserPrivileges = new List<UserPrivilege>()
-            {
-                UserPrivilege.Viewer
-            },
             CreationDate = _dateTimeService.DateTimeOffsetNow,
             LastSignedIn = _dateTimeService.DateTimeOffsetNow
         };
@@ -81,7 +81,12 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             User = new User
             {
                 Username = "aram",
-                EmailAddress = "aram@email"
+                EmailAddress = "aram@email",
+                UserRole = UserRole.Standard,
+                UserPrivileges = new List<UserPrivilege>()
+                {
+                    UserPrivilege.Viewer
+                }
             },
             UserProfile = new UserProfile
             {
@@ -92,11 +97,6 @@ internal sealed class AppDbContextSeeder : IAppDbContextSeeder
             PasswordHash = _passwordService.HashPassword("LongPassword012", out salt),
             PasswordSalt = salt,
             IsVerified = true,
-            UserRole = UserRole.Standard,
-            UserPrivileges = new List<UserPrivilege>()
-            {
-                UserPrivilege.Viewer
-            },
             CreationDate = _dateTimeService.DateTimeOffsetNow,
             LastSignedIn = _dateTimeService.DateTimeOffsetNow
         };

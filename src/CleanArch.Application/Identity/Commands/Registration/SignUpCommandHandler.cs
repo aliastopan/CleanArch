@@ -42,7 +42,7 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUp
             userAccount.UserProfile.FullName,
             userAccount.UserProfile.DateOfBirth,
             userAccount.User.EmailAddress,
-            userAccount.UserPrivileges.Select(privilege => privilege.ToString()).ToList());
+            userAccount.User.UserPrivileges.Select(privilege => privilege.ToString()).ToList());
 
         var ok = Result<SignUpResponse>.Ok(response);
         return await ValueTask.FromResult(ok);

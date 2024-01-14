@@ -17,7 +17,12 @@ public class UserAccount : IAggregateRoot
         {
             UserId = Guid.NewGuid(),
             Username = username,
-            EmailAddress = emailAddress
+            EmailAddress = emailAddress,
+            UserRole = UserRole.Standard,
+            UserPrivileges = new List<UserPrivilege>()
+            {
+                UserPrivilege.Viewer
+            }
         };
 
         UserProfile = new UserProfile
@@ -29,12 +34,6 @@ public class UserAccount : IAggregateRoot
         };
 
         UserAccountId = Guid.NewGuid();
-        UserRole = UserRole.Standard;
-        UserPrivileges = new List<UserPrivilege>()
-        {
-            UserPrivilege.Viewer
-        };
-
         PasswordHash = passwordHash;
         PasswordSalt = passwordSalt;
         CreationDate = creationDate;
@@ -42,9 +41,6 @@ public class UserAccount : IAggregateRoot
     }
 
     public Guid UserAccountId { get; init; }
-    // TODO: move 'UserRole' and 'UserPrivileges' as 'User' properties
-    public UserRole UserRole { get; set; }
-    public ICollection<UserPrivilege> UserPrivileges { get; set; }
     public bool IsVerified { get; set; }
     public string PasswordHash { get; set; }
     public string PasswordSalt { get; set; }

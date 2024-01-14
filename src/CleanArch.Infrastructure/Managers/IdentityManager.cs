@@ -55,7 +55,7 @@ internal sealed class IdentityManager : IIdentityManager
 
         // TODO: add redundancy parsing guard to return error
         var userPrivilege = (UserPrivilege)Enum.Parse(typeof(UserPrivilege), privilege);
-        var hasDuplicatePrivilege = userAccount.UserPrivileges.Contains(userPrivilege);
+        var hasDuplicatePrivilege = userAccount.User.UserPrivileges.Contains(userPrivilege);
         if (hasDuplicatePrivilege)
         {
             var error = new Error("Cannot have duplicate privilege.", ErrorSeverity.Warning);
@@ -77,7 +77,7 @@ internal sealed class IdentityManager : IIdentityManager
 
         var userAccount = tryGetUserAccount.Value;
         var userPrivilege = (UserPrivilege)Enum.Parse(typeof(UserPrivilege), privilege);
-        var hasMissingPrivilege = !userAccount.UserPrivileges.Contains(userPrivilege);
+        var hasMissingPrivilege = !userAccount.User.UserPrivileges.Contains(userPrivilege);
         if (hasMissingPrivilege)
         {
             var error = new Error("Privilege does not exist.", ErrorSeverity.Warning);

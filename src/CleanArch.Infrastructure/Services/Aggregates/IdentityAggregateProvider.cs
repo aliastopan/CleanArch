@@ -100,7 +100,7 @@ internal sealed class IdentityAggregateProvider : IIdentityAggregateService
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        userAccount.UserRole = userRole;
+        userAccount.User.UserRole = userRole;
         dbContext.UserAccounts.Update(userAccount);
 
         await dbContext.SaveChangesAsync();
@@ -110,7 +110,7 @@ internal sealed class IdentityAggregateProvider : IIdentityAggregateService
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        userAccount.UserPrivileges.Add(userPrivilege);
+        userAccount.User.UserPrivileges.Add(userPrivilege);
         dbContext.UserAccounts.Update(userAccount);
 
         await dbContext.SaveChangesAsync();
@@ -120,7 +120,7 @@ internal sealed class IdentityAggregateProvider : IIdentityAggregateService
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        userAccount.UserPrivileges.Remove(userPrivilege);
+        userAccount.User.UserPrivileges.Remove(userPrivilege);
         dbContext.UserAccounts.Update(userAccount);
 
         await dbContext.SaveChangesAsync();

@@ -104,7 +104,7 @@ internal sealed class AccessTokenProvider : IAccessTokenService
             new Claim(JwtClaimTypes.IsVerified, userAccount.IsVerified ? "true" : "false")
         };
 
-        foreach (var privilege in userAccount.UserPrivileges)
+        foreach (var privilege in userAccount.User.UserPrivileges)
         {
             claims.Add(new Claim(JwtClaimTypes.Privileges, privilege.ToString()));
         }
