@@ -30,7 +30,7 @@ internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAc
 
         builder.Property(u => u.PasswordSalt)
             .HasColumnName("password_salt")
-            .HasMaxLength(8)
+            .HasMaxLength(16)
             .IsRequired();
 
         builder.Property(u => u.CreationDate)
@@ -38,7 +38,7 @@ internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAc
             .IsRequired();
 
         builder.Property(u => u.LastSignedIn)
-            .HasColumnType("last_signed_in")
+            .HasColumnName("last_signed_in")
             .IsRequired();
 
         // foreign key
