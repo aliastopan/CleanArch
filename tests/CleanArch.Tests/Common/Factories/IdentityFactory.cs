@@ -13,7 +13,12 @@ public static class IdentityFactory
             User = new User
             {
                 Username = "tester",
-                EmailAddress = "tester@mail.com"
+                EmailAddress = "tester@mail.com",
+                UserRole = UserRole.Standard,
+                UserPrivileges = new List<UserPrivilege>()
+                {
+                    UserPrivilege.Viewer
+                }
             },
             UserProfile = new UserProfile
             {
@@ -24,10 +29,6 @@ public static class IdentityFactory
             PasswordHash = "15ebbed109775ec3bf1a1be98871dfbcb534f593bda7be6269db573efa4822065772cc6de99313b194d4321954372bf0",
             PasswordSalt = "14O2U0D902x96xZR",
             IsVerified = true,
-            UserPrivileges = new List<UserPrivilege>()
-            {
-                UserPrivilege.Viewer
-            },
             CreationDate = DateTimeOffset.Now,
             LastSignedIn = DateTimeOffset.Now
         };
