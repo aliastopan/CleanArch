@@ -41,7 +41,7 @@ public static class ConfigureServices
     internal static IServiceCollection ConfigureApiServices(this IServiceCollection services,
         IConfiguration configuration, IHostEnvironment environment)
     {
-        services.ConfigureDataPersistence(configuration, environment);
+        services.ConfigureDbContext(configuration, environment);
 
         services.AddScoped<IIdentityAggregateService, IdentityAggregateProvider>();
         services.AddScoped<IIdentityManager, IdentityManager>();
@@ -53,29 +53,6 @@ public static class ConfigureServices
 
     internal static IServiceCollection ConfigureWebAppServices(this IServiceCollection services)
     {
-        return services;
-    }
-
-    internal static IServiceCollection ConfigureDataPersistence(this IServiceCollection services,
-        IConfiguration configuration, IHostEnvironment environment)
-    {
-        if (environment.IsDevelopment() && configuration.UseInMemoryDatabase())
-        {
-            services.AddDbContext<IAppDbContext, AppDbContext>(options =>
-            {
-                options.UseInMemoryDatabase($"Database-CleanArch");
-                options.UseLazyLoadingProxies();
-                options.EnableSensitiveDataLogging();
-            });
-            services.AddScoped<IAppDbContextFactory<IAppDbContext>, AppDbContextFactory>();
-            services.AddScoped<IAppDbContextSeeder, AppDbContextSeeder>();
-        }
-        else
-        {
-            // TODO: Replace with code for using SQLite
-            throw new NotImplementedException();
-        }
-
         return services;
     }
 }
