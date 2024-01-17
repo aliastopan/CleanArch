@@ -22,10 +22,10 @@ namespace CleanArch.Infrastructure.Persistence.Migrations
                     is_verified = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     password_hash = table.Column<string>(type: "varchar(96)", maxLength: 96, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    password_salt = table.Column<string>(type: "varchar(8)", maxLength: 8, nullable: false)
+                    password_salt = table.Column<string>(type: "varchar(16)", maxLength: 16, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     creation_date = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
-                    LastSignedIn = table.Column<DateTimeOffset>(type: "last_signed_in(6)", nullable: false),
+                    last_signed_in = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
                     fk_user_id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     fk_user_profile_id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
                 },

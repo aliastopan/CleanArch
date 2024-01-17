@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArch.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240117145414_InitialCreate")]
+    [Migration("20240117162541_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -129,7 +129,8 @@ namespace CleanArch.Infrastructure.Persistence.Migrations
                         .HasColumnName("is_verified");
 
                     b.Property<DateTimeOffset>("LastSignedIn")
-                        .HasColumnType("last_signed_in");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("last_signed_in");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -139,8 +140,8 @@ namespace CleanArch.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("PasswordSalt")
                         .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("varchar(8)")
+                        .HasMaxLength(16)
+                        .HasColumnType("varchar(16)")
                         .HasColumnName("password_salt");
 
                     b.HasKey("UserAccountId");
