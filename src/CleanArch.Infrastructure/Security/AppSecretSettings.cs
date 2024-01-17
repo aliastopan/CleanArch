@@ -2,7 +2,7 @@ namespace CleanArch.Infrastructure.Security;
 
 public class AppSecretSettings
 {
-    public static class Element
+    public static class Section
     {
         public const string MasterKey = "AppSecrets:MasterKey";
         public const string ConnectionString = "AppSecrets:ConnectionString";

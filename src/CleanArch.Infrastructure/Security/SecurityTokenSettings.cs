@@ -3,7 +3,7 @@ namespace CleanArch.Infrastructure.Security;
 
 internal sealed class SecurityTokenSettings
 {
-    internal static class Element
+    internal static class Section
     {
         public const string Issuer = "SecurityToken:Issuer";
         public const string Audience = "SecurityToken:Audience";

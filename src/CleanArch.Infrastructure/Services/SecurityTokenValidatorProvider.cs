@@ -15,11 +15,11 @@ internal sealed class SecurityTokenValidatorProvider : ISecurityTokenValidatorSe
 
     public TokenValidationParameters GetAccessTokenValidationParameters()
     {
-        var masterKey = _configuration[AppSecretSettings.Element.MasterKey];
+        var masterKey = _configuration[AppSecretSettings.Section.MasterKey];
         return new TokenValidationParameters
         {
-            ValidIssuer = _configuration[SecurityTokenSettings.Element.Issuer],
-            ValidAudience = _configuration[SecurityTokenSettings.Element.Audience],
+            ValidIssuer = _configuration[SecurityTokenSettings.Section.Issuer],
+            ValidAudience = _configuration[SecurityTokenSettings.Section.Audience],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(masterKey!)),
             ValidateIssuer = true,
             ValidateAudience = true,
@@ -32,7 +32,7 @@ internal sealed class SecurityTokenValidatorProvider : ISecurityTokenValidatorSe
 
     public TokenValidationParameters GetRefreshTokenValidationParameters()
     {
-        var masterKey = _configuration[AppSecretSettings.Element.MasterKey];
+        var masterKey = _configuration[AppSecretSettings.Section.MasterKey];
         return new TokenValidationParameters
         {
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(masterKey!)),
