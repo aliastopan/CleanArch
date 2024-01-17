@@ -7,7 +7,7 @@
     "name": "ASP.NET Core Solution with Clean Architecture",
     "identity": "CleanArch.Solution.CSharp",
     "groupIdentity": "CleanArch.Solution",
-    "shortName": "clean-arch",
+    "shortName": "cleanarch",
     "tags": {
       "language": "C#",
       "type": "project"
