@@ -17,11 +17,11 @@ public static class ConfigureService
         services.AddScoped<IRefreshTokenService, RefreshTokenProvider>();
         services.AddScoped<ISecurityTokenValidatorService, SecurityTokenValidatorProvider>();
 
-        services.AddDbContext<IAppDbContext, AppDbContext>(options =>
+        services.AddDbContext<AppDbContext>(options =>
         {
             options.UseInMemoryDatabase($"Database-CleanArch");
         });
-        services.AddScoped<IAppDbContextFactory<IAppDbContext>, AppDbContextFactory>();
+        services.AddScoped<AppDbContextFactory>();
         services.AddScoped<IAppDbContextSeeder, AppDbContextSeeder>();
 
         return services;

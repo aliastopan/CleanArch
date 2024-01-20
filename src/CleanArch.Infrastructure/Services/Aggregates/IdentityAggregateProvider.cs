@@ -5,11 +5,11 @@ namespace CleanArch.Infrastructure.Services.Aggregates;
 
 internal sealed class IdentityAggregateProvider : IIdentityAggregateService
 {
-    private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
+    private readonly AppDbContextFactory _dbContextFactory;
     private readonly IPasswordService _passwordService;
     private readonly IDateTimeService _dateTimeService;
 
-    public IdentityAggregateProvider(IAppDbContextFactory<IAppDbContext> dbContextFactory,
+    public IdentityAggregateProvider(AppDbContextFactory dbContextFactory,
         IPasswordService passwordService,
         IDateTimeService dateTimeService)
     {
@@ -44,7 +44,7 @@ internal sealed class IdentityAggregateProvider : IIdentityAggregateService
         await dbContext.SaveChangesAsync();
     }
 
-    internal async Task<Result<UserAccount>> TryGetUserAccountAsync(Func<IAppDbContext, Task<UserAccount?>> getUserAccount)
+    internal async Task<Result<UserAccount>> TryGetUserAccountAsync(Func<AppDbContext, Task<UserAccount?>> getUserAccount)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 

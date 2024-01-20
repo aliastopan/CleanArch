@@ -13,13 +13,13 @@ public static class ConfigurePersistence
     {
         if (environment.IsDevelopment() && configuration.UseInMemoryDatabase())
         {
-            services.AddDbContext<IAppDbContext, AppDbContext>(options =>
+            services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseInMemoryDatabase($"Database-CleanArch");
                 options.UseLazyLoadingProxies();
                 options.EnableSensitiveDataLogging();
             });
-            services.AddScoped<IAppDbContextFactory<IAppDbContext>, AppDbContextFactory>();
+            services.AddScoped<AppDbContextFactory>();
             services.AddScoped<IAppDbContextSeeder, AppDbContextSeeder>();
         }
         else
@@ -27,13 +27,13 @@ public static class ConfigurePersistence
             var connectionString = configuration[AppSecretSettings.Section.ConnectionString];
             var serverVersion = new MariaDbServerVersion(new Version(10, 6, 16));
 
-            services.AddDbContext<IAppDbContext, AppDbContext>(options =>
+            services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseMySql(connectionString, serverVersion);
                 options.EnableSensitiveDataLogging();
                 options.EnableDetailedErrors();
             });
-            services.AddScoped<IAppDbContextFactory<IAppDbContext>, AppDbContextFactory>();
+            services.AddScoped<AppDbContextFactory>();
         }
 
         return services;

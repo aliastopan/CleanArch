@@ -11,13 +11,13 @@ namespace CleanArch.Infrastructure.Services;
 [Obsolete("Use 'IAccessTokenService' or 'IRefreshTokenService' instead")]
 internal sealed class SecurityTokenProvider : ISecurityTokenService
 {
-    private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
+    private readonly AppDbContextFactory _dbContextFactory;
     private readonly IDateTimeService _dateTimeService;
     private readonly ISecurityTokenValidatorService _securityTokenValidatorService;
     private readonly AppSecretSettings _appSecretSettings;
     private readonly SecurityTokenSettings _securityTokenSettings;
 
-    public SecurityTokenProvider(IAppDbContextFactory<IAppDbContext> dbContextFactory,
+    public SecurityTokenProvider(AppDbContextFactory dbContextFactory,
         IDateTimeService dateTimeService,
         ISecurityTokenValidatorService securityTokenValidatorService,
         IOptions<AppSecretSettings> appSecretSettings,

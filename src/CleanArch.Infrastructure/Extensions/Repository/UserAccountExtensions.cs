@@ -3,9 +3,9 @@ using CleanArch.Domain.Aggregates.Identity;
 
 namespace CleanArch.Infrastructure.Extensions.Repository;
 
-public static class UserAccountExtensions
+internal static class UserAccountExtensions
 {
-    public static async Task<UserAccount?> GetUserAccountByIdAsync(this IAppDbContext context, Guid userAccountId)
+    public static async Task<UserAccount?> GetUserAccountByIdAsync(this AppDbContext context, Guid userAccountId)
     {
         return await context.UserAccounts
             .Include(x => x.User)
@@ -13,7 +13,7 @@ public static class UserAccountExtensions
             .FirstOrDefaultAsync(x => x.UserAccountId == userAccountId);
     }
 
-    public static async Task<UserAccount?> GetUserAccountByUsernameAsync(this IAppDbContext context, string username)
+    public static async Task<UserAccount?> GetUserAccountByUsernameAsync(this AppDbContext context, string username)
     {
         return await context.UserAccounts
             .Include(x => x.User)
@@ -21,7 +21,7 @@ public static class UserAccountExtensions
             .FirstOrDefaultAsync(x => x.User.Username == username);
     }
 
-    public static async Task<UserAccount?> GetUserAccountByEmailAddressAsync(this IAppDbContext context, string emailAddress)
+    public static async Task<UserAccount?> GetUserAccountByEmailAddressAsync(this AppDbContext context, string emailAddress)
     {
         return await context.UserAccounts
             .Include(x => x.User)
@@ -29,7 +29,7 @@ public static class UserAccountExtensions
             .FirstOrDefaultAsync(x => x.User.EmailAddress == emailAddress);
     }
 
-    public static async Task<List<UserAccount>> GetUserAccountAsync(this IAppDbContext context)
+    public static async Task<List<UserAccount>> GetUserAccountAsync(this AppDbContext context)
     {
         return await context.UserAccounts
             .Include(x => x.User)
@@ -37,7 +37,7 @@ public static class UserAccountExtensions
             .ToListAsync();
     }
 
-    public static async Task<List<UserAccount>> GetRangeUserAccountAsync(this IAppDbContext context, int range = 0)
+    public static async Task<List<UserAccount>> GetRangeUserAccountAsync(this AppDbContext context, int range = 0)
     {
         if (range > 0)
         {

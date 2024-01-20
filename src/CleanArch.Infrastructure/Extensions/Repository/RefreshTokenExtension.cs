@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanArch.Infrastructure.Extensions.Repository;
 
-public static class RefreshTokenExtensions
+internal static class RefreshTokenExtensions
 {
-    public static async Task<List<RefreshToken>> GetRefreshTokensByUserAccountIdAsync(this IAppDbContext context, Guid userAccountId)
+    public static async Task<List<RefreshToken>> GetRefreshTokensByUserAccountIdAsync(this AppDbContext context, Guid userAccountId)
     {
         return await context.RefreshTokens.Where(x => x.FkUserAccountId == userAccountId).ToListAsync();
     }
 
-    public static RefreshToken? GetRefreshToken(this IAppDbContext context, string token)
+    public static RefreshToken? GetRefreshToken(this AppDbContext context, string token)
     {
         return context.RefreshTokens
             .Include(x => x.UserAccount)

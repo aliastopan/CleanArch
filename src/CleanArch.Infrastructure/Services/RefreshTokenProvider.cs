@@ -5,12 +5,12 @@ namespace CleanArch.Infrastructure.Services;
 
 internal sealed class RefreshTokenProvider : IRefreshTokenService
 {
-    private readonly IAppDbContextFactory<IAppDbContext> _dbContextFactory;
+    private readonly AppDbContextFactory _dbContextFactory;
     private readonly IAccessTokenService _accessTokenService;
     private readonly IDateTimeService _dateTimeService;
     private readonly SecurityTokenSettings _securityTokenSettings;
 
-    public RefreshTokenProvider(IAppDbContextFactory<IAppDbContext> dbContextFactory,
+    public RefreshTokenProvider(AppDbContextFactory dbContextFactory,
         IAccessTokenService accessTokenService,
         IDateTimeService dateTimeService,
         IOptions<SecurityTokenSettings> securityTokenSettings)
