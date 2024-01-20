@@ -1,7 +1,7 @@
 using CleanArch.Domain.Aggregates.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace CleanArch.Application.Common.Extensions.Repository;
+namespace CleanArch.Infrastructure.Extensions.Repository;
 
 public static class RefreshTokenExtensions
 {

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using CleanArch.Domain.Aggregates.Identity;
 
-namespace CleanArch.Application.Common.Extensions.Repository;
+namespace CleanArch.Infrastructure.Extensions.Repository;
 
 public static class UserAccountExtensions
 {
