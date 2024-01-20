@@ -1,4 +1,4 @@
-using CleanArch.Application.Common.Interfaces.Persistence;
+using CleanArch.Application.Common.Interfaces.Services;
 
 namespace CleanArch.Api.Extensions;
 
@@ -13,7 +13,7 @@ public static class WebApplicationExtensions
         }
 
         using var scope = app.Services.CreateScope();
-        var task = scope.ServiceProvider.GetRequiredService<IAppDbContextSeeder>().GenerateUsersAsync();
+        var task = scope.ServiceProvider.GetRequiredService<IDataSeedingService>().GenerateUsersAsync();
         task.GetAwaiter().GetResult();
     }
 }

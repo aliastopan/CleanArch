@@ -2,11 +2,11 @@ namespace CleanArch.Tests.Unit;
 
 public class AppDbContextTests : UnitTest
 {
-    private readonly IAppDbContextSeeder ctxSeeder;
+    private readonly IDataSeedingService ctxSeeder;
 
     public AppDbContextTests()
     {
-        ctxSeeder = base.ServicesProvider.GetRequiredService<IAppDbContextSeeder>();
+        ctxSeeder = base.ServicesProvider.GetRequiredService<IDataSeedingService>();
     }
 
     [Fact]

@@ -20,7 +20,7 @@ public static class ConfigurePersistence
                 options.EnableSensitiveDataLogging();
             });
             services.AddScoped<AppDbContextFactory>();
-            services.AddScoped<IAppDbContextSeeder, AppDbContextSeeder>();
+            services.AddScoped<IDataSeedingService, DataSeedingProvider>();
         }
         else
         {

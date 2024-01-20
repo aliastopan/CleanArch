@@ -2,15 +2,15 @@ using CleanArch.Domain.Aggregates.Identity;
 using CleanArch.Domain.Enums;
 
 [assembly: InternalsVisibleTo("CleanArch.Tests")]
-namespace CleanArch.Infrastructure.Persistence;
+namespace CleanArch.Infrastructure.Services;
 
-internal sealed class AppDbContextSeeder : IAppDbContextSeeder
+internal sealed class DataSeedingProvider : IDataSeedingService
 {
     private readonly AppDbContextFactory _dbContextFactory;
     private readonly IPasswordService _passwordService;
     private readonly IDateTimeService _dateTimeService;
 
-    public AppDbContextSeeder(AppDbContextFactory dbContextFactory,
+    public DataSeedingProvider(AppDbContextFactory dbContextFactory,
         IPasswordService passwordService,
         IDateTimeService dateTimeService)
     {
