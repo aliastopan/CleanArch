@@ -1,3 +1,4 @@
+global using CleanArch.Application.Common.Interfaces.Handlers;
 global using CleanArch.Application.Common.Interfaces.Managers;
 global using CleanArch.Application.Common.Interfaces.Services;
 global using CleanArch.Shared.Validations;

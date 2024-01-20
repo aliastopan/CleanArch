@@ -1,9 +1,9 @@
 using CleanArch.Domain.Aggregates.Identity;
 using CleanArch.Domain.Enums;
 
-namespace CleanArch.Application.Common.Interfaces.Services.Aggregates;
+namespace CleanArch.Application.Common.Interfaces.Handlers;
 
-public interface IIdentityAggregateService
+public interface IIdentityAggregateHandler
 {
     // user account
     Task<UserAccount> CreateUserAccountAsync(string username, string firstName, string lastName,

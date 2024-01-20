@@ -1,21 +1,20 @@
-using CleanArch.Application.Common.Interfaces.Services.Aggregates;
 using CleanArch.Shared.Contracts.Identity;
 
 namespace CleanArch.Application.Identity.Queries.GetUserAccounts;
 
 public class GetUserAccountsQueryHandler : IRequestHandler<GetUserAccountsQuery, Result<GetUserAccountsQueryResponse>>
 {
-    private readonly IIdentityAggregateService _identityAggregateService;
+    private readonly IIdentityAggregateHandler _identityAggregateHandler;
 
-    public GetUserAccountsQueryHandler(IIdentityAggregateService identityAggregateService)
+    public GetUserAccountsQueryHandler(IIdentityAggregateHandler identityAggregateHandler)
     {
-        _identityAggregateService = identityAggregateService;
+        _identityAggregateHandler = identityAggregateHandler;
     }
 
     public async ValueTask<Result<GetUserAccountsQueryResponse>> Handle(GetUserAccountsQuery request,
         CancellationToken cancellationToken)
     {
-        var tryGetRange = await _identityAggregateService.TryGetRangeUserAccountsAsync();
+        var tryGetRange = await _identityAggregateHandler.TryGetRangeUserAccountsAsync();
         if (tryGetRange.IsFailure())
         {
             var failure = Result<GetUserAccountsQueryResponse>.Inherit(result: tryGetRange);

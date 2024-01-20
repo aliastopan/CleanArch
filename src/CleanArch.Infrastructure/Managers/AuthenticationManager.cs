@@ -4,22 +4,22 @@ namespace CleanArch.Infrastructure.Managers;
 
 internal sealed class AuthenticationManager : IAuthenticationManager
 {
-    private readonly IIdentityAggregateService _identityAggregateService;
+    private readonly IIdentityAggregateHandler _identityAggregateHandler;
     private readonly IAccessTokenService _accessTokenService;
     private readonly IRefreshTokenService _refreshTokenService;
 
-    public AuthenticationManager(IIdentityAggregateService identityAggregateService,
+    public AuthenticationManager(IIdentityAggregateHandler identityAggregateHandler,
         IAccessTokenService accessTokenService,
         IRefreshTokenService refreshTokenService)
     {
-        _identityAggregateService = identityAggregateService;
+        _identityAggregateHandler = identityAggregateHandler;
         _accessTokenService = accessTokenService;
         _refreshTokenService = refreshTokenService;
     }
 
     public async Task<Result<(string accessToken, RefreshToken refreshToken)>> TrySignInAsync(string username, string password)
     {
-        var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(username);
+        var tryGetUserAccount = await _identityAggregateHandler.TryGetUserAccountAsync(username);
         if (tryGetUserAccount.IsFailure())
         {
             return Result<(string, RefreshToken)>.Inherit(result: tryGetUserAccount);
@@ -27,7 +27,7 @@ internal sealed class AuthenticationManager : IAuthenticationManager
 
         var userAccount = tryGetUserAccount.Value;
 
-        var tryValidatePassword = _identityAggregateService.TryValidatePassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
+        var tryValidatePassword = _identityAggregateHandler.TryValidatePassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
         if (tryValidatePassword.IsFailure())
         {
             return Result<(string, RefreshToken)>.Inherit(result: tryValidatePassword);
@@ -42,7 +42,7 @@ internal sealed class AuthenticationManager : IAuthenticationManager
         }
 
         var refreshToken = tryGetRefreshToken.Value;
-        await _identityAggregateService.SignUserAsync(userAccount, refreshToken);
+        await _identityAggregateHandler.SignUserAsync(userAccount, refreshToken);
 
         return Result<(string, RefreshToken)>.Ok((accessToken, refreshToken));
     }
@@ -65,14 +65,14 @@ internal sealed class AuthenticationManager : IAuthenticationManager
 
         var previousRefreshToken = tryValidateSecurityToken.Value;
         var currentRefreshToken = tryGetRefreshToken.Value;
-        await _identityAggregateService.RotateRefreshTokenAsync(previousRefreshToken, currentRefreshToken);
+        await _identityAggregateHandler.RotateRefreshTokenAsync(previousRefreshToken, currentRefreshToken);
 
         return Result<(string, RefreshToken)>.Ok((accessToken, currentRefreshToken));
     }
 
     public async Task<Result> TryAccessPromptAsync(Guid userAccountId, string password)
     {
-        var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(userAccountId);
+        var tryGetUserAccount = await _identityAggregateHandler.TryGetUserAccountAsync(userAccountId);
         if (tryGetUserAccount.IsFailure())
         {
             return Result.Inherit(result: tryGetUserAccount);
@@ -80,7 +80,7 @@ internal sealed class AuthenticationManager : IAuthenticationManager
 
         var userAccount = tryGetUserAccount.Value;
 
-        var validatePassword = _identityAggregateService.TryValidatePassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
+        var validatePassword = _identityAggregateHandler.TryValidatePassword(password, userAccount.PasswordSalt, userAccount.PasswordHash);
         if (validatePassword.IsFailure())
         {
             return Result.Inherit(result: validatePassword);

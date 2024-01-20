@@ -42,7 +42,7 @@ public static class ConfigureServices
     {
         services.ConfigureDbContext(configuration, environment);
 
-        services.AddScoped<IIdentityAggregateService, IdentityAggregateProvider>();
+        services.AddScoped<IIdentityAggregateHandler, IdentityAggregateHandler>();
         services.AddScoped<IIdentityManager, IdentityManager>();
         services.AddScoped<IAuthenticationManager, AuthenticationManager>();
         services.AddScoped<IRefreshTokenService, RefreshTokenProvider>();

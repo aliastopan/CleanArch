@@ -1,15 +1,15 @@
 using CleanArch.Domain.Aggregates.Identity;
 using CleanArch.Domain.Enums;
 
-namespace CleanArch.Infrastructure.Services.Aggregates;
+namespace CleanArch.Infrastructure.Handlers;
 
-internal sealed class IdentityAggregateProvider : IIdentityAggregateService
+internal sealed class IdentityAggregateHandler : IIdentityAggregateHandler
 {
     private readonly AppDbContextFactory _dbContextFactory;
     private readonly IPasswordService _passwordService;
     private readonly IDateTimeService _dateTimeService;
 
-    public IdentityAggregateProvider(AppDbContextFactory dbContextFactory,
+    public IdentityAggregateHandler(AppDbContextFactory dbContextFactory,
         IPasswordService passwordService,
         IDateTimeService dateTimeService)
     {
