@@ -36,4 +36,23 @@ public static class UserAccountExtensions
             .Include(x => x.UserProfile)
             .ToListAsync();
     }
+
+    public static async Task<List<UserAccount>> GetRangeUserAccountAsync(this IAppDbContext context, int range = 0)
+    {
+        if (range > 0)
+        {
+            return await context.UserAccounts
+                .Include(x => x.User)
+                .Include(x => x.UserProfile)
+                .Take(range)
+                .ToListAsync();
+        }
+        else
+        {
+            return await context.UserAccounts
+                .Include(x => x.User)
+                .Include(x => x.UserProfile)
+                .ToListAsync();
+        }
+    }
 }
