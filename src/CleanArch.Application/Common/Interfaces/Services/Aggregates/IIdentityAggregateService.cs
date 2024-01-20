@@ -11,6 +11,7 @@ public interface IIdentityAggregateService
     Task SignUserAsync(UserAccount userAccount, RefreshToken refreshToken);
     Task<Result<UserAccount>> TryGetUserAccountAsync(Guid userAccountId);
     Task<Result<UserAccount>> TryGetUserAccountAsync(string username);
+    Task<Result<List<UserAccount>>> TryGetRangeUserAccountsAsync(int range = 0);
     Task<Result> TryValidateAvailabilityAsync(string username, string emailAddress);
 
     // user role

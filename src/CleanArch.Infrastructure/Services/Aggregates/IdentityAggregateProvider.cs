@@ -68,6 +68,20 @@ internal sealed class IdentityAggregateProvider : IIdentityAggregateService
         return await TryGetUserAccountAsync(db => db.GetUserAccountByUsernameAsync(username));
     }
 
+    public async Task<Result<List<UserAccount>>> TryGetRangeUserAccountsAsync(int range = 0)
+    {
+        using var dbContext = _dbContextFactory.CreateDbContext();
+
+        var userAccounts = await dbContext.GetRangeUserAccountAsync(range);
+        if (userAccounts.Count is 0)
+        {
+            var error = new Error("Users not found.", ErrorSeverity.Emergency);
+            return Result<List<UserAccount>>.NotFound(error);
+        }
+
+        return Result<List<UserAccount>>.Ok(userAccounts);
+    }
+
     public async Task<Result> TryValidateAvailabilityAsync(string username, string emailAddress)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
