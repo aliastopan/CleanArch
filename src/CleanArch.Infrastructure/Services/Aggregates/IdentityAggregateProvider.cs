@@ -155,7 +155,7 @@ internal sealed class IdentityAggregateProvider : IIdentityAggregateService
     public Result TryValidatePassword(string newPassword, string oldPassword, string passwordSalt, string passwordHash)
     {
         var tryValidateAccess = TryValidatePassword(oldPassword, passwordSalt, passwordHash);
-        if (tryValidateAccess.IsFailure)
+        if (tryValidateAccess.IsFailure())
         {
             return Result.Inherit(result: tryValidateAccess);
         }

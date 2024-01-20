@@ -27,7 +27,7 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
             request.OldPassword,
             request.NewPassword);
 
-        if (tryResetPassword.IsFailure)
+        if (tryResetPassword.IsFailure())
         {
             var failure = Result.Inherit(result: tryResetPassword);
             return await ValueTask.FromResult(failure);

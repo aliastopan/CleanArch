@@ -30,7 +30,7 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUp
             request.EmailAddress,
             request.Password);
 
-        if (trySignUp.IsFailure)
+        if (trySignUp.IsFailure())
         {
             var failure = Result<SignUpResponse>.Inherit(result: trySignUp);
             return await ValueTask.FromResult(failure);

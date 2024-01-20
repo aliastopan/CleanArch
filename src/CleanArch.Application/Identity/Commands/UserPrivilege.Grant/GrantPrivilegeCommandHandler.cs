@@ -24,7 +24,7 @@ public class GrantPrivilegeCommandHandler : IRequestHandler<GrantPrivilegeComman
         }
 
         var tryAccessPrompt = await _authenticationManager.TryAccessPromptAsync(request.AuthorityAccountId, request.AccessPassword);
-        if (tryAccessPrompt.IsFailure)
+        if (tryAccessPrompt.IsFailure())
         {
             var denied = Result.Inherit(result: tryAccessPrompt);
             return await ValueTask.FromResult(denied);
@@ -32,7 +32,7 @@ public class GrantPrivilegeCommandHandler : IRequestHandler<GrantPrivilegeComman
 
         // grant privilege
         var tryGrantPrivilege = await _identityManager.TryGrantPrivilegeAsync(request.SubjectAccountId, request.Privilege);
-        if (tryGrantPrivilege.IsFailure)
+        if (tryGrantPrivilege.IsFailure())
         {
             var failure = Result.Inherit(result: tryGrantPrivilege);
             return await ValueTask.FromResult(failure);

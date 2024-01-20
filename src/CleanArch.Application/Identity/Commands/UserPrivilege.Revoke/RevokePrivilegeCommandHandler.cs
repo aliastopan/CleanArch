@@ -24,7 +24,7 @@ public class RevokePrivilegeCommandHandler : IRequestHandler<RevokePrivilegeComm
         }
 
         var tryAccessPrompt = await _authenticationManager.TryAccessPromptAsync(request.AuthorityAccountId, request.AccessPassword);
-        if (tryAccessPrompt.IsFailure)
+        if (tryAccessPrompt.IsFailure())
         {
             var denied = Result.Inherit(result: tryAccessPrompt);
             return await ValueTask.FromResult(denied);
@@ -32,7 +32,7 @@ public class RevokePrivilegeCommandHandler : IRequestHandler<RevokePrivilegeComm
 
         // revoke user privilege
         var tryRevokePrivilege = await _identityManager.TryRevokePrivilegeAsync(request.SubjectAccountId, request.Privilege);
-        if (tryRevokePrivilege.IsFailure)
+        if (tryRevokePrivilege.IsFailure())
         {
             var failure = Result.Inherit(result: tryRevokePrivilege);
             return await ValueTask.FromResult(failure);

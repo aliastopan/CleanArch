@@ -16,7 +16,7 @@ internal sealed class IdentityManager : IIdentityManager
         DateOnly dateOfBirth, string emailAddress, string password)
     {
         var TryValidateAvailability = await _identityAggregateService.TryValidateAvailabilityAsync(username, emailAddress);
-        if (TryValidateAvailability.IsFailure)
+        if (TryValidateAvailability.IsFailure())
         {
             return Result<UserAccount>.Inherit(result: TryValidateAvailability);
         }
@@ -30,7 +30,7 @@ internal sealed class IdentityManager : IIdentityManager
     public async Task<Result> TrySetRoleAsync(Guid userAccountId, string role)
     {
         var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(userAccountId);
-        if (tryGetUserAccount.IsFailure)
+        if (tryGetUserAccount.IsFailure())
         {
             return Result.Inherit(result: tryGetUserAccount);
         }
@@ -46,7 +46,7 @@ internal sealed class IdentityManager : IIdentityManager
     public async Task<Result> TryGrantPrivilegeAsync(Guid userAccountId, string privilege)
     {
         var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(userAccountId);
-        if (tryGetUserAccount.IsFailure)
+        if (tryGetUserAccount.IsFailure())
         {
             return Result.Inherit(result: tryGetUserAccount);
         }
@@ -70,7 +70,7 @@ internal sealed class IdentityManager : IIdentityManager
     public async Task<Result> TryRevokePrivilegeAsync(Guid userAccountId, string privilege)
     {
         var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(userAccountId);
-        if (tryGetUserAccount.IsFailure)
+        if (tryGetUserAccount.IsFailure())
         {
             return Result.Inherit(result: tryGetUserAccount);
         }
@@ -92,14 +92,14 @@ internal sealed class IdentityManager : IIdentityManager
     public async Task<Result> TryResetPasswordAsync(Guid userAccountId, string oldPassword, string newPassword)
     {
         var tryGetUserAccount = await _identityAggregateService.TryGetUserAccountAsync(userAccountId);
-        if (tryGetUserAccount.IsFailure)
+        if (tryGetUserAccount.IsFailure())
         {
             return Result.Inherit(result: tryGetUserAccount);
         }
 
         var userAccount = tryGetUserAccount.Value;
         var tryValidatePassword = _identityAggregateService.TryValidatePassword(newPassword, oldPassword, userAccount.PasswordSalt, userAccount.PasswordHash);
-        if (tryValidatePassword.IsFailure)
+        if (tryValidatePassword.IsFailure())
         {
             return Result.Inherit(result: tryValidatePassword);
         }

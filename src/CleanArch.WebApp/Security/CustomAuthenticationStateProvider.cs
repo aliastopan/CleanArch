@@ -30,7 +30,7 @@ public sealed class CustomAuthenticationStateProvider : AuthenticationStateProvi
         var tryGetAccessToken = await TryGetAccessTokenAsync();
         var tryGetRefreshToken = await TryGetRefreshTokenAsync();
 
-        if (tryGetAccessToken.IsFailure || tryGetRefreshToken.IsFailure)
+        if (tryGetAccessToken.IsFailure() || tryGetRefreshToken.IsFailure())
         {
             Log.Fatal("Fail to authenticate.");
             return UnauthenticatedState();
@@ -48,7 +48,7 @@ public sealed class CustomAuthenticationStateProvider : AuthenticationStateProvi
 
         Log.Warning("Authenticating...");
         var tryAuthenticate = _accessTokenService.TryValidateAccessToken(accessToken);
-        if (tryAuthenticate.IsFailure)
+        if (tryAuthenticate.IsFailure())
         {
             Log.Warning("Authentication failed.");
             Log.Warning("{0}", tryAuthenticate.Errors[0].Message);

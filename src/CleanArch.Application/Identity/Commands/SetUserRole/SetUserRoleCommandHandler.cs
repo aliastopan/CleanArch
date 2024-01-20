@@ -25,7 +25,7 @@ public class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand, Res
 
         // validate access
         var tryAccessPrompt = await _authenticationManager.TryAccessPromptAsync(request.AuthorityAccountId, request.AccessPassword);
-        if (tryAccessPrompt.IsFailure)
+        if (tryAccessPrompt.IsFailure())
         {
             var denied = Result.Inherit(result: tryAccessPrompt);
             return await ValueTask.FromResult(denied);
@@ -33,7 +33,7 @@ public class SetUserRoleCommandHandler : IRequestHandler<SetUserRoleCommand, Res
 
         // set role
         var trySetRole = await _identityManager.TrySetRoleAsync(request.SubjectAccountId, request.Role);
-        if (trySetRole.IsFailure)
+        if (trySetRole.IsFailure())
         {
             var failure = Result.Inherit(result: trySetRole);
             return await ValueTask.FromResult(failure);

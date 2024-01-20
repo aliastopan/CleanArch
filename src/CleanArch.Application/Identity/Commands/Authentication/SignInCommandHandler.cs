@@ -24,7 +24,7 @@ public class SignInCommandHandler : IRequestHandler<SignInCommand, Result<SignIn
 
         // authentication
         var trySignIn = await _authenticationManager.TrySignInAsync(request.Username, request.Password);
-        if (trySignIn.IsFailure)
+        if (trySignIn.IsFailure())
         {
             var failure = Result<SignInResponse>.Inherit(result: trySignIn);
             return await ValueTask.FromResult(failure);
