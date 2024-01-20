@@ -1,25 +1,28 @@
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace CleanArch.Infrastructure.Services;
 
 internal sealed class SecurityTokenValidatorProvider : ISecurityTokenValidatorService
 {
-    private readonly IConfiguration _configuration;
+    private readonly AppSecretSettings _appSecretSettings;
+    private readonly SecurityTokenSettings _securityTokenSettings;
 
-    public SecurityTokenValidatorProvider(IConfiguration configuration)
+    public SecurityTokenValidatorProvider(IOptions<AppSecretSettings> appSecretSettings,
+        IOptions<SecurityTokenSettings> securityTokenSettings)
     {
-        _configuration = configuration;
+        _appSecretSettings = appSecretSettings.Value;
+        _securityTokenSettings = securityTokenSettings.Value;
     }
 
     public TokenValidationParameters GetAccessTokenValidationParameters()
     {
-        var masterKey = _configuration[AppSecretSettings.Section.MasterKey];
+        var masterKey = _appSecretSettings.MasterKey;
         return new TokenValidationParameters
         {
-            ValidIssuer = _configuration[SecurityTokenSettings.Section.Issuer],
-            ValidAudience = _configuration[SecurityTokenSettings.Section.Audience],
+            ValidIssuer = _securityTokenSettings.Issuer,
+            ValidAudience = _securityTokenSettings.Audience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(masterKey!)),
             ValidateIssuer = true,
             ValidateAudience = true,
@@ -32,7 +35,7 @@ internal sealed class SecurityTokenValidatorProvider : ISecurityTokenValidatorSe
 
     public TokenValidationParameters GetRefreshTokenValidationParameters()
     {
-        var masterKey = _configuration[AppSecretSettings.Section.MasterKey];
+        var masterKey = _appSecretSettings.MasterKey;
         return new TokenValidationParameters
         {
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(masterKey!)),
