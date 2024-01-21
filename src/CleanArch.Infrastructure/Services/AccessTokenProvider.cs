@@ -23,6 +23,8 @@ internal sealed class AccessTokenProvider : IAccessTokenService
         _securityTokenValidatorService = securityTokenValidatorService;
         _appSecretSettings = appSecretSettings.Value;
         _securityTokenSettings = securityTokenSettings.Value;
+
+        JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
     }
 
     public string GenerateAccessToken(UserAccount userAccount)
@@ -30,7 +32,6 @@ internal sealed class AccessTokenProvider : IAccessTokenService
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSecretSettings.MasterKey));
         var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
         var jwtHandler = new JwtSecurityTokenHandler();
         var jwt = new JwtSecurityToken
         (
