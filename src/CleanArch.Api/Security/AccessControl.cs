@@ -18,8 +18,12 @@ public static class AccessControl
         })
         .AddJwtBearer(options =>
         {
-            var securityTokenValidator = services.BuildServiceProvider().GetRequiredService<ISecurityTokenValidatorService>();
-            options.TokenValidationParameters = securityTokenValidator.GetAccessTokenValidationParameters();
+            using (var serviceProvider = services.BuildServiceProvider())
+            {
+                var securityTokenValidator = serviceProvider.GetRequiredService<ISecurityTokenValidatorService>();
+                options.TokenValidationParameters = securityTokenValidator.GetAccessTokenValidationParameters();
+            }
+
             options.MapInboundClaims = false;
             options.Events = new JwtBearerEvents
             {
