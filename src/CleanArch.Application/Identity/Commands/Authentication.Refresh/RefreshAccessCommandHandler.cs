@@ -17,14 +17,12 @@ public class RefreshAccessCommandHandler : IRequestHandler<RefreshAccessCommand,
         var tryRefreshAccess = await _authenticationManager.TryRefreshAccessAsync(request.AccessToken, request.RefreshTokenStr);
         if (tryRefreshAccess.IsFailure())
         {
-            var failure = Result<RefreshAccessResponse>.Inherit(result: tryRefreshAccess);
-            return await ValueTask.FromResult(failure);
+            return Result<RefreshAccessResponse>.Inherit(result: tryRefreshAccess);
         }
 
         var (accessToken, refreshToken) = tryRefreshAccess.Value;
         var response = new RefreshAccessResponse(accessToken, refreshToken.Token);
 
-        var ok = Result<RefreshAccessResponse>.Ok(response);
-        return await ValueTask.FromResult(ok);
+        return Result<RefreshAccessResponse>.Ok(response);
     }
 }

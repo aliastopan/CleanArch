@@ -18,22 +18,19 @@ public class SignInCommandHandler : IRequestHandler<SignInCommand, Result<SignIn
         var isInvalid = !request.TryValidate(out var errors);
         if (isInvalid)
         {
-            var invalid = Result<SignInResponse>.Invalid(errors);
-            return await ValueTask.FromResult(invalid);
+            return Result<SignInResponse>.Invalid(errors);
         }
 
         // authentication
         var trySignIn = await _authenticationManager.TrySignInAsync(request.Username, request.Password);
         if (trySignIn.IsFailure())
         {
-            var failure = Result<SignInResponse>.Inherit(result: trySignIn);
-            return await ValueTask.FromResult(failure);
+            return Result<SignInResponse>.Inherit(result: trySignIn);
         }
 
         var (accessToken, refreshToken) = trySignIn.Value;
         var response = new SignInResponse(accessToken, refreshToken.Token);
 
-        var ok = Result<SignInResponse>.Ok(response);
-        return await ValueTask.FromResult(ok);
+        return Result<SignInResponse>.Ok(response);
     }
 }

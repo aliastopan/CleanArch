@@ -17,8 +17,7 @@ public class GetUserAccountsQueryHandler : IRequestHandler<GetUserAccountsQuery,
         var tryGetRange = await _identityAggregateHandler.TryGetRangeUserAccountsAsync();
         if (tryGetRange.IsFailure())
         {
-            var failure = Result<GetUserAccountsQueryResponse>.Inherit(result: tryGetRange);
-            return await ValueTask.FromResult(failure);
+            return Result<GetUserAccountsQueryResponse>.Inherit(result: tryGetRange);
         }
 
         var userAccounts = tryGetRange.Value;
@@ -36,7 +35,6 @@ public class GetUserAccountsQueryHandler : IRequestHandler<GetUserAccountsQuery,
         }
 
         var response = new GetUserAccountsQueryResponse(userAccountDtos);
-        var ok = Result<GetUserAccountsQueryResponse>.Ok(response);
-        return await ValueTask.FromResult(ok);
+        return Result<GetUserAccountsQueryResponse>.Ok(response);
     }
 }

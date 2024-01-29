@@ -18,8 +18,7 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
         var isInvalid = !request.TryValidate(out var errors);
         if (isInvalid)
         {
-            var invalid = Result.Invalid(errors);
-            return await ValueTask.FromResult(invalid);
+            return Result.Invalid(errors);
         }
 
         // reset password
@@ -29,11 +28,9 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
 
         if (tryResetPassword.IsFailure())
         {
-            var failure = Result.Inherit(result: tryResetPassword);
-            return await ValueTask.FromResult(failure);
+            return Result.Inherit(result: tryResetPassword);
         }
 
-        var ok = Result.Ok();
-        return await ValueTask.FromResult(ok);
+        return Result.Ok();
     }
 }

@@ -18,8 +18,7 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUp
         var isInvalid = !request.TryValidate(out var errors);
         if (isInvalid)
         {
-            var invalid = Result<SignUpResponse>.Invalid(errors);
-            return await ValueTask.FromResult(invalid);
+            return Result<SignUpResponse>.Invalid(errors);
         }
 
         // registration
@@ -32,8 +31,7 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUp
 
         if (trySignUp.IsFailure())
         {
-            var failure = Result<SignUpResponse>.Inherit(result: trySignUp);
-            return await ValueTask.FromResult(failure);
+            return Result<SignUpResponse>.Inherit(result: trySignUp);
         }
 
         var userAccount = trySignUp.Value;
@@ -44,7 +42,6 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, Result<SignUp
             userAccount.User.EmailAddress,
             userAccount.User.UserPrivileges.Select(privilege => privilege.ToString()).ToList());
 
-        var ok = Result<SignUpResponse>.Ok(response);
-        return await ValueTask.FromResult(ok);
+        return Result<SignUpResponse>.Ok(response);
     }
 }
