@@ -21,11 +21,9 @@ internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAc
             .HasMaxLength(36)
             .IsRequired();
 
-        builder.ComplexProperty(u => u.User,
+        builder.OwnsOne(u => u.User,
             user =>
             {
-                user.IsRequired();
-
                 user.Property(u => u.Username)
                     .HasColumnName("username")
                     .HasMaxLength(16)
