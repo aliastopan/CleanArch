@@ -1,4 +1,5 @@
 using CleanArch.Domain.Aggregates.Identity;
+using CleanArch.Domain.Aggregates.Identity.ValueObjects;
 using CleanArch.Domain.Enums;
 
 namespace CleanArch.Tests.Common.Factories;

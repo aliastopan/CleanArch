@@ -1,4 +1,5 @@
 using CleanArch.Domain.Aggregates.Identity;
+using CleanArch.Domain.Aggregates.Identity.ValueObjects;
 using CleanArch.Domain.Enums;
 
 [assembly: InternalsVisibleTo("CleanArch.Tests")]

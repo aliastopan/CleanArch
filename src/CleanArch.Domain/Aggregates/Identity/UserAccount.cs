@@ -1,4 +1,5 @@
 #nullable disable
+using CleanArch.Domain.Aggregates.Identity.ValueObjects;
 
 namespace CleanArch.Domain.Aggregates.Identity;
 
@@ -15,7 +16,6 @@ public class UserAccount : IAggregateRoot
     {
         User = new User
         {
-            UserId = Guid.NewGuid(),
             Username = username,
             EmailAddress = emailAddress,
             UserRole = UserRole.Standard,
@@ -41,16 +41,15 @@ public class UserAccount : IAggregateRoot
     }
 
     public Guid UserAccountId { get; init; }
+    public User User { get; set; }
     public bool IsVerified { get; set; }
     public string PasswordHash { get; set; }
     public string PasswordSalt { get; set; }
     public DateTimeOffset CreationDate { get; init; }
     public DateTimeOffset LastSignedIn { get; set; }
 
-    public Guid FkUserId { get; init; }
     public Guid FkUserProfileId { get; init; }
 
-    public virtual User User { get; init; }
     public virtual UserProfile UserProfile { get; init; }
     public virtual ICollection<RefreshToken> RefreshTokens { get; init; }
 }

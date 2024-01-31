@@ -114,7 +114,7 @@ internal sealed class IdentityAggregateHandler : IIdentityAggregateHandler
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        userAccount.User.UserRole = userRole;
+        userAccount.User = userAccount.User.ChangeUserRole(userRole);
         dbContext.UserAccounts.Update(userAccount);
 
         await dbContext.SaveChangesAsync();
@@ -124,7 +124,7 @@ internal sealed class IdentityAggregateHandler : IIdentityAggregateHandler
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        userAccount.User.UserPrivileges.Add(userPrivilege);
+        userAccount.User = userAccount.User.AddPrivilege(userPrivilege);
         dbContext.UserAccounts.Update(userAccount);
 
         await dbContext.SaveChangesAsync();
@@ -134,7 +134,7 @@ internal sealed class IdentityAggregateHandler : IIdentityAggregateHandler
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        userAccount.User.UserPrivileges.Remove(userPrivilege);
+        userAccount.User = userAccount.User.RemovePrivilege(userPrivilege);
         dbContext.UserAccounts.Update(userAccount);
 
         await dbContext.SaveChangesAsync();
