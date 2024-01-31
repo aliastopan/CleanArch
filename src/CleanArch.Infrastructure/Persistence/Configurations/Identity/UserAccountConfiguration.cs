@@ -24,6 +24,8 @@ internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAc
         builder.ComplexProperty(u => u.User,
             user =>
             {
+                user.IsRequired();
+
                 user.Property(u => u.Username)
                     .HasColumnName("username")
                     .HasMaxLength(16)
@@ -45,7 +47,7 @@ internal sealed class UserAccountConfiguration : IEntityTypeConfiguration<UserAc
                         x => x.Split(',', StringSplitOptions.RemoveEmptyEntries)
                                 .Select(privilegeStr => Enum.Parse<UserPrivilege>(privilegeStr))
                                 .ToList(),
-                        new ValueComparer<ICollection<UserPrivilege>>(
+                        new ValueComparer<IReadOnlyCollection<UserPrivilege>>(
                             (c1, c2) => c1!.SequenceEqual(c2!),
                             c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                             c => c.ToList()))
