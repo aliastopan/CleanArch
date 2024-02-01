@@ -19,13 +19,6 @@ namespace CleanArch.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     user_account_id = table.Column<Guid>(type: "char(36)", maxLength: 36, nullable: false, collation: "ascii_general_ci"),
-                    username = table.Column<string>(type: "varchar(16)", maxLength: 16, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    email_address = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    user_role = table.Column<int>(type: "int", nullable: true),
-                    user_privileges = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     is_verified = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     password_hash = table.Column<string>(type: "varchar(96)", maxLength: 96, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -33,7 +26,11 @@ namespace CleanArch.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     creation_date = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
                     last_signed_in = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
-                    fk_user_profile_id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
+                    fk_user_profile_id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    email_address = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false),
+                    user_privileges = table.Column<string>(type: "longtext", nullable: false),
+                    user_role = table.Column<int>(type: "int", nullable: false),
+                    username = table.Column<string>(type: "varchar(16)", maxLength: 16, nullable: false)
                 },
                 constraints: table =>
                 {
